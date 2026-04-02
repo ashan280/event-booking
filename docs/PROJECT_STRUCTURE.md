@@ -1,20 +1,36 @@
 # Project Structure
 
-## Base Layout
+## Main Folders
 
-- `frontend/`: React application
-- `backend/`: Spring Boot API
-- `database/`: starter MySQL schema
-- `docs/`: project workflow and structure docs
+- `frontend/`
+- `backend/`
+- `database/`
+- `docs/`
 
-## Team Module Mapping
+## What Each Folder Has
 
-- Member 1 works mainly in frontend auth pages and backend auth, user, and review features.
-- Member 2 works mainly in frontend event pages and backend event, category, venue, and search features.
-- Member 3 works mainly in frontend booking pages and backend booking, seat, payment, ticket, and report features.
+- `frontend/` contains the React application.
+- `backend/` contains the Spring Boot API.
+- `database/` contains the MySQL schema and database scripts.
+- `docs/` contains project documentation and team workflow files.
 
-## Starting Points
+## Team Areas
 
-- Frontend entry: `frontend/src/App.jsx`
-- Backend entry: `backend/src/main/java/com/eventmanagement/backend/EventBookingApplication.java`
-- Database starter schema: `database/schema.sql`
+- `Ashan` works on auth pages, login, register, and backend user features.
+- `vinuridisara997@gmail.com` works on event pages, venue, category, and search features.
+- `nimesha4nimesha@gmail.com` works on booking pages, seats, payments, tickets, and reports.
+
+## Important Files
+
+- Frontend start file: `frontend/src/App.jsx`
+- Backend start file: `backend/src/main/java/com/eventmanagement/backend/EventBookingApplication.java`
+- Database file: `database/schema.sql`
+
+## Example Structure
+
+```text
+frontend/
+backend/
+database/
+docs/
+```
