@@ -1,5 +1,9 @@
-import { Link, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
+import AuthHomePage from "./pages/auth/AuthHomePage";
+import LoginPage from "./pages/auth/LoginPage";
+import RegisterPage from "./pages/auth/RegisterPage";
+import ProfilePage from "./pages/auth/ProfilePage";
 import PlaceholderPage from "./pages/PlaceholderPage";
 
 const modules = [
@@ -26,12 +30,19 @@ function App() {
       <Route path="/" element={<HomePage modules={modules} />} />
       <Route
         path="/auth"
-        element={
-          <PlaceholderPage
-            title="Auth Module"
-            description="Base route reserved for Member 1."
-          />
-        }
+        element={<AuthHomePage />}
+      />
+      <Route
+        path="/auth/login"
+        element={<LoginPage />}
+      />
+      <Route
+        path="/auth/register"
+        element={<RegisterPage />}
+      />
+      <Route
+        path="/auth/profile"
+        element={<ProfilePage />}
       />
       <Route
         path="/events"
@@ -54,18 +65,10 @@ function App() {
       <Route
         path="*"
         element={
-          <main className="page-shell">
-            <section className="hero-card">
-              <p className="eyebrow">Event Booking System</p>
-              <h1>Page not found</h1>
-              <p className="lead">
-                The route does not exist yet. Return to the project home page.
-              </p>
-              <Link className="primary-link" to="/">
-                Back to home
-              </Link>
-            </section>
-          </main>
+          <PlaceholderPage
+            title="Page not found"
+            description="This page is not ready yet. Go back and continue from the home page."
+          />
         }
       />
     </Routes>
