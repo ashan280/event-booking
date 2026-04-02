@@ -4,9 +4,9 @@
 
 - `main`
 - `develop`
-- `feature/member1-auth-user`
-- `feature/member2-event-venue`
-- `feature/member3-booking-payment`
+- `feature/ashan-auth-user`
+- `feature/vinuri-event-venue`
+- `feature/nimesha-booking-payment`
 
 ## How We Work
 
@@ -29,6 +29,6 @@
 ```bash
 git checkout develop
 git pull
-git checkout feature/member1-auth-user
+git checkout feature/ashan-auth-user
 git merge develop
 ```
