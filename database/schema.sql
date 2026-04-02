@@ -1,0 +1,48 @@
+CREATE DATABASE IF NOT EXISTS event_management_db;
+USE event_management_db;
+
+CREATE TABLE IF NOT EXISTS users (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    full_name VARCHAR(120) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS categories (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL UNIQUE,
+    description VARCHAR(255)
+);
+
+CREATE TABLE IF NOT EXISTS venues (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(150) NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    capacity INT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS events (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    category_id BIGINT NOT NULL,
+    venue_id BIGINT NOT NULL,
+    title VARCHAR(150) NOT NULL,
+    description TEXT,
+    event_date DATETIME NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    status VARCHAR(50) NOT NULL DEFAULT 'DRAFT',
+    FOREIGN KEY (category_id) REFERENCES categories(id),
+    FOREIGN KEY (venue_id) REFERENCES venues(id)
+);
+
+CREATE TABLE IF NOT EXISTS bookings (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+    event_id BIGINT NOT NULL,
+    total_amount DECIMAL(10, 2) NOT NULL,
+    booking_status VARCHAR(50) NOT NULL DEFAULT 'PENDING',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (event_id) REFERENCES events(id)
+);
