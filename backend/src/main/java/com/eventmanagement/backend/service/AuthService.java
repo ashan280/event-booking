@@ -52,6 +52,11 @@ public class AuthService {
     }
 
     public Map<String, Object> profile(HttpServletRequest request) {
+        User user = getCurrentUser(request);
+        return userDetails(user, "Profile loaded");
+    }
+
+    public User getCurrentUser(HttpServletRequest request) {
         String token = getToken(request);
         Long userId = activeSessions.get(token);
 
@@ -59,10 +64,8 @@ public class AuthService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Please login first");
         }
 
-        User user = userRepository.findById(userId)
+        return userRepository.findById(userId)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
-
-        return userDetails(user, "Profile loaded");
     }
 
     private Map<String, Object> buildAuthResponse(User user, String message) {
