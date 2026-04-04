@@ -84,6 +84,7 @@ public class AuthService {
         response.put("fullName", user.getFullName());
         response.put("email", user.getEmail());
         response.put("role", user.getRole());
+        response.put("createdAt", user.getCreatedAt());
         return response;
     }
 
