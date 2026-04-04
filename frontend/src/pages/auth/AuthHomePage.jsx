@@ -64,7 +64,7 @@ function AuthHomePage() {
           <div className="grid gap-8 px-6 py-8 md:grid-cols-[1.4fr_0.9fr] md:px-10 md:py-10">
             <div className="space-y-6">
               <div className="inline-flex items-center rounded-full border border-orange-200 bg-orange-50 px-4 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-orange-700">
-                Member 1 Dashboard
+                Account Center
               </div>
 
               <div className="space-y-4">
@@ -72,9 +72,8 @@ function AuthHomePage() {
                   Authentication and user area for the real project.
                 </h1>
                 <p className="max-w-2xl text-base leading-7 text-slate-600 md:text-lg">
-                  This section now feels more like a real product dashboard. It groups
-                  login, register, password recovery, profile, and reviews in one clean
-                  workspace for Member 1.
+                  Manage sign in, registration, password recovery, profile details, and reviews
+                  from one clean account workspace.
                 </p>
               </div>
 
@@ -100,7 +99,7 @@ function AuthHomePage() {
                     Status
                   </p>
                   <strong className="mt-2 block text-2xl font-bold text-slate-950">
-                    Active
+                    Ready
                   </strong>
                 </article>
               </div>
@@ -130,12 +129,12 @@ function AuthHomePage() {
                 </div>
               ) : (
                 <div className="mt-5 space-y-4">
-                  <p className="text-3xl font-black tracking-tight">Guest mode</p>
+                  <p className="text-3xl font-black tracking-tight">Welcome back</p>
                   <p className="text-sm leading-6 text-slate-300">
-                    No user is logged in now. Use the quick actions below to start the auth flow.
+                    No user is signed in right now. Use the quick actions below to get started.
                   </p>
                   <div className="rounded-3xl border border-dashed border-white/15 bg-white/5 p-4 text-sm text-slate-300">
-                    Login and register are open. Profile and reviews are protected.
+                    Sign in and create account pages are open. Profile and reviews stay protected.
                   </div>
                 </div>
               )}
@@ -155,7 +154,7 @@ function AuthHomePage() {
                 </h2>
               </div>
               <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
-                Student module
+                Live pages
               </span>
             </div>
 
@@ -189,7 +188,7 @@ function AuthHomePage() {
                 Workflow
               </p>
               <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-950">
-                Current checklist
+                Current flow
               </h2>
               <div className="mt-5 space-y-3">
                 {authSteps.map((step, index) => (
@@ -208,14 +207,14 @@ function AuthHomePage() {
 
             <section className="rounded-[28px] bg-[linear-gradient(135deg,#0f172a_0%,#1d4ed8_100%)] p-6 text-white shadow-[0_24px_60px_rgba(29,78,216,0.25)]">
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-orange-200">
-                Real project note
+                Project note
               </p>
               <h2 className="mt-2 text-3xl font-black tracking-tight">
-                Built for the university project
+                Built as a real account experience
               </h2>
               <p className="mt-3 text-sm leading-6 text-slate-200">
-                This auth area is now closer to a real project dashboard, not a simple starter page.
-                It is ready to connect later with deeper password reset and user management logic.
+                This account area now uses a cleaner dashboard layout and is ready for deeper
+                password reset and user management logic.
               </p>
             </section>
           </div>

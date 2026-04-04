@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import AuthPageShell from "../../components/AuthPageShell";
 import { apiRequest } from "../../lib/api";
 import { clearAuth, getAuth } from "../../lib/auth";
 
@@ -56,53 +57,93 @@ function ProfilePage() {
   }
 
   return (
-    <main className="home-page">
-      <section className="simple-panel">
-        <p className="section-tag">Member 1 Module</p>
-        <h1>User Profile</h1>
-        <p>This page shows more account details for the logged in user.</p>
+    <AuthPageShell
+      eyebrow="Your Account"
+      title="Your profile and account details in one place."
+      description="Review your personal details, account role, status, and profile timeline from a single full-page screen."
+      sideTitle="Profile Overview"
+      sideText="A clean account view for signed-in users."
+      sideItems={[
+        "Open protected account details after sign in.",
+        "See profile data returned from the backend.",
+        "Use quick links to go back or sign out."
+      ]}
+    >
+      {isLoading ? (
+        <p className="rounded-2xl bg-slate-100 px-4 py-3 text-sm font-medium text-slate-600">
+          Loading your profile...
+        </p>
+      ) : null}
 
-        {isLoading ? <p className="helper-text">Loading profile...</p> : null}
-        {error ? <p className="error-text">{error}</p> : null}
+      {error ? (
+        <p className="rounded-2xl bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700">
+          {error}
+        </p>
+      ) : null}
 
-        {profile ? (
-          <>
-            <div className="profile-summary-grid">
-              <article className="profile-summary-card">
-                <span className="profile-summary-label">Name</span>
-                <strong>{profile.fullName}</strong>
-              </article>
-              <article className="profile-summary-card">
-                <span className="profile-summary-label">Role</span>
-                <strong>{profile.role}</strong>
-              </article>
-              <article className="profile-summary-card">
-                <span className="profile-summary-label">Account ID</span>
-                <strong>#{profile.id}</strong>
-              </article>
+      {profile ? (
+        <>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <article className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                Name
+              </p>
+              <strong className="mt-2 block text-xl font-bold text-slate-950">
+                {profile.fullName}
+              </strong>
+            </article>
+            <article className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                Role
+              </p>
+              <strong className="mt-2 block text-xl font-bold text-slate-950">
+                {profile.role}
+              </strong>
+            </article>
+            <article className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                Account ID
+              </p>
+              <strong className="mt-2 block text-xl font-bold text-slate-950">
+                #{profile.id}
+              </strong>
+            </article>
+          </div>
+
+          <div className="mt-5 grid gap-4 rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm md:grid-cols-2">
+            <div className="space-y-3">
+              <h2 className="text-lg font-bold text-slate-950">Account details</h2>
+              <p className="text-sm text-slate-600"><strong className="text-slate-900">Full name:</strong> {profile.fullName}</p>
+              <p className="text-sm text-slate-600"><strong className="text-slate-900">Email:</strong> {profile.email}</p>
+              <p className="text-sm text-slate-600"><strong className="text-slate-900">Role:</strong> {profile.role}</p>
             </div>
 
-            <div className="profile-box">
-              <p><strong>Full name:</strong> {profile.fullName}</p>
-              <p><strong>Email:</strong> {profile.email}</p>
-              <p><strong>Role:</strong> {profile.role}</p>
-              <p><strong>Account ID:</strong> {profile.id}</p>
-              <p><strong>Member since:</strong> {formatDate(profile.createdAt)}</p>
-              <p><strong>Status:</strong> Active user</p>
+            <div className="space-y-3">
+              <h2 className="text-lg font-bold text-slate-950">Status</h2>
+              <p className="text-sm text-slate-600"><strong className="text-slate-900">Member since:</strong> {formatDate(profile.createdAt)}</p>
+              <p className="text-sm text-slate-600"><strong className="text-slate-900">Access:</strong> Protected account</p>
+              <p className="text-sm text-slate-600"><strong className="text-slate-900">State:</strong> Active user</p>
             </div>
-          </>
-        ) : null}
+          </div>
+        </>
+      ) : null}
 
-        <div className="auth-link-list">
-          <Link className="primary-link" to="/auth">
-            Back to auth home
-          </Link>
-          <button className="primary-link secondary-link" onClick={handleLogout} type="button">
-            Logout
-          </button>
-        </div>
-      </section>
-    </main>
+      <div className="mt-6 flex flex-wrap gap-3">
+        <Link
+          className="inline-flex items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+          to="/auth"
+        >
+          Back to account home
+        </Link>
+        <button
+          className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50"
+          onClick={handleLogout}
+          type="button"
+        >
+          Sign out
+        </button>
+      </div>
+    </AuthPageShell>
   );
 }
 

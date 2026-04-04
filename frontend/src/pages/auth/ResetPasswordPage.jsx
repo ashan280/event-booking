@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import AuthPageShell from "../../components/AuthPageShell";
 
 function ResetPasswordPage() {
   const [formData, setFormData] = useState({
@@ -23,12 +24,12 @@ function ResetPasswordPage() {
     setError("");
 
     if (!formData.password.trim() || !formData.confirmPassword.trim()) {
-      setError("Fill all password fields.");
+      setError("Fill in both password fields.");
       return;
     }
 
     if (formData.password.length < 6) {
-      setError("Password must have at least 6 characters.");
+      setError("Use at least 6 characters.");
       return;
     }
 
@@ -37,7 +38,7 @@ function ResetPasswordPage() {
       return;
     }
 
-    setMessage("Reset password page is ready. Backend reset update can be added later.");
+    setMessage("Reset password screen is ready. The backend update flow can be connected next.");
     setFormData({
       password: "",
       confirmPassword: ""
@@ -45,48 +46,76 @@ function ResetPasswordPage() {
   }
 
   return (
-    <main className="home-page">
-      <section className="simple-panel auth-form-panel">
-        <p className="section-tag">Member 1 Module</p>
-        <h1>Reset Password</h1>
-        <p>This page is ready for the new password update flow.</p>
-
-        <form className="auth-form" onSubmit={handleSubmit}>
-          <label>
+    <AuthPageShell
+      eyebrow="Reset Password"
+      title="Create a new password for your account."
+      description="Enter a new password, confirm it, and prepare the screen for the real backend reset update flow."
+      sideTitle="Reset Step"
+      sideText="A clean and simple password update screen."
+      sideItems={[
+        "Enter a new password with at least 6 characters.",
+        "Confirm the password before saving.",
+        "Connect the real reset token logic later."
+      ]}
+    >
+      <form className="space-y-5" onSubmit={handleSubmit}>
+        <div className="space-y-2">
+          <label className="text-sm font-semibold text-slate-800" htmlFor="reset-password">
             New password
-            <input
-              name="password"
-              type="password"
-              placeholder="Enter new password"
-              value={formData.password}
-              onChange={handleChange}
-            />
           </label>
+          <input
+            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
+            id="reset-password"
+            name="password"
+            type="password"
+            placeholder="Enter new password"
+            value={formData.password}
+            onChange={handleChange}
+          />
+        </div>
 
-          <label>
+        <div className="space-y-2">
+          <label className="text-sm font-semibold text-slate-800" htmlFor="reset-confirm-password">
             Confirm password
-            <input
-              name="confirmPassword"
-              type="password"
-              placeholder="Confirm new password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-            />
           </label>
+          <input
+            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
+            id="reset-confirm-password"
+            name="confirmPassword"
+            type="password"
+            placeholder="Confirm new password"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+          />
+        </div>
 
-          <button type="submit" className="primary-link">
-            Update password
-          </button>
-        </form>
+        <button
+          className="inline-flex w-full items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+          type="submit"
+        >
+          Update password
+        </button>
+      </form>
 
-        {message ? <p className="success-text">{message}</p> : null}
-        {error ? <p className="error-text">{error}</p> : null}
-
-        <p className="helper-text">
-          Back to <Link to="/auth/login">login</Link>
+      {message ? (
+        <p className="mt-4 rounded-2xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
+          {message}
         </p>
-      </section>
-    </main>
+      ) : null}
+
+      {error ? (
+        <p className="mt-4 rounded-2xl bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700">
+          {error}
+        </p>
+      ) : null}
+
+      <div className="mt-6 flex flex-wrap gap-3 text-sm text-slate-600">
+        <span>Need the recovery step first?</span>
+        <Link className="font-semibold text-blue-700 hover:text-blue-800" to="/auth/forgot-password">
+          Go back
+        </Link>
+      </div>
+    </AuthPageShell>
   );
 }
 

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import AuthPageShell from "../../components/AuthPageShell";
 import { saveAuth } from "../../lib/auth";
 import { apiRequest } from "../../lib/api";
 
@@ -45,59 +46,92 @@ function RegisterPage() {
   }
 
   return (
-    <main className="home-page">
-      <section className="simple-panel auth-form-panel">
-        <p className="section-tag">Member 1 Module</p>
-        <h1>Register</h1>
-        <p>Create your account to continue.</p>
-
-        <form className="auth-form" onSubmit={handleSubmit}>
-          <label>
+    <AuthPageShell
+      eyebrow="Create Account"
+      title="Start your account in a few simple steps."
+      description="Create a user profile to sign in, access protected pages, and leave event reviews."
+      sideTitle="Account Setup"
+      sideText="A clean onboarding flow for new users."
+      sideItems={[
+        "Add your full name, email, and password.",
+        "Save the account and sign in right away.",
+        "Open your profile as soon as registration is complete."
+      ]}
+    >
+      <form className="space-y-5" onSubmit={handleSubmit}>
+        <div className="space-y-2">
+          <label className="text-sm font-semibold text-slate-800" htmlFor="register-name">
             Full name
-            <input
-              name="fullName"
-              type="text"
-              placeholder="Enter your full name"
-              value={formData.fullName}
-              onChange={handleChange}
-            />
           </label>
+          <input
+            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
+            id="register-name"
+            name="fullName"
+            type="text"
+            placeholder="Your full name"
+            value={formData.fullName}
+            onChange={handleChange}
+          />
+        </div>
 
-          <label>
+        <div className="space-y-2">
+          <label className="text-sm font-semibold text-slate-800" htmlFor="register-email">
             Email
-            <input
-              name="email"
-              type="email"
-              placeholder="Enter your email"
-              value={formData.email}
-              onChange={handleChange}
-            />
           </label>
+          <input
+            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
+            id="register-email"
+            name="email"
+            type="email"
+            placeholder="name@email.com"
+            value={formData.email}
+            onChange={handleChange}
+          />
+        </div>
 
-          <label>
+        <div className="space-y-2">
+          <label className="text-sm font-semibold text-slate-800" htmlFor="register-password">
             Password
-            <input
-              name="password"
-              type="password"
-              placeholder="Create a password"
-              value={formData.password}
-              onChange={handleChange}
-            />
           </label>
+          <input
+            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
+            id="register-password"
+            name="password"
+            type="password"
+            placeholder="Create a strong password"
+            value={formData.password}
+            onChange={handleChange}
+          />
+        </div>
 
-          <button type="submit" className="primary-link" disabled={isLoading}>
-            {isLoading ? "Creating..." : "Register"}
-          </button>
-        </form>
+        <button
+          className="inline-flex w-full items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-400"
+          type="submit"
+          disabled={isLoading}
+        >
+          {isLoading ? "Creating account..." : "Create account"}
+        </button>
+      </form>
 
-        {message ? <p className="success-text">{message}</p> : null}
-        {error ? <p className="error-text">{error}</p> : null}
-
-        <p className="helper-text">
-          Already have an account? <Link to="/auth/login">Login here</Link>
+      {message ? (
+        <p className="mt-4 rounded-2xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
+          {message}
         </p>
-      </section>
-    </main>
+      ) : null}
+
+      {error ? (
+        <p className="mt-4 rounded-2xl bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700">
+          {error}
+        </p>
+      ) : null}
+
+      <div className="mt-6 flex flex-wrap gap-3 text-sm text-slate-600">
+        <span>Already registered?</span>
+        <Link className="font-semibold text-blue-700 hover:text-blue-800" to="/auth/login">
+          Sign in here
+        </Link>
+      </div>
+    </AuthPageShell>
   );
 }
 
