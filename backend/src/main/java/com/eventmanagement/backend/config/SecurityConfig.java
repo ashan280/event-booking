@@ -24,6 +24,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/health").permitAll()
                 .requestMatchers("/api/featured-events").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/reviews/**").permitAll()
                 .anyRequest().authenticated()
             )
             .httpBasic(Customizer.withDefaults());
