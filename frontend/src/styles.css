@@ -393,6 +393,23 @@ label {
   font-weight: 700;
 }
 
+.success-text,
+.error-text {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: 14px;
+}
+
+.success-text {
+  background: rgba(32, 125, 86, 0.12);
+  color: #176247;
+}
+
+.error-text {
+  background: rgba(184, 49, 49, 0.12);
+  color: #a12b2b;
+}
+
 .profile-box {
   margin-top: 20px;
   padding: 18px;
