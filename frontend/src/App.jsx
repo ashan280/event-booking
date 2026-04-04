@@ -1,22 +1,34 @@
-import { Link, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
+import GuestRoute from "./components/GuestRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
 import HomePage from "./pages/HomePage";
+import AuthHomePage from "./pages/auth/AuthHomePage";
+import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
+import LoginPage from "./pages/auth/LoginPage";
+import RegisterPage from "./pages/auth/RegisterPage";
+import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
+import ProfilePage from "./pages/auth/ProfilePage";
+import ReviewPage from "./pages/auth/ReviewPage";
 import PlaceholderPage from "./pages/PlaceholderPage";
 
 const modules = [
   {
-    title: "Member 1",
+    title: "Accounts",
     path: "/auth",
-    description: "Authentication, user management, reviews"
+    description: "Login, account settings, and reviews",
+    summary: "Sign in, register, open protected pages, and manage reviews"
   },
   {
-    title: "Member 2",
+    title: "Events",
     path: "/events",
-    description: "Events, categories, venues, search"
+    description: "Event discovery, categories, venues, and search",
+    summary: "Browse pages, filters, event details, and management tools"
   },
   {
-    title: "Member 3",
+    title: "Bookings",
     path: "/booking",
-    description: "Booking, seats, payments, tickets, reports"
+    description: "Bookings, seats, payments, tickets, and reports",
+    summary: "Seat maps, checkout, payment flow, tickets, and booking history"
   }
 ];
 
@@ -26,19 +38,62 @@ function App() {
       <Route path="/" element={<HomePage modules={modules} />} />
       <Route
         path="/auth"
+        element={<AuthHomePage />}
+      />
+      <Route
+        path="/auth/login"
         element={
-          <PlaceholderPage
-            title="Auth Module"
-            description="Base route reserved for Member 1."
-          />
+          <GuestRoute>
+            <LoginPage />
+          </GuestRoute>
+        }
+      />
+      <Route
+        path="/auth/forgot-password"
+        element={
+          <GuestRoute>
+            <ForgotPasswordPage />
+          </GuestRoute>
+        }
+      />
+      <Route
+        path="/auth/reset-password"
+        element={
+          <GuestRoute>
+            <ResetPasswordPage />
+          </GuestRoute>
+        }
+      />
+      <Route
+        path="/auth/register"
+        element={
+          <GuestRoute>
+            <RegisterPage />
+          </GuestRoute>
+        }
+      />
+      <Route
+        path="/auth/profile"
+        element={
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/auth/reviews"
+        element={
+          <ProtectedRoute>
+            <ReviewPage />
+          </ProtectedRoute>
         }
       />
       <Route
         path="/events"
         element={
           <PlaceholderPage
-            title="Events Module"
-            description="Base route reserved for Member 2."
+            title="Events"
+            description="Event browsing and event details will appear here."
           />
         }
       />
@@ -46,26 +101,18 @@ function App() {
         path="/booking"
         element={
           <PlaceholderPage
-            title="Booking Module"
-            description="Base route reserved for Member 3."
+            title="Bookings"
+            description="Seat selection, checkout, and ticket pages will appear here."
           />
         }
       />
       <Route
         path="*"
         element={
-          <main className="page-shell">
-            <section className="hero-card">
-              <p className="eyebrow">Event Booking System</p>
-              <h1>Page not found</h1>
-              <p className="lead">
-                The route does not exist yet. Return to the project home page.
-              </p>
-              <Link className="primary-link" to="/">
-                Back to home
-              </Link>
-            </section>
-          </main>
+          <PlaceholderPage
+            title="Page not found"
+            description="This page is not ready yet. Go back and continue from the home page."
+          />
         }
       />
     </Routes>

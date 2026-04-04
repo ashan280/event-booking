@@ -1,45 +1,51 @@
 # Event Booking and Seat Reservation System
 
-This repository is the shared codebase for the Event Booking and Seat Reservation System built with React, Spring Boot, and MySQL.
+A web application for browsing events, reserving seats, and managing bookings.
 
-## Base Project Structure
+## Tech
 
-- `frontend/`: React + Vite client
-- `backend/`: Spring Boot API
-- `database/`: MySQL starter schema
-- `docs/`: workflow and project notes
+- React
+- Spring Boot
+- MySQL
 
-## Branch Workflow
+## Folders
 
-- `main`: final stable branch
-- `develop`: shared integration branch
-- `feature/member1-auth-user`: Member 1 work
-- `feature/member2-event-venue`: Member 2 work
-- `feature/member3-booking-payment`: Member 3 work
+- `frontend/` for React
+- `backend/` for Spring Boot
+- `database/` for SQL
+- `docs/` for local notes only
 
-## Team Responsibilities
+## Team
 
-- Member 1: authentication, user management, reviews
-- Member 2: events, categories, venues, search
-- Member 3: booking, seats, payments, tickets, reports
+- `Ashan` for auth, user, review
+- `vinuri` for event, venue, category, search
+- `nimesha` for booking, seat, payment, ticket, report
 
-## Merge Rules
+## Branches
 
-1. Work only in your assigned feature branch.
-2. Open pull requests from your feature branch into `develop`.
-3. Test the full system on `develop`.
-4. Merge `develop` into `main` only after team review and final testing.
+- `main` is final
+- `develop` is team branch
+- `feature/ashan-auth-user`
+- `feature/vinuri-event-venue`
+- `feature/nimesha-booking-payment`
 
-## Commit Style
+## Workflow
 
-- `feat(auth): add login api`
-- `fix(events): correct venue filter`
+1. Do one small task.
+2. Make one simple commit.
+3. Push only to your feature branch.
+4. Merge feature branch to `develop`.
+5. Test in `develop`.
+6. Merge `develop` to `main` at the end.
 
-## Notes
+## Simple Commit Names
 
-Branch protection for `main` and pull request requirements must be configured in GitHub after this local repository is pushed to a remote.
+- `add login page`
+- `fix register form`
+- `add event list`
+- `add booking page`
 
-## Local Start
+## Run Project
 
 Frontend:
 
