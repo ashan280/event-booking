@@ -1,4 +1,6 @@
 import { Route, Routes } from "react-router-dom";
+import GuestRoute from "./components/GuestRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
 import HomePage from "./pages/HomePage";
 import AuthHomePage from "./pages/auth/AuthHomePage";
 import LoginPage from "./pages/auth/LoginPage";
@@ -38,19 +40,35 @@ function App() {
       />
       <Route
         path="/auth/login"
-        element={<LoginPage />}
+        element={
+          <GuestRoute>
+            <LoginPage />
+          </GuestRoute>
+        }
       />
       <Route
         path="/auth/register"
-        element={<RegisterPage />}
+        element={
+          <GuestRoute>
+            <RegisterPage />
+          </GuestRoute>
+        }
       />
       <Route
         path="/auth/profile"
-        element={<ProfilePage />}
+        element={
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        }
       />
       <Route
         path="/auth/reviews"
-        element={<ReviewPage />}
+        element={
+          <ProtectedRoute>
+            <ReviewPage />
+          </ProtectedRoute>
+        }
       />
       <Route
         path="/events"
