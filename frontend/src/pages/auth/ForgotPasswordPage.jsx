@@ -1,13 +1,16 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthPageShell from "../../components/AuthPageShell";
+import { apiRequest } from "../../lib/api";
 
 function ForgotPasswordPage() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     setMessage("");
     setError("");
@@ -17,20 +20,38 @@ function ForgotPasswordPage() {
       return;
     }
 
-    setMessage("Password recovery screen is ready. The backend email flow can be connected next.");
+    setIsLoading(true);
+
+    try {
+      const data = await apiRequest("/api/auth/forgot-password", {
+        method: "POST",
+        body: JSON.stringify({ email })
+      });
+
+      setMessage(data.message);
+      navigate(`/auth/reset-password?token=${encodeURIComponent(data.resetToken)}`, {
+        state: {
+          message: "Reset link created. You can set a new password now."
+        }
+      });
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
     <AuthPageShell
       eyebrow="Password Recovery"
       title="Recover access to your account."
-      description="Enter your email address to start the password recovery flow and continue to the reset screen."
-      sideTitle="Recovery Flow"
-      sideText="A simple step before setting a new password."
+      description="Enter your email address to request a password reset and continue to the next step."
+      sideTitle="Recovery"
+      sideText="Start the password reset process."
       sideItems={[
         "Enter the email linked to your account.",
-        "Move to the reset password screen.",
-        "Connect the real email reset flow later."
+        "Check for a recovery link.",
+        "Create a new password on the next page."
       ]}
     >
       <form className="space-y-5" onSubmit={handleSubmit}>
@@ -49,10 +70,11 @@ function ForgotPasswordPage() {
         </div>
 
         <button
-          className="inline-flex w-full items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+          className="inline-flex w-full items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-400"
           type="submit"
+          disabled={isLoading}
         >
-          Send recovery link
+          {isLoading ? "Sending link..." : "Send recovery link"}
         </button>
       </form>
 
