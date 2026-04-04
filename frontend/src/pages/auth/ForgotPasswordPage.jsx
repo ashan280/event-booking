@@ -6,13 +6,11 @@ import { apiRequest } from "../../lib/api";
 function ForgotPasswordPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   async function handleSubmit(event) {
     event.preventDefault();
-    setMessage("");
     setError("");
 
     if (!email.trim()) {
@@ -28,7 +26,6 @@ function ForgotPasswordPage() {
         body: JSON.stringify({ email })
       });
 
-      setMessage(data.message);
       navigate(`/auth/reset-password?token=${encodeURIComponent(data.resetToken)}`, {
         state: {
           message: "Reset link created. You can set a new password now."
@@ -43,15 +40,15 @@ function ForgotPasswordPage() {
 
   return (
     <AuthPageShell
-      eyebrow="Password Recovery"
-      title="Recover access to your account."
-      description="Enter your email address to request a password reset and continue to the next step."
-      sideTitle="Recovery"
-      sideText="Start the password reset process."
+      eyebrow="Forgot password"
+      title="Reset your password."
+      description="Enter your email and move to the reset step."
+      sideTitle="Reset steps"
+      sideText="Start the reset process."
       sideItems={[
         "Enter the email linked to your account.",
-        "Check for a recovery link.",
-        "Create a new password on the next page."
+        "Use the reset link or token.",
+        "Set a new password on the next page."
       ]}
     >
       <form className="space-y-5" onSubmit={handleSubmit}>
@@ -77,12 +74,6 @@ function ForgotPasswordPage() {
           {isLoading ? "Sending link..." : "Send recovery link"}
         </button>
       </form>
-
-      {message ? (
-        <p className="mt-4 rounded-2xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
-          {message}
-        </p>
-      ) : null}
 
       {error ? (
         <p className="mt-4 rounded-2xl bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700">

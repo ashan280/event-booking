@@ -11,7 +11,6 @@ function RegisterPage() {
     email: "",
     password: ""
   });
-  const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -26,7 +25,6 @@ function RegisterPage() {
   async function handleSubmit(event) {
     event.preventDefault();
     setIsLoading(true);
-    setMessage("");
     setError("");
 
     try {
@@ -36,7 +34,6 @@ function RegisterPage() {
       });
 
       saveAuth(data);
-      setMessage(data.message);
       navigate("/auth/profile");
     } catch (requestError) {
       setError(requestError.message);
@@ -47,15 +44,15 @@ function RegisterPage() {
 
   return (
     <AuthPageShell
-      eyebrow="Create Account"
-      title="Start your account in a few simple steps."
-      description="Create a user profile to sign in, access protected pages, and leave event reviews."
-      sideTitle="Account Setup"
-      sideText="A clean onboarding flow for new users."
+      eyebrow="Register"
+      title="Create your account."
+      description="Create an account to sign in and use protected pages."
+      sideTitle="Register steps"
+      sideText="Add your details and create your account."
       sideItems={[
         "Add your full name, email, and password.",
-        "Save the account and sign in right away.",
-        "Open your profile as soon as registration is complete."
+        "Create the account.",
+        "Open your profile after registration."
       ]}
     >
       <form className="space-y-5" onSubmit={handleSubmit}>
@@ -112,12 +109,6 @@ function RegisterPage() {
           {isLoading ? "Creating account..." : "Create account"}
         </button>
       </form>
-
-      {message ? (
-        <p className="mt-4 rounded-2xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
-          {message}
-        </p>
-      ) : null}
 
       {error ? (
         <p className="mt-4 rounded-2xl bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700">

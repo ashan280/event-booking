@@ -10,7 +10,6 @@ function LoginPage() {
     email: "",
     password: ""
   });
-  const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -25,7 +24,6 @@ function LoginPage() {
   async function handleSubmit(event) {
     event.preventDefault();
     setIsLoading(true);
-    setMessage("");
     setError("");
 
     try {
@@ -35,7 +33,6 @@ function LoginPage() {
       });
 
       saveAuth(data);
-      setMessage(data.message);
       navigate("/auth/profile");
     } catch (requestError) {
       setError(requestError.message);
@@ -46,15 +43,15 @@ function LoginPage() {
 
   return (
     <AuthPageShell
-      eyebrow="Account Access"
-      title="Sign in and continue where you left off."
-      description="Use your email and password to open your account, view your profile, and manage reviews."
-      sideTitle="Sign In Flow"
-      sideText="Fast access to your account area."
+      eyebrow="Login"
+      title="Sign in to your account."
+      description="Use your email and password to open your account."
+      sideTitle="Login steps"
+      sideText="Sign in and open your account pages."
       sideItems={[
-        "Login with your saved email and password.",
-        "Go straight to your protected profile page.",
-        "Open reviews and other account tools after sign in."
+        "Enter your email and password.",
+        "Open your profile after login.",
+        "Use reviews after you sign in."
       ]}
     >
       <form className="space-y-5" onSubmit={handleSubmit}>
@@ -96,12 +93,6 @@ function LoginPage() {
           {isLoading ? "Signing in..." : "Sign in"}
         </button>
       </form>
-
-      {message ? (
-        <p className="mt-4 rounded-2xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
-          {message}
-        </p>
-      ) : null}
 
       {error ? (
         <p className="mt-4 rounded-2xl bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700">

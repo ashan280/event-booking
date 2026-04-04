@@ -15,8 +15,8 @@ const modules = [
   {
     title: "Accounts",
     path: "/auth",
-    description: "Authentication, account settings, and reviews",
-    summary: "Sign in, registration, protected routes, profile details, and feedback"
+    description: "Login, account settings, and reviews",
+    summary: "Sign in, register, open protected pages, and manage reviews"
   },
   {
     title: "Events",

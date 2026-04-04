@@ -59,14 +59,14 @@ function ProfilePage() {
   return (
     <AuthPageShell
       eyebrow="Your Account"
-      title="Your profile and account details in one place."
-      description="Review your personal details, account role, status, and profile timeline from a single full-page screen."
-      sideTitle="Profile Overview"
-      sideText="A clean account view for signed-in users."
+      title="Your profile details."
+      description="Check your personal details and account status."
+      sideTitle="Profile"
+      sideText="Your account details after sign in."
       sideItems={[
-        "Open protected account details after sign in.",
-        "See profile data returned from the backend.",
-        "Use quick links to go back or sign out."
+        "Open this page after sign in.",
+        "See profile data from the backend.",
+        "Go back or sign out when needed."
       ]}
     >
       {isLoading ? (

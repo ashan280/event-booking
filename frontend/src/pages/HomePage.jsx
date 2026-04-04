@@ -53,7 +53,7 @@ const collections = [
 const projectHighlights = [
   "Discover concerts, workshops, festivals, and more in one place",
   "Choose your event, reserve your seat, and book in a few simple steps",
-  "Manage your account, bookings, and tickets with less effort"
+  "Check your account, bookings, and tickets in one system"
 ];
 
 function HomePage({ modules }) {
@@ -97,7 +97,7 @@ function HomePage({ modules }) {
             <div className="hero-stats">
               <article>
                 <strong>3</strong>
-                <span>main platform areas</span>
+                <span>main sections</span>
               </article>
               <article>
                 <strong>6</strong>
@@ -158,7 +158,7 @@ function HomePage({ modules }) {
         <section className="collection-section">
           <div className="section-head">
             <p className="section-tag">Collections</p>
-            <h2>Fresh picks for different kinds of visitors</h2>
+            <h2>Useful sections on the home page</h2>
           </div>
           <div className="collection-grid">
             {collections.map((collection) => (
@@ -174,7 +174,7 @@ function HomePage({ modules }) {
         <section className="featured-section" id="featured">
           <div className="section-head">
             <p className="section-tag">Featured events</p>
-            <h2>Featured events people can explore right away</h2>
+            <h2>Featured events to browse</h2>
           </div>
           <div className="event-grid">
             {featuredEvents.map((event) => (
@@ -196,7 +196,7 @@ function HomePage({ modules }) {
         <section className="module-section" id="modules">
           <div className="section-head">
             <p className="section-tag">Explore</p>
-            <h2>Key areas of the platform</h2>
+            <h2>Main parts of the project</h2>
           </div>
           <div className="module-grid">
             {modules.map((module) => (

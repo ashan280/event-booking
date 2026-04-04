@@ -75,14 +75,14 @@ function ResetPasswordPage() {
   return (
     <AuthPageShell
       eyebrow="Reset Password"
-      title="Create a new password for your account."
-      description="Enter a new password, confirm it, and save your changes."
-      sideTitle="Password update"
-      sideText="Choose a new password to secure your account."
+      title="Set a new password."
+      description="Enter your token, add a new password, and save it."
+      sideTitle="Reset"
+      sideText="Add your token and save a new password."
       sideItems={[
-        "Use the reset token from the recovery step.",
-        "Enter a new password with at least 6 characters.",
-        "Confirm the password before saving.",
+        "Use the token from the reset step.",
+        "Enter a password with at least 6 characters.",
+        "Confirm it before saving.",
         "Use the new password the next time you sign in."
       ]}
     >

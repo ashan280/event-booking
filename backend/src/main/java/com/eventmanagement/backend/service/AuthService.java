@@ -69,7 +69,6 @@ public class AuthService {
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("message", "Password reset link created");
         response.put("resetToken", resetToken);
-        response.put("expiresAt", expiresAt);
         return response;
     }
 

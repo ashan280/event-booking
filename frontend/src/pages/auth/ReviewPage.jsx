@@ -83,10 +83,10 @@ function ReviewPage() {
   return (
     <AuthPageShell
       eyebrow="Reviews"
-      title="Read feedback and leave your own review."
-      description="This screen keeps the review form and recent feedback in one responsive layout so the whole auth area feels consistent."
-      sideTitle="Review Flow"
-      sideText="Feedback tools inside the account area."
+      title="Read reviews and add your own."
+      description="Use this page to post a review and read recent reviews."
+      sideTitle="Reviews"
+      sideText="Post a review and read what other users added."
       sideItems={[
         "Only signed-in users can submit a review.",
         "Recent reviews are shown in the same page.",
@@ -161,7 +161,7 @@ function ReviewPage() {
             <div>
               <h2 className="text-xl font-bold text-slate-950">Recent reviews</h2>
               <p className="mt-2 text-sm text-slate-600">
-                The newest feedback appears here.
+                The newest reviews appear here.
               </p>
             </div>
             <Link className="text-sm font-semibold text-blue-700 hover:text-blue-800" to="/auth">
