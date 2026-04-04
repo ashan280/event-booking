@@ -1,12 +1,6 @@
 package com.eventmanagement.backend.service;
 
-import com.eventmanagement.backend.dto.ApiMessageResponse;
-import com.eventmanagement.backend.dto.AuthResponse;
-import com.eventmanagement.backend.dto.ForgotPasswordRequest;
-import com.eventmanagement.backend.dto.ForgotPasswordResponse;
-import com.eventmanagement.backend.dto.LoginRequest;
-import com.eventmanagement.backend.dto.RegisterRequest;
-import com.eventmanagement.backend.dto.ResetPasswordRequest;
+import com.eventmanagement.backend.dto.AuthDto;
 import com.eventmanagement.backend.model.User;
 import com.eventmanagement.backend.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,7 +22,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final Map<String, Long> activeSessions = new ConcurrentHashMap<>();
 
-    public AuthResponse login(LoginRequest request) {
+    public AuthDto.AuthResponse login(AuthDto.LoginRequest request) {
         User user = userRepository.findByEmail(normalizeEmail(request.getEmail()))
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email or password is wrong"));
 
@@ -39,7 +33,7 @@ public class AuthService {
         return buildAuthResponse(user, "Login successful");
     }
 
-    public AuthResponse register(RegisterRequest request) {
+    public AuthDto.AuthResponse register(AuthDto.RegisterRequest request) {
         String email = normalizeEmail(request.getEmail());
 
         if (userRepository.findByEmail(email).isPresent()) {
@@ -56,7 +50,7 @@ public class AuthService {
         return buildAuthResponse(savedUser, "Register successful");
     }
 
-    public ForgotPasswordResponse forgotPassword(ForgotPasswordRequest request) {
+    public AuthDto.ForgotPasswordResponse forgotPassword(AuthDto.ForgotPasswordRequest request) {
         String email = normalizeEmail(request.getEmail());
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found for this email"));
@@ -68,10 +62,10 @@ public class AuthService {
         user.setResetTokenExpiresAt(expiresAt);
         userRepository.save(user);
 
-        return new ForgotPasswordResponse("Password reset link created", resetToken);
+        return new AuthDto.ForgotPasswordResponse("Password reset link created", resetToken);
     }
 
-    public ApiMessageResponse resetPassword(ResetPasswordRequest request) {
+    public AuthDto.MessageResponse resetPassword(AuthDto.ResetPasswordRequest request) {
         User user = userRepository.findByResetToken(request.getToken().trim())
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reset token is not valid"));
 
@@ -84,10 +78,10 @@ public class AuthService {
         user.setResetTokenExpiresAt(null);
         userRepository.save(user);
 
-        return new ApiMessageResponse("Password updated successfully");
+        return new AuthDto.MessageResponse("Password updated successfully");
     }
 
-    public AuthResponse profile(HttpServletRequest request) {
+    public AuthDto.AuthResponse profile(HttpServletRequest request) {
         User user = getCurrentUser(request);
         return userDetails(user, "Profile loaded");
     }
@@ -104,10 +98,10 @@ public class AuthService {
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }
 
-    private AuthResponse buildAuthResponse(User user, String message) {
+    private AuthDto.AuthResponse buildAuthResponse(User user, String message) {
         String token = UUID.randomUUID().toString();
         activeSessions.put(token, user.getId());
-        return new AuthResponse(
+        return new AuthDto.AuthResponse(
             message,
             user.getId(),
             user.getFullName(),
@@ -118,8 +112,8 @@ public class AuthService {
         );
     }
 
-    private AuthResponse userDetails(User user, String message) {
-        return new AuthResponse(
+    private AuthDto.AuthResponse userDetails(User user, String message) {
+        return new AuthDto.AuthResponse(
             message,
             user.getId(),
             user.getFullName(),

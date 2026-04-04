@@ -1,7 +1,6 @@
 package com.eventmanagement.backend.controller;
 
-import com.eventmanagement.backend.dto.ReviewRequest;
-import com.eventmanagement.backend.dto.ReviewResponse;
+import com.eventmanagement.backend.dto.ReviewDto;
 import com.eventmanagement.backend.service.ReviewService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -21,12 +20,12 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @GetMapping
-    public List<ReviewResponse> getReviews() {
+    public List<ReviewDto.ReviewResponse> getReviews() {
         return reviewService.getReviews();
     }
 
     @PostMapping
-    public ReviewResponse addReview(@Valid @RequestBody ReviewRequest request, HttpServletRequest httpRequest) {
+    public ReviewDto.ReviewResponse addReview(@Valid @RequestBody ReviewDto.ReviewRequest request, HttpServletRequest httpRequest) {
         return reviewService.addReview(request, httpRequest);
     }
 }
