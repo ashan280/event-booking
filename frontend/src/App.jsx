@@ -6,6 +6,7 @@ import AuthHomePage from "./pages/auth/AuthHomePage";
 import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
+import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import ProfilePage from "./pages/auth/ProfilePage";
 import ReviewPage from "./pages/auth/ReviewPage";
 import PlaceholderPage from "./pages/PlaceholderPage";
@@ -52,6 +53,14 @@ function App() {
         element={
           <GuestRoute>
             <ForgotPasswordPage />
+          </GuestRoute>
+        }
+      />
+      <Route
+        path="/auth/reset-password"
+        element={
+          <GuestRoute>
+            <ResetPasswordPage />
           </GuestRoute>
         }
       />

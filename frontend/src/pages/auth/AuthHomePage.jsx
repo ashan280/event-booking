@@ -29,6 +29,9 @@ function AuthHomePage() {
           <Link className="primary-link secondary-link" to="/auth/forgot-password">
             Forgot password
           </Link>
+          <Link className="primary-link secondary-link" to="/auth/reset-password">
+            Reset password
+          </Link>
           <Link className="primary-link secondary-link" to="/auth/profile">
             Go to profile
           </Link>

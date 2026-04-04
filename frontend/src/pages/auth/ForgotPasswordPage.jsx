@@ -42,6 +42,10 @@ function ForgotPasswordPage() {
         {message ? <p className="success-text">{message}</p> : null}
 
         <p className="helper-text">
+          Continue to <Link to="/auth/reset-password">reset password</Link>
+        </p>
+
+        <p className="helper-text">
           Back to <Link to="/auth/login">login</Link>
         </p>
       </section>
