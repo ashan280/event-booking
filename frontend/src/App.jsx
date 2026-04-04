@@ -13,22 +13,22 @@ import PlaceholderPage from "./pages/PlaceholderPage";
 
 const modules = [
   {
-    title: "Member 1",
+    title: "Accounts",
     path: "/auth",
-    description: "Authentication, user management, reviews",
-    summary: "Login, register, protected routes, profiles, ratings"
+    description: "Authentication, account settings, and reviews",
+    summary: "Sign in, registration, protected routes, profile details, and feedback"
   },
   {
-    title: "Member 2",
+    title: "Events",
     path: "/events",
-    description: "Events, categories, venues, search",
-    summary: "Discovery pages, filters, event detail screens, admin event tools"
+    description: "Event discovery, categories, venues, and search",
+    summary: "Browse pages, filters, event details, and management tools"
   },
   {
-    title: "Member 3",
+    title: "Bookings",
     path: "/booking",
-    description: "Booking, seats, payments, tickets, reports",
-    summary: "Seat maps, checkout, payment flow, tickets, booking analytics"
+    description: "Bookings, seats, payments, tickets, and reports",
+    summary: "Seat maps, checkout, payment flow, tickets, and booking history"
   }
 ];
 
@@ -92,8 +92,8 @@ function App() {
         path="/events"
         element={
           <PlaceholderPage
-            title="Events Module"
-            description="Base route reserved for Member 2."
+            title="Events"
+            description="Event browsing and event details will appear here."
           />
         }
       />
@@ -101,8 +101,8 @@ function App() {
         path="/booking"
         element={
           <PlaceholderPage
-            title="Booking Module"
-            description="Base route reserved for Member 3."
+            title="Bookings"
+            description="Seat selection, checkout, and ticket pages will appear here."
           />
         }
       />

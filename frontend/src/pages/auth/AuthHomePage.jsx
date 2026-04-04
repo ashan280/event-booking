@@ -18,14 +18,14 @@ const authActions = [
   },
   {
     title: "Forgot Password",
-    description: "Start the password recovery flow.",
+    description: "Recover access to your account.",
     path: "/auth/forgot-password",
     style: "bg-white text-slate-900",
     textStyle: "text-slate-600"
   },
   {
     title: "Reset Password",
-    description: "Update the password with a reset form.",
+    description: "Set a new password.",
     path: "/auth/reset-password",
     style: "bg-white text-slate-900",
     textStyle: "text-slate-600"
@@ -47,11 +47,11 @@ const authActions = [
 ];
 
 const authSteps = [
-  "Register a new account",
-  "Login with saved user data",
-  "Open protected profile page",
-  "Add and read reviews",
-  "Use forgot and reset password pages"
+  "Create an account",
+  "Sign in with your email and password",
+  "Open your profile",
+  "Read and post reviews",
+  "Recover or reset your password"
 ];
 
 function AuthHomePage() {
@@ -69,7 +69,7 @@ function AuthHomePage() {
 
               <div className="space-y-4">
                 <h1 className="max-w-3xl text-4xl font-black tracking-tight text-slate-950 md:text-6xl">
-                  Authentication and user area for the real project.
+                  One place to manage sign in, profile details, and feedback.
                 </h1>
                 <p className="max-w-2xl text-base leading-7 text-slate-600 md:text-lg">
                   Manage sign in, registration, password recovery, profile details, and reviews
@@ -80,7 +80,7 @@ function AuthHomePage() {
               <div className="grid gap-4 sm:grid-cols-3">
                 <article className="rounded-3xl border border-slate-200 bg-slate-50 p-5">
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                    Module
+                    Area
                   </p>
                   <strong className="mt-2 block text-2xl font-bold text-slate-950">
                     Auth
@@ -185,10 +185,10 @@ function AuthHomePage() {
           <div className="space-y-6">
             <section className="rounded-[28px] border border-slate-200/70 bg-white/80 p-6 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur">
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-orange-700">
-                Workflow
+                Overview
               </p>
               <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-950">
-                Current flow
+                What you can do
               </h2>
               <div className="mt-5 space-y-3">
                 {authSteps.map((step, index) => (
@@ -207,14 +207,14 @@ function AuthHomePage() {
 
             <section className="rounded-[28px] bg-[linear-gradient(135deg,#0f172a_0%,#1d4ed8_100%)] p-6 text-white shadow-[0_24px_60px_rgba(29,78,216,0.25)]">
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-orange-200">
-                Project note
+                Account area
               </p>
               <h2 className="mt-2 text-3xl font-black tracking-tight">
-                Built as a real account experience
+                Clean, simple, and easy to use
               </h2>
               <p className="mt-3 text-sm leading-6 text-slate-200">
-                This account area now uses a cleaner dashboard layout and is ready for deeper
-                password reset and user management logic.
+                This space keeps the account pages in one consistent layout with quick access
+                to profile, reviews, and password tools.
               </p>
             </section>
           </div>

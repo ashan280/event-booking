@@ -120,7 +120,7 @@ function ProfilePage() {
 
             <div className="space-y-3">
               <h2 className="text-lg font-bold text-slate-950">Status</h2>
-              <p className="text-sm text-slate-600"><strong className="text-slate-900">Member since:</strong> {formatDate(profile.createdAt)}</p>
+              <p className="text-sm text-slate-600"><strong className="text-slate-900">Joined:</strong> {formatDate(profile.createdAt)}</p>
               <p className="text-sm text-slate-600"><strong className="text-slate-900">Access:</strong> Protected account</p>
               <p className="text-sm text-slate-600"><strong className="text-slate-900">State:</strong> Active user</p>
             </div>

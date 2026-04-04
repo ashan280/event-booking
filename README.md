@@ -1,6 +1,6 @@
 # Event Booking and Seat Reservation System
 
-This is a 3 student group project.
+A web application for browsing events, reserving seats, and managing bookings.
 
 ## Tech
 
@@ -15,7 +15,7 @@ This is a 3 student group project.
 - `database/` for SQL
 - `docs/` for local notes only
 
-## Students
+## Team
 
 - `Ashan` for auth, user, review
 - `vinuri` for event, venue, category, search
@@ -29,7 +29,7 @@ This is a 3 student group project.
 - `feature/vinuri-event-venue`
 - `feature/nimesha-booking-payment`
 
-## Work Flow
+## Workflow
 
 1. Do one small task.
 2. Make one simple commit.

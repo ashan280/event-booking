@@ -38,22 +38,22 @@ const featuredEvents = [
 const collections = [
   {
     title: "Trending this week",
-    description: "Fast, category-led discovery inspired by large ticketing platforms."
+    description: "Popular events people are looking at right now."
   },
   {
-    title: "Student-friendly events",
-    description: "Budget-conscious listings with clear pricing and location cues."
+    title: "Budget-friendly picks",
+    description: "Easy-to-scan listings with clear pricing and location details."
   },
   {
-    title: "Ready for booking flow",
-    description: "A clear handoff from event discovery into seat selection and payment."
+    title: "Easy to book",
+    description: "A smooth path from discovery to seat selection and checkout."
   }
 ];
 
 const projectHighlights = [
-  "React frontend for event discovery and booking journeys",
-  "Spring Boot APIs for auth, events, seats, payments, and tickets",
-  "MySQL-backed modules split across the 3 team members"
+  "Discover concerts, workshops, festivals, and more in one place",
+  "Choose your event, reserve your seat, and book in a few simple steps",
+  "Manage your account, bookings, and tickets with less effort"
 ];
 
 function HomePage({ modules }) {
@@ -69,7 +69,7 @@ function HomePage({ modules }) {
           <nav className="top-links">
             <a href="#discover">Discover</a>
             <a href="#featured">Featured</a>
-            <a href="#modules">Modules</a>
+            <a href="#modules">Explore</a>
             <Link className="nav-cta" to="/auth">
               Sign in
             </Link>
@@ -78,12 +78,11 @@ function HomePage({ modules }) {
 
         <section className="hero-section" id="discover">
           <div className="hero-copy">
-            <p className="section-tag">Reference-driven home page</p>
+            <p className="section-tag">Discover events</p>
             <h1>Discover events, reserve seats, and move smoothly into booking.</h1>
             <p className="hero-text">
-              This landing page uses the project plan and Eventbrite-style discovery
-              patterns as reference: search first, browse by category, highlight
-              featured events, and give each team module a clear place in the flow.
+              Find live events, explore by category, and move from browsing to booking
+              in a simple, clear flow.
             </p>
 
             <div className="hero-actions">
@@ -98,7 +97,7 @@ function HomePage({ modules }) {
             <div className="hero-stats">
               <article>
                 <strong>3</strong>
-                <span>core project modules</span>
+                <span>main platform areas</span>
               </article>
               <article>
                 <strong>6</strong>
@@ -159,12 +158,12 @@ function HomePage({ modules }) {
         <section className="collection-section">
           <div className="section-head">
             <p className="section-tag">Collections</p>
-            <h2>Sections that make the homepage feel alive</h2>
+            <h2>Fresh picks for different kinds of visitors</h2>
           </div>
           <div className="collection-grid">
             {collections.map((collection) => (
               <article className="collection-card" key={collection.title}>
-                <p className="collection-kicker">Curated lane</p>
+                <p className="collection-kicker">Collection</p>
                 <h3>{collection.title}</h3>
                 <p>{collection.description}</p>
               </article>
@@ -175,7 +174,7 @@ function HomePage({ modules }) {
         <section className="featured-section" id="featured">
           <div className="section-head">
             <p className="section-tag">Featured events</p>
-            <h2>Event cards ready to evolve into full listings and detail pages</h2>
+            <h2>Featured events people can explore right away</h2>
           </div>
           <div className="event-grid">
             {featuredEvents.map((event) => (
@@ -196,8 +195,8 @@ function HomePage({ modules }) {
 
         <section className="module-section" id="modules">
           <div className="section-head">
-            <p className="section-tag">Team modules</p>
-            <h2>Project ownership mapped directly from the planning document</h2>
+            <p className="section-tag">Explore</p>
+            <h2>Key areas of the platform</h2>
           </div>
           <div className="module-grid">
             {modules.map((module) => (
@@ -206,7 +205,7 @@ function HomePage({ modules }) {
                 <h3>{module.description}</h3>
                 <p>{module.summary}</p>
                 <Link className="primary-link" to={module.path}>
-                  Open module
+                  Open page
                 </Link>
               </article>
             ))}
