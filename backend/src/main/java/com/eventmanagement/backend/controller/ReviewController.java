@@ -1,11 +1,11 @@
 package com.eventmanagement.backend.controller;
 
 import com.eventmanagement.backend.dto.ReviewRequest;
+import com.eventmanagement.backend.dto.ReviewResponse;
 import com.eventmanagement.backend.service.ReviewService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,12 +21,12 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @GetMapping
-    public List<Map<String, Object>> getReviews() {
+    public List<ReviewResponse> getReviews() {
         return reviewService.getReviews();
     }
 
     @PostMapping
-    public Map<String, Object> addReview(@Valid @RequestBody ReviewRequest request, HttpServletRequest httpRequest) {
+    public ReviewResponse addReview(@Valid @RequestBody ReviewRequest request, HttpServletRequest httpRequest) {
         return reviewService.addReview(request, httpRequest);
     }
 }

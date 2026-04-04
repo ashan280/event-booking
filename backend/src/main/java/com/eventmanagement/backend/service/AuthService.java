@@ -1,6 +1,9 @@
 package com.eventmanagement.backend.service;
 
+import com.eventmanagement.backend.dto.ApiMessageResponse;
+import com.eventmanagement.backend.dto.AuthResponse;
 import com.eventmanagement.backend.dto.ForgotPasswordRequest;
+import com.eventmanagement.backend.dto.ForgotPasswordResponse;
 import com.eventmanagement.backend.dto.LoginRequest;
 import com.eventmanagement.backend.dto.RegisterRequest;
 import com.eventmanagement.backend.dto.ResetPasswordRequest;
@@ -8,7 +11,6 @@ import com.eventmanagement.backend.model.User;
 import com.eventmanagement.backend.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,7 +28,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final Map<String, Long> activeSessions = new ConcurrentHashMap<>();
 
-    public Map<String, Object> login(LoginRequest request) {
+    public AuthResponse login(LoginRequest request) {
         User user = userRepository.findByEmail(normalizeEmail(request.getEmail()))
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email or password is wrong"));
 
@@ -37,7 +39,7 @@ public class AuthService {
         return buildAuthResponse(user, "Login successful");
     }
 
-    public Map<String, Object> register(RegisterRequest request) {
+    public AuthResponse register(RegisterRequest request) {
         String email = normalizeEmail(request.getEmail());
 
         if (userRepository.findByEmail(email).isPresent()) {
@@ -54,7 +56,7 @@ public class AuthService {
         return buildAuthResponse(savedUser, "Register successful");
     }
 
-    public Map<String, Object> forgotPassword(ForgotPasswordRequest request) {
+    public ForgotPasswordResponse forgotPassword(ForgotPasswordRequest request) {
         String email = normalizeEmail(request.getEmail());
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found for this email"));
@@ -66,13 +68,10 @@ public class AuthService {
         user.setResetTokenExpiresAt(expiresAt);
         userRepository.save(user);
 
-        Map<String, Object> response = new LinkedHashMap<>();
-        response.put("message", "Password reset link created");
-        response.put("resetToken", resetToken);
-        return response;
+        return new ForgotPasswordResponse("Password reset link created", resetToken);
     }
 
-    public Map<String, Object> resetPassword(ResetPasswordRequest request) {
+    public ApiMessageResponse resetPassword(ResetPasswordRequest request) {
         User user = userRepository.findByResetToken(request.getToken().trim())
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reset token is not valid"));
 
@@ -85,12 +84,10 @@ public class AuthService {
         user.setResetTokenExpiresAt(null);
         userRepository.save(user);
 
-        Map<String, Object> response = new LinkedHashMap<>();
-        response.put("message", "Password updated successfully");
-        return response;
+        return new ApiMessageResponse("Password updated successfully");
     }
 
-    public Map<String, Object> profile(HttpServletRequest request) {
+    public AuthResponse profile(HttpServletRequest request) {
         User user = getCurrentUser(request);
         return userDetails(user, "Profile loaded");
     }
@@ -107,24 +104,30 @@ public class AuthService {
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }
 
-    private Map<String, Object> buildAuthResponse(User user, String message) {
+    private AuthResponse buildAuthResponse(User user, String message) {
         String token = UUID.randomUUID().toString();
         activeSessions.put(token, user.getId());
-
-        Map<String, Object> response = userDetails(user, message);
-        response.put("token", token);
-        return response;
+        return new AuthResponse(
+            message,
+            user.getId(),
+            user.getFullName(),
+            user.getEmail(),
+            user.getRole(),
+            user.getCreatedAt(),
+            token
+        );
     }
 
-    private Map<String, Object> userDetails(User user, String message) {
-        Map<String, Object> response = new LinkedHashMap<>();
-        response.put("message", message);
-        response.put("id", user.getId());
-        response.put("fullName", user.getFullName());
-        response.put("email", user.getEmail());
-        response.put("role", user.getRole());
-        response.put("createdAt", user.getCreatedAt());
-        return response;
+    private AuthResponse userDetails(User user, String message) {
+        return new AuthResponse(
+            message,
+            user.getId(),
+            user.getFullName(),
+            user.getEmail(),
+            user.getRole(),
+            user.getCreatedAt(),
+            null
+        );
     }
 
     private String getToken(HttpServletRequest request) {
