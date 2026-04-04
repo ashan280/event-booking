@@ -84,6 +84,9 @@ function LoginPage() {
         <p className="helper-text">
           New user? <Link to="/auth/register">Create an account</Link>
         </p>
+        <p className="helper-text">
+          Forgot password? <Link to="/auth/forgot-password">Reset here</Link>
+        </p>
       </section>
     </main>
   );

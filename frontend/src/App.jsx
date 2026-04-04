@@ -3,6 +3,7 @@ import GuestRoute from "./components/GuestRoute";
 import ProtectedRoute from "./components/ProtectedRoute";
 import HomePage from "./pages/HomePage";
 import AuthHomePage from "./pages/auth/AuthHomePage";
+import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
 import ProfilePage from "./pages/auth/ProfilePage";
@@ -43,6 +44,14 @@ function App() {
         element={
           <GuestRoute>
             <LoginPage />
+          </GuestRoute>
+        }
+      />
+      <Route
+        path="/auth/forgot-password"
+        element={
+          <GuestRoute>
+            <ForgotPasswordPage />
           </GuestRoute>
         }
       />
