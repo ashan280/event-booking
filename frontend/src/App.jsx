@@ -10,17 +10,20 @@ const modules = [
   {
     title: "Member 1",
     path: "/auth",
-    description: "Authentication, user management, reviews"
+    description: "Authentication, user management, reviews",
+    summary: "Login, register, protected routes, profiles, ratings"
   },
   {
     title: "Member 2",
     path: "/events",
-    description: "Events, categories, venues, search"
+    description: "Events, categories, venues, search",
+    summary: "Discovery pages, filters, event detail screens, admin event tools"
   },
   {
     title: "Member 3",
     path: "/booking",
-    description: "Booking, seats, payments, tickets, reports"
+    description: "Booking, seats, payments, tickets, reports",
+    summary: "Seat maps, checkout, payment flow, tickets, booking analytics"
   }
 ];
 
