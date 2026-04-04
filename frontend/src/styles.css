@@ -35,7 +35,9 @@ a {
 }
 
 button,
-input {
+input,
+select,
+textarea {
   font: inherit;
 }
 
@@ -274,6 +276,21 @@ label {
   color: var(--ink);
 }
 
+.auth-select,
+.auth-textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid rgba(31, 41, 55, 0.12);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--ink);
+}
+
+.auth-textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
 .quick-filter-list,
 .auth-link-list,
 .category-list {
@@ -416,6 +433,25 @@ label {
   background: rgba(255, 255, 255, 0.72);
   border: 1px solid var(--border);
   border-radius: 18px;
+}
+
+.review-list {
+  display: grid;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.review-card {
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid var(--border);
+}
+
+.review-card p,
+.review-rating {
+  margin: 8px 0 0;
+  color: var(--muted);
 }
 
 @media (max-width: 900px) {

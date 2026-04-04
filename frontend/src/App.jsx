@@ -4,6 +4,7 @@ import AuthHomePage from "./pages/auth/AuthHomePage";
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
 import ProfilePage from "./pages/auth/ProfilePage";
+import ReviewPage from "./pages/auth/ReviewPage";
 import PlaceholderPage from "./pages/PlaceholderPage";
 
 const modules = [
@@ -46,6 +47,10 @@ function App() {
       <Route
         path="/auth/profile"
         element={<ProfilePage />}
+      />
+      <Route
+        path="/auth/reviews"
+        element={<ReviewPage />}
       />
       <Route
         path="/events"

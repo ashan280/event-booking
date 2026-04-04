@@ -29,6 +29,9 @@ function AuthHomePage() {
           <Link className="primary-link secondary-link" to="/auth/profile">
             Go to profile
           </Link>
+          <Link className="primary-link secondary-link" to="/auth/reviews">
+            Go to reviews
+          </Link>
         </div>
       </section>
     </main>
