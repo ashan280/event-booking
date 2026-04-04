@@ -105,4 +105,69 @@ class AuthControllerTests {
             .andExpect(status().isUnauthorized())
             .andExpect(jsonPath("$.message").value("Email or password is wrong"));
     }
+
+    @Test
+    void forgotAndResetPasswordFlowWorks() throws Exception {
+        mockMvc.perform(post("/api/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {
+                      "fullName": "Ashan Maduwantha",
+                      "email": "ashan@example.com",
+                      "password": "secret123"
+                    }
+                    """))
+            .andExpect(status().isOk());
+
+        MvcResult forgotResult = mockMvc.perform(post("/api/auth/forgot-password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {
+                      "email": "ashan@example.com"
+                    }
+                    """))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.message").value("Password reset link created"))
+            .andExpect(jsonPath("$.resetToken").exists())
+            .andReturn();
+
+        JsonNode forgotBody = objectMapper.readTree(forgotResult.getResponse().getContentAsString());
+        String resetToken = forgotBody.get("resetToken").asText();
+
+        mockMvc.perform(post("/api/auth/reset-password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {
+                      "token": "%s",
+                      "password": "newpass123"
+                    }
+                    """.formatted(resetToken)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.message").value("Password updated successfully"));
+
+        mockMvc.perform(post("/api/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {
+                      "email": "ashan@example.com",
+                      "password": "newpass123"
+                    }
+                    """))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.message").value("Login successful"));
+    }
+
+    @Test
+    void resetPasswordFailsWithWrongToken() throws Exception {
+        mockMvc.perform(post("/api/auth/reset-password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {
+                      "token": "wrong-token",
+                      "password": "newpass123"
+                    }
+                    """))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("Reset token is not valid"));
+    }
 }

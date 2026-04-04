@@ -1,7 +1,9 @@
 package com.eventmanagement.backend.controller;
 
+import com.eventmanagement.backend.dto.ForgotPasswordRequest;
 import com.eventmanagement.backend.dto.LoginRequest;
 import com.eventmanagement.backend.dto.RegisterRequest;
+import com.eventmanagement.backend.dto.ResetPasswordRequest;
 import com.eventmanagement.backend.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -28,6 +30,16 @@ public class AuthController {
     @PostMapping("/register")
     public Map<String, Object> register(@Valid @RequestBody RegisterRequest request) {
         return authService.register(request);
+    }
+
+    @PostMapping("/forgot-password")
+    public Map<String, Object> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
+        return authService.forgotPassword(request);
+    }
+
+    @PostMapping("/reset-password")
+    public Map<String, Object> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        return authService.resetPassword(request);
     }
 
     @GetMapping("/profile")

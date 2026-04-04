@@ -1,10 +1,13 @@
 package com.eventmanagement.backend.service;
 
+import com.eventmanagement.backend.dto.ForgotPasswordRequest;
 import com.eventmanagement.backend.dto.LoginRequest;
 import com.eventmanagement.backend.dto.RegisterRequest;
+import com.eventmanagement.backend.dto.ResetPasswordRequest;
 import com.eventmanagement.backend.model.User;
 import com.eventmanagement.backend.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -49,6 +52,43 @@ public class AuthService {
 
         User savedUser = userRepository.save(user);
         return buildAuthResponse(savedUser, "Register successful");
+    }
+
+    public Map<String, Object> forgotPassword(ForgotPasswordRequest request) {
+        String email = normalizeEmail(request.getEmail());
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found for this email"));
+
+        String resetToken = UUID.randomUUID().toString();
+        LocalDateTime expiresAt = LocalDateTime.now().plusMinutes(15);
+
+        user.setResetToken(resetToken);
+        user.setResetTokenExpiresAt(expiresAt);
+        userRepository.save(user);
+
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("message", "Password reset link created");
+        response.put("resetToken", resetToken);
+        response.put("expiresAt", expiresAt);
+        return response;
+    }
+
+    public Map<String, Object> resetPassword(ResetPasswordRequest request) {
+        User user = userRepository.findByResetToken(request.getToken().trim())
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reset token is not valid"));
+
+        if (user.getResetTokenExpiresAt() == null || user.getResetTokenExpiresAt().isBefore(LocalDateTime.now())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reset token has expired");
+        }
+
+        user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
+        user.setResetToken(null);
+        user.setResetTokenExpiresAt(null);
+        userRepository.save(user);
+
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("message", "Password updated successfully");
+        return response;
     }
 
     public Map<String, Object> profile(HttpServletRequest request) {
