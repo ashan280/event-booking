@@ -86,9 +86,9 @@ function HomePage({ modules }) {
             </p>
 
             <div className="hero-actions">
-              <button className="primary-link" type="button">
+              <Link className="primary-link" to="/events">
                 Explore events
-              </button>
+              </Link>
               <Link className="ghost-link" to="/auth/register">
                 Create account
               </Link>
