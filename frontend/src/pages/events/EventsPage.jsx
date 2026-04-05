@@ -2,15 +2,27 @@ import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { apiRequest } from "../../lib/api";
 
-const categories = ["All", "Music", "Business", "Food & Drink", "Workshops", "Sports"];
-
 function EventsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [events, setEvents] = useState([]);
+  const [categories, setCategories] = useState(["All"]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [search, setSearch] = useState(searchParams.get("search") || "");
   const [category, setCategory] = useState(searchParams.get("category") || "All");
+
+  useEffect(() => {
+    async function loadCategories() {
+      try {
+        const data = await apiRequest("/api/events/categories");
+        setCategories(["All", ...data.map((item) => item.name)]);
+      } catch {
+        setCategories(["All"]);
+      }
+    }
+
+    loadCategories();
+  }, []);
 
   useEffect(() => {
     async function loadEvents() {
@@ -81,6 +93,9 @@ function EventsPage() {
             <Link className="ghost-link" to="/">
               Back to home
             </Link>
+            <Link className="ghost-link" to="/venues">
+              View venues
+            </Link>
           </div>
         </section>
 
@@ -112,7 +127,7 @@ function EventsPage() {
                   <span>{event.price}</span>
                 </div>
                 <p className="event-venue-text">
-                  {event.venue} • {event.availableSeats} seats left
+                  {event.venue} | {event.availableSeats} seats left
                 </p>
                 <Link className="primary-link" to={`/events/${event.id}`}>
                   View details

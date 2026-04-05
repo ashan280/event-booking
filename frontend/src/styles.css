@@ -514,6 +514,12 @@ label {
   gap: 20px;
 }
 
+.venue-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
 .event-list-card,
 .event-details-box {
   padding: 24px;

@@ -11,6 +11,7 @@ import ProfilePage from "./pages/auth/ProfilePage";
 import ReviewPage from "./pages/auth/ReviewPage";
 import EventDetailsPage from "./pages/events/EventDetailsPage";
 import EventsPage from "./pages/events/EventsPage";
+import VenuesPage from "./pages/events/VenuesPage";
 import PlaceholderPage from "./pages/PlaceholderPage";
 
 const modules = [
@@ -97,6 +98,10 @@ function App() {
       <Route
         path="/events/:eventId"
         element={<EventDetailsPage />}
+      />
+      <Route
+        path="/venues"
+        element={<VenuesPage />}
       />
       <Route
         path="/booking"
