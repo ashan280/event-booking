@@ -1,7 +1,12 @@
 package com.eventmanagement.backend.dto;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 public final class EventDto {
 
@@ -40,5 +45,43 @@ public final class EventDto {
         private final String name;
         private final String city;
         private final Long eventCount;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class EventRequest {
+
+        @NotBlank(message = "Title is required")
+        private String title;
+
+        @NotBlank(message = "Category is required")
+        private String category;
+
+        @NotBlank(message = "Venue is required")
+        private String venue;
+
+        @NotBlank(message = "City is required")
+        private String city;
+
+        @NotBlank(message = "Date is required")
+        private String date;
+
+        @NotBlank(message = "Time is required")
+        private String time;
+
+        @NotBlank(message = "Price is required")
+        private String price;
+
+        @NotBlank(message = "Short description is required")
+        @Size(max = 120, message = "Short description is too long")
+        private String shortDescription;
+
+        @NotBlank(message = "Description is required")
+        @Size(max = 500, message = "Description is too long")
+        private String description;
+
+        @Min(value = 1, message = "Available seats must be at least 1")
+        private Integer availableSeats;
     }
 }

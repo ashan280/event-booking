@@ -1,6 +1,7 @@
 package com.eventmanagement.backend.service;
 
 import com.eventmanagement.backend.dto.EventDto;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -14,7 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class EventService {
 
-    private static final List<EventDto.EventResponse> EVENTS = List.of(
+    private static final List<EventDto.EventResponse> STARTER_EVENTS = List.of(
         new EventDto.EventResponse(
             1L,
             "Colombo Music Night",
@@ -82,25 +83,27 @@ public class EventService {
         )
     );
 
+    private final List<EventDto.EventResponse> events = new ArrayList<>(STARTER_EVENTS);
+
     public List<EventDto.EventResponse> getEvents(String search, String category) {
         String searchValue = normalize(search);
         String categoryValue = normalize(category);
 
-        return EVENTS.stream()
+        return events.stream()
             .filter(event -> matchesSearch(event, searchValue))
             .filter(event -> matchesCategory(event, categoryValue))
             .toList();
     }
 
     public EventDto.EventResponse getEventById(Long id) {
-        return EVENTS.stream()
+        return events.stream()
             .filter(event -> event.getId().equals(id))
             .findFirst()
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
     }
 
     public List<EventDto.CategoryResponse> getCategories() {
-        return EVENTS.stream()
+        return events.stream()
             .collect(java.util.stream.Collectors.groupingBy(EventDto.EventResponse::getCategory, java.util.stream.Collectors.counting()))
             .entrySet()
             .stream()
@@ -110,7 +113,7 @@ public class EventService {
     }
 
     public List<EventDto.VenueResponse> getVenues() {
-        return EVENTS.stream()
+        return events.stream()
             .collect(
                 java.util.stream.Collectors.groupingBy(
                     event -> event.getVenue() + "||" + event.getCity(),
@@ -125,6 +128,25 @@ public class EventService {
             })
             .sorted(Comparator.comparing(EventDto.VenueResponse::getCity).thenComparing(EventDto.VenueResponse::getName))
             .toList();
+    }
+
+    public EventDto.EventResponse addEvent(EventDto.EventRequest request) {
+        EventDto.EventResponse event = new EventDto.EventResponse(
+            nextId(),
+            request.getTitle().trim(),
+            request.getCategory().trim(),
+            request.getVenue().trim(),
+            request.getCity().trim(),
+            request.getDate().trim(),
+            request.getTime().trim(),
+            request.getPrice().trim(),
+            request.getShortDescription().trim(),
+            request.getDescription().trim(),
+            request.getAvailableSeats()
+        );
+
+        events.add(event);
+        return event;
     }
 
     private boolean matchesSearch(EventDto.EventResponse event, String search) {
@@ -148,5 +170,12 @@ public class EventService {
 
     private String normalize(String value) {
         return value == null ? "" : value.trim().toLowerCase(Locale.ROOT);
+    }
+
+    private Long nextId() {
+        return events.stream()
+            .map(EventDto.EventResponse::getId)
+            .max(Long::compareTo)
+            .orElse(0L) + 1;
     }
 }
