@@ -24,4 +24,21 @@ public final class EventDto {
         private final String description;
         private final Integer availableSeats;
     }
+
+    @Getter
+    @AllArgsConstructor
+    public static class CategoryResponse {
+
+        private final String name;
+        private final Long eventCount;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class VenueResponse {
+
+        private final String name;
+        private final String city;
+        private final Long eventCount;
+    }
 }

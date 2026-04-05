@@ -29,4 +29,14 @@ public class EventController {
     public EventDto.EventResponse getEvent(@PathVariable Long id) {
         return eventService.getEventById(id);
     }
+
+    @GetMapping("/categories")
+    public List<EventDto.CategoryResponse> getCategories() {
+        return eventService.getCategories();
+    }
+
+    @GetMapping("/venues")
+    public List<EventDto.VenueResponse> getVenues() {
+        return eventService.getVenues();
+    }
 }

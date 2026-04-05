@@ -39,4 +39,20 @@ class EventControllerTests {
             .andExpect(jsonPath("$.title").value("Colombo Music Night"))
             .andExpect(jsonPath("$.venue").value("Lotus Hall"));
     }
+
+    @Test
+    void categoriesWork() throws Exception {
+        mockMvc.perform(get("/api/events/categories"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$[0].name").exists())
+            .andExpect(jsonPath("$[0].eventCount").exists());
+    }
+
+    @Test
+    void venuesWork() throws Exception {
+        mockMvc.perform(get("/api/events/venues"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$[0].name").exists())
+            .andExpect(jsonPath("$[0].city").exists());
+    }
 }

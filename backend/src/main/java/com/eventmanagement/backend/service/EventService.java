@@ -1,8 +1,10 @@
 package com.eventmanagement.backend.service;
 
 import com.eventmanagement.backend.dto.EventDto;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -95,6 +97,34 @@ public class EventService {
             .filter(event -> event.getId().equals(id))
             .findFirst()
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
+    }
+
+    public List<EventDto.CategoryResponse> getCategories() {
+        return EVENTS.stream()
+            .collect(java.util.stream.Collectors.groupingBy(EventDto.EventResponse::getCategory, java.util.stream.Collectors.counting()))
+            .entrySet()
+            .stream()
+            .sorted(Map.Entry.comparingByKey())
+            .map(entry -> new EventDto.CategoryResponse(entry.getKey(), entry.getValue()))
+            .toList();
+    }
+
+    public List<EventDto.VenueResponse> getVenues() {
+        return EVENTS.stream()
+            .collect(
+                java.util.stream.Collectors.groupingBy(
+                    event -> event.getVenue() + "||" + event.getCity(),
+                    java.util.stream.Collectors.counting()
+                )
+            )
+            .entrySet()
+            .stream()
+            .map(entry -> {
+                String[] parts = entry.getKey().split("\\|\\|");
+                return new EventDto.VenueResponse(parts[0], parts[1], entry.getValue());
+            })
+            .sorted(Comparator.comparing(EventDto.VenueResponse::getCity).thenComparing(EventDto.VenueResponse::getName))
+            .toList();
     }
 
     private boolean matchesSearch(EventDto.EventResponse event, String search) {
