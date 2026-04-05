@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthPageShell from "../../components/AuthPageShell";
 import { apiRequest } from "../../lib/api";
-import { clearAuth, getAuth } from "../../lib/auth";
+import { clearAuth, getAuth, isAdmin } from "../../lib/auth";
 
 function formatDate(value) {
   if (!value) {
@@ -20,6 +20,7 @@ function formatDate(value) {
 
 function ProfilePage() {
   const navigate = useNavigate();
+  const auth = getAuth();
   const [profile, setProfile] = useState(null);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -135,6 +136,20 @@ function ProfilePage() {
         >
           Back to account home
         </Link>
+        <Link
+          className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50"
+          to="/booking"
+        >
+          My bookings
+        </Link>
+        {isAdmin(auth) ? (
+          <Link
+            className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50"
+            to="/admin"
+          >
+            Admin dashboard
+          </Link>
+        ) : null}
         <button
           className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50"
           onClick={handleLogout}

@@ -12,36 +12,25 @@ CREATE TABLE IF NOT EXISTS users (
     reset_token_expires_at TIMESTAMP NULL
 );
 
-CREATE TABLE IF NOT EXISTS categories (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(100) NOT NULL UNIQUE,
-    description VARCHAR(255)
-);
-
-CREATE TABLE IF NOT EXISTS venues (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(150) NOT NULL,
-    location VARCHAR(255) NOT NULL,
-    capacity INT NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS events (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    category_id BIGINT NOT NULL,
-    venue_id BIGINT NOT NULL,
     title VARCHAR(150) NOT NULL,
-    description TEXT,
-    event_date DATETIME NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    status VARCHAR(50) NOT NULL DEFAULT 'DRAFT',
-    FOREIGN KEY (category_id) REFERENCES categories(id),
-    FOREIGN KEY (venue_id) REFERENCES venues(id)
+    category VARCHAR(80) NOT NULL,
+    venue VARCHAR(150) NOT NULL,
+    city VARCHAR(120) NOT NULL,
+    date VARCHAR(20) NOT NULL,
+    time VARCHAR(40) NOT NULL,
+    price VARCHAR(40) NOT NULL,
+    short_description VARCHAR(120) NOT NULL,
+    description VARCHAR(500) NOT NULL,
+    available_seats INT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS bookings (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     user_id BIGINT NOT NULL,
     event_id BIGINT NOT NULL,
+    seat_count INT NOT NULL,
     total_amount DECIMAL(10, 2) NOT NULL,
     booking_status VARCHAR(50) NOT NULL DEFAULT 'PENDING',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

@@ -133,7 +133,7 @@ function ResetPasswordPage() {
         </div>
 
         <button
-          className="inline-flex w-full items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-400"
+          className="inline-flex w-full items-center justify-center rounded-full bg-orange-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:bg-orange-300"
           type="submit"
           disabled={isLoading}
         >
@@ -155,7 +155,7 @@ function ResetPasswordPage() {
 
       <div className="mt-6 flex flex-wrap gap-3 text-sm text-slate-600">
         <span>Need the recovery step first?</span>
-        <Link className="font-semibold text-blue-700 hover:text-blue-800" to="/auth/forgot-password">
+        <Link className="font-semibold text-orange-700 hover:text-orange-800" to="/auth/forgot-password">
           Go back
         </Link>
       </div>

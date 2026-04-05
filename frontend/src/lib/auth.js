@@ -22,3 +22,11 @@ export function getAuth() {
 export function clearAuth() {
   localStorage.removeItem(AUTH_KEY);
 }
+
+export function isLoggedIn(authData = getAuth()) {
+  return Boolean(authData?.token);
+}
+
+export function isAdmin(authData = getAuth()) {
+  return authData?.role === "ADMIN";
+}

@@ -1,216 +1,258 @@
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import PublicSiteHeader from "../components/PublicSiteHeader";
+import { apiRequest } from "../lib/api";
 
-const categories = [
-  "Music",
-  "Business",
-  "Food & Drink",
-  "Arts",
-  "Workshops",
-  "Sports"
-];
+function getTodayValue() {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
 
-const quickFilters = ["Today", "This weekend", "Free", "Online", "Family-friendly"];
+function formatDateLabel(value) {
+  const parsedDate = new Date(value);
 
-const featuredEvents = [
-  {
-    title: "Colombo Skyline Music Night",
-    date: "Fri, 12 Apr",
-    location: "Colombo Fort",
-    price: "LKR 2,500",
-    mood: "Live music"
-  },
-  {
-    title: "Startup Sprint Summit 2026",
-    date: "Sat, 20 Apr",
-    location: "Kandy",
-    price: "Free",
-    mood: "Networking"
-  },
-  {
-    title: "Southern Food Street Weekender",
-    date: "Sun, 28 Apr",
-    location: "Galle",
-    price: "LKR 1,200",
-    mood: "Festival"
+  if (Number.isNaN(parsedDate.getTime())) {
+    return value;
   }
-];
 
-const collections = [
-  {
-    title: "Trending this week",
-    description: "Popular events people are looking at right now."
-  },
-  {
-    title: "Budget-friendly picks",
-    description: "Easy-to-scan listings with clear pricing and location details."
-  },
-  {
-    title: "Easy to book",
-    description: "A smooth path from discovery to seat selection and checkout."
-  }
-];
+  return parsedDate.toLocaleDateString("en-GB", {
+    weekday: "short",
+    day: "numeric",
+    month: "short"
+  });
+}
 
-const projectHighlights = [
-  "Discover concerts, workshops, festivals, and more in one place",
-  "Choose your event, reserve your seat, and book in a few simple steps",
-  "Check your account, bookings, and tickets in one system"
-];
+function HomePage() {
+  const [events, setEvents] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
 
-function HomePage({ modules }) {
+  useEffect(() => {
+    async function loadHomeEvents() {
+      setIsLoading(true);
+      setError("");
+
+      try {
+        const data = await apiRequest("/api/events");
+        setEvents(data);
+      } catch (requestError) {
+        setError(requestError.message);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    loadHomeEvents();
+  }, []);
+
+  const todayValue = getTodayValue();
+
+  const sortedEvents = useMemo(
+    () => [...events].sort((first, second) => first.date.localeCompare(second.date)),
+    [events]
+  );
+
+  const todayEvents = useMemo(
+    () => sortedEvents.filter((event) => event.date === todayValue),
+    [sortedEvents, todayValue]
+  );
+
+  const upcomingEvents = useMemo(
+    () => sortedEvents.filter((event) => event.date >= todayValue).slice(0, 4),
+    [sortedEvents, todayValue]
+  );
+
+  const locationCards = useMemo(() => {
+    const cityMap = new Map();
+
+    sortedEvents.forEach((event) => {
+      const current = cityMap.get(event.city);
+
+      if (current) {
+        current.count += 1;
+      } else {
+        cityMap.set(event.city, {
+          city: event.city,
+          count: 1,
+          venue: event.venue
+        });
+      }
+    });
+
+    return Array.from(cityMap.values()).slice(0, 4);
+  }, [sortedEvents]);
+
+  const categories = useMemo(
+    () => Array.from(new Set(sortedEvents.map((event) => event.category))).slice(0, 6),
+    [sortedEvents]
+  );
+
+  const spotlightEvent = todayEvents[0] || upcomingEvents[0] || sortedEvents[0];
+
   return (
     <main className="home-page">
       <div className="page-shell">
-        <header className="top-bar">
-          <div className="brand-block">
-            <p className="brand-name">EventHub</p>
-            <span className="brand-subtitle">Event booking and seat reservation system</span>
-          </div>
+        <PublicSiteHeader />
 
-          <nav className="top-links">
-            <a href="#discover">Discover</a>
-            <a href="#featured">Featured</a>
-            <a href="#modules">Explore</a>
-            <Link className="nav-cta" to="/auth">
-              Sign in
-            </Link>
-          </nav>
-        </header>
-
-        <section className="hero-section" id="discover">
+        <section className="hero-section home-hero">
           <div className="hero-copy">
-            <p className="section-tag">Discover events</p>
-            <h1>Discover events, reserve seats, and move smoothly into booking.</h1>
+            <p className="section-tag">What&apos;s on</p>
+            <h1>See today&apos;s events, upcoming plans, and places to go.</h1>
             <p className="hero-text">
-              Find live events, explore by category, and move from browsing to booking
-              in a simple, clear flow.
+              Start from today&apos;s picks, check upcoming events, then move to booking in a simple flow.
             </p>
 
             <div className="hero-actions">
-              <button className="primary-link" type="button">
-                Explore events
-              </button>
-              <Link className="ghost-link" to="/auth/register">
-                Create account
+              <Link className="primary-link" to="/events">
+                Browse all events
+              </Link>
+              <Link className="ghost-link" to="/venues">
+                Browse venues
               </Link>
             </div>
 
             <div className="hero-stats">
               <article>
-                <strong>3</strong>
-                <span>main sections</span>
+                <strong>{events.length}</strong>
+                <span>events live</span>
               </article>
               <article>
-                <strong>6</strong>
-                <span>browse-first categories</span>
+                <strong>{todayEvents.length}</strong>
+                <span>events today</span>
               </article>
               <article>
-                <strong>1</strong>
-                <span>end-to-end booking journey</span>
+                <strong>{locationCards.length}</strong>
+                <span>main locations</span>
               </article>
             </div>
           </div>
 
-          <aside className="search-panel">
-            <p className="search-eyebrow">Find an event</p>
-            <label>
-              Looking for
-              <input type="text" placeholder="Concerts, meetups, festivals..." />
-            </label>
-            <label>
-              Location
-              <input type="text" placeholder="Colombo, Kandy, Galle..." />
-            </label>
-            <label>
-              Date
-              <input type="text" placeholder="This weekend" />
-            </label>
-            <button type="button">Search events</button>
-            <div className="quick-filter-list">
-              {quickFilters.map((filter) => (
-                <button className="quick-filter-chip" key={filter} type="button">
-                  {filter}
-                </button>
-              ))}
-            </div>
+          <aside className="spotlight-panel">
+            <p className="search-eyebrow">Event spotlight</p>
+            {spotlightEvent ? (
+              <>
+                <h2>{spotlightEvent.title}</h2>
+                <p>{spotlightEvent.shortDescription}</p>
+                <div className="spotlight-meta">
+                  <span>{formatDateLabel(spotlightEvent.date)}</span>
+                  <span>{spotlightEvent.time}</span>
+                  <span>{spotlightEvent.city}</span>
+                  <span>{spotlightEvent.price}</span>
+                </div>
+                <p className="spotlight-venue">{spotlightEvent.venue}</p>
+                <Link className="primary-link" to={`/events/${spotlightEvent.id}`}>
+                  View event
+                </Link>
+              </>
+            ) : (
+              <p>Events will show here after the event list loads.</p>
+            )}
           </aside>
         </section>
 
-        <section className="insight-strip">
-          {projectHighlights.map((item) => (
-            <p key={item}>{item}</p>
-          ))}
-        </section>
+        {error ? <p className="error-text">{error}</p> : null}
 
-        <section className="category-section" id="categories">
-          <div className="section-head">
-            <p className="section-tag">Browse</p>
-            <h2>Popular categories to jump-start discovery</h2>
-          </div>
-          <div className="category-list">
-            {categories.map((category) => (
-              <button className="category-chip" key={category} type="button">
-                {category}
-              </button>
-            ))}
-          </div>
-        </section>
+        {isLoading ? (
+          <section className="simple-panel">
+            <p>Loading home page events...</p>
+          </section>
+        ) : null}
 
-        <section className="collection-section">
-          <div className="section-head">
-            <p className="section-tag">Collections</p>
-            <h2>Useful sections on the home page</h2>
-          </div>
-          <div className="collection-grid">
-            {collections.map((collection) => (
-              <article className="collection-card" key={collection.title}>
-                <p className="collection-kicker">Collection</p>
-                <h3>{collection.title}</h3>
-                <p>{collection.description}</p>
-              </article>
-            ))}
-          </div>
-        </section>
+        {!isLoading ? (
+          <>
+            <section className="featured-section">
+              <div className="section-head">
+                <p className="section-tag">Today</p>
+                <h2>Today&apos;s events</h2>
+              </div>
 
-        <section className="featured-section" id="featured">
-          <div className="section-head">
-            <p className="section-tag">Featured events</p>
-            <h2>Featured events to browse</h2>
-          </div>
-          <div className="event-grid">
-            {featuredEvents.map((event) => (
-              <article className="event-card" key={event.title}>
-                <div className="event-image">
-                  <span>{event.mood}</span>
+              {todayEvents.length ? (
+                <div className="event-grid">
+                  {todayEvents.map((event) => (
+                    <article className="event-card" key={event.id}>
+                      <div className="event-image">
+                        <span>{event.category}</span>
+                      </div>
+                      <div className="event-content">
+                        <p className="event-date">{formatDateLabel(event.date)}</p>
+                        <h3>{event.title}</h3>
+                        <p>{event.city} | {event.venue}</p>
+                        <strong>{event.price}</strong>
+                        <Link className="primary-link" to={`/events/${event.id}`}>
+                          View event
+                        </Link>
+                      </div>
+                    </article>
+                  ))}
                 </div>
-                <div className="event-content">
-                  <p className="event-date">{event.date}</p>
-                  <h3>{event.title}</h3>
-                  <p>{event.location}</p>
-                  <strong>{event.price}</strong>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
+              ) : (
+                <section className="simple-panel compact-panel">
+                  <p>No events are marked for today. Check the upcoming section below.</p>
+                </section>
+              )}
+            </section>
 
-        <section className="module-section" id="modules">
-          <div className="section-head">
-            <p className="section-tag">Explore</p>
-            <h2>Main parts of the project</h2>
-          </div>
-          <div className="module-grid">
-            {modules.map((module) => (
-              <article className="module-card" key={module.path}>
-                <p className="module-label">{module.title}</p>
-                <h3>{module.description}</h3>
-                <p>{module.summary}</p>
-                <Link className="primary-link" to={module.path}>
-                  Open page
-                </Link>
-              </article>
-            ))}
-          </div>
-        </section>
+            <section className="collection-section">
+              <div className="section-head">
+                <p className="section-tag">Upcoming</p>
+                <h2>Upcoming events</h2>
+              </div>
+              <div className="collection-grid">
+                {upcomingEvents.map((event) => (
+                  <article className="collection-card" key={event.id}>
+                    <p className="collection-kicker">{formatDateLabel(event.date)}</p>
+                    <h3>{event.title}</h3>
+                    <p>{event.city} | {event.venue}</p>
+                    <p>{event.shortDescription}</p>
+                    <Link className="ghost-link" to={`/events/${event.id}`}>
+                      Open details
+                    </Link>
+                  </article>
+                ))}
+              </div>
+            </section>
+
+            <section className="collection-section">
+              <div className="section-head">
+                <p className="section-tag">Locations</p>
+                <h2>Browse by location</h2>
+              </div>
+              <div className="collection-grid">
+                {locationCards.map((location) => (
+                  <article className="collection-card" key={location.city}>
+                    <p className="collection-kicker">{location.city}</p>
+                    <h3>{location.count} event{location.count === 1 ? "" : "s"}</h3>
+                    <p>Main venue: {location.venue}</p>
+                    <Link className="ghost-link" to={`/events?city=${encodeURIComponent(location.city)}`}>
+                      View city events
+                    </Link>
+                  </article>
+                ))}
+              </div>
+            </section>
+
+            <section className="category-section">
+              <div className="section-head">
+                <p className="section-tag">Quick filters</p>
+                <h2>Browse by category</h2>
+              </div>
+              <div className="category-list">
+                {categories.map((category) => (
+                  <Link
+                    className="category-chip"
+                    key={category}
+                    to={`/events?category=${encodeURIComponent(category)}`}
+                  >
+                    {category}
+                  </Link>
+                ))}
+              </div>
+            </section>
+          </>
+        ) : null}
       </div>
     </main>
   );

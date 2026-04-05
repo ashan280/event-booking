@@ -98,6 +98,14 @@ public class AuthService {
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }
 
+    public void requireAdmin(HttpServletRequest request) {
+        User user = getCurrentUser(request);
+
+        if (!"ADMIN".equalsIgnoreCase(user.getRole())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Admin access is required");
+        }
+    }
+
     private AuthDto.AuthResponse buildAuthResponse(User user, String message) {
         String token = UUID.randomUUID().toString();
         activeSessions.put(token, user.getId());
