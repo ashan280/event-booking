@@ -512,6 +512,7 @@ label {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 20px;
+  align-items: stretch;
 }
 
 .venue-grid {
@@ -548,11 +549,25 @@ label {
 
 .event-list-card,
 .event-details-box {
-  padding: 24px;
   border-radius: 24px;
   background: rgba(255, 255, 255, 0.82);
   border: 1px solid var(--border);
   box-shadow: var(--shadow);
+}
+
+.event-list-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.event-list-body,
+.event-details-image {
+  padding: 24px;
+}
+
+.event-details-box {
+  padding: 24px;
 }
 
 .event-list-card p,
@@ -565,6 +580,91 @@ label {
 .event-list-card .primary-link,
 .event-details-box .primary-link {
   margin-top: 18px;
+}
+
+.event-list-body .primary-link {
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+.event-list-image,
+.event-details-image {
+  position: relative;
+  display: flex;
+  min-height: 200px;
+  align-items: flex-end;
+  justify-content: space-between;
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.14), transparent),
+    linear-gradient(135deg, #15345f, #ec6d35);
+  color: white;
+}
+
+.event-details-image {
+  min-height: 260px;
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+}
+
+.event-image-badge {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.event-image-text {
+  display: flex;
+  width: 100%;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.event-image-text strong {
+  font-family: "Space Grotesk", "Trebuchet MS", sans-serif;
+  font-size: 1.45rem;
+}
+
+.event-image-text span {
+  font-weight: 600;
+  opacity: 0.92;
+}
+
+.event-theme-music {
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.14), transparent),
+    linear-gradient(135deg, #4f1d95, #ec4899 55%, #fb923c);
+}
+
+.event-theme-business {
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.14), transparent),
+    linear-gradient(135deg, #0f172a, #2563eb 55%, #38bdf8);
+}
+
+.event-theme-food-drink {
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.14), transparent),
+    linear-gradient(135deg, #9a3412, #f97316 55%, #facc15);
+}
+
+.event-theme-workshops {
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.14), transparent),
+    linear-gradient(135deg, #14532d, #16a34a 55%, #84cc16);
+}
+
+.event-theme-sports {
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.14), transparent),
+    linear-gradient(135deg, #991b1b, #ef4444 55%, #f59e0b);
 }
 
 .event-meta-grid {

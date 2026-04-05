@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { apiRequest } from "../../lib/api";
 
+function getEventTheme(category) {
+  return category.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+}
+
 function EventsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [events, setEvents] = useState([]);
@@ -123,21 +127,30 @@ function EventsPage() {
           <section className="event-list-grid">
             {events.map((event) => (
               <article className="event-list-card" key={event.id}>
-                <p className="section-tag">{event.category}</p>
-                <h2>{event.title}</h2>
-                <p>{event.shortDescription}</p>
-                <div className="event-meta-grid">
-                  <span>{event.date}</span>
-                  <span>{event.time}</span>
-                  <span>{event.city}</span>
-                  <span>{event.price}</span>
+                <div className={`event-list-image event-theme-${getEventTheme(event.category)}`}>
+                  <span className="event-image-badge">{event.category}</span>
+                  <div className="event-image-text">
+                    <strong>{event.city}</strong>
+                    <span>{event.time}</span>
+                  </div>
                 </div>
-                <p className="event-venue-text">
-                  {event.venue} | {event.availableSeats} seats left
-                </p>
-                <Link className="primary-link" to={`/events/${event.id}`}>
-                  View details
-                </Link>
+
+                <div className="event-list-body">
+                  <h2>{event.title}</h2>
+                  <p>{event.shortDescription}</p>
+                  <div className="event-meta-grid">
+                    <span>{event.date}</span>
+                    <span>{event.time}</span>
+                    <span>{event.city}</span>
+                    <span>{event.price}</span>
+                  </div>
+                  <p className="event-venue-text">
+                    {event.venue} | {event.availableSeats} seats left
+                  </p>
+                  <Link className="primary-link" to={`/events/${event.id}`}>
+                    View details
+                  </Link>
+                </div>
               </article>
             ))}
           </section>
