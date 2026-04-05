@@ -131,13 +131,13 @@ function EventsPage() {
                   <span className="event-image-badge">{event.category}</span>
                   <div className="event-image-text">
                     <strong>{event.city}</strong>
-                    <span>{event.time}</span>
+                    <span>{event.date}</span>
                   </div>
                 </div>
 
                 <div className="event-list-body">
                   <h2>{event.title}</h2>
-                  <p>{event.shortDescription}</p>
+                  <p className="event-summary-text">{event.shortDescription}</p>
                   <div className="event-meta-grid">
                     <span>{event.date}</span>
                     <span>{event.time}</span>

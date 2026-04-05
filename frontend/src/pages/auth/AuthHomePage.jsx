@@ -59,7 +59,7 @@ function AuthHomePage() {
 
   return (
     <main className="min-h-screen bg-slate-100 px-4 py-6 md:px-8">
-      <div className="mx-auto max-w-6xl space-y-6">
+      <div className="mx-auto max-w-[1300px] space-y-6">
         <section className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
           <div className="grid gap-6 px-6 py-8 md:px-9 md:py-9 lg:grid-cols-[1.16fr_0.84fr]">
             <div className="space-y-6">

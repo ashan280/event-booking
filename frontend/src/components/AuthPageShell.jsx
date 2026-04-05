@@ -16,7 +16,7 @@ function AuthPageShell({
 
   return (
     <main className="min-h-screen bg-slate-100 px-4 py-6 md:px-8 md:py-8">
-      <div className="mx-auto grid min-h-[calc(100vh-3rem)] max-w-6xl gap-6 lg:grid-cols-[1.15fr_0.85fr]">
+      <div className="mx-auto grid min-h-[calc(100vh-3rem)] max-w-[1300px] gap-6 lg:grid-cols-[1.15fr_0.85fr]">
         <section className="flex flex-col justify-between rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
           <div className="space-y-5">
             <div className="flex flex-wrap items-center gap-3">
