@@ -1,7 +1,9 @@
 package com.eventmanagement.backend.controller;
 
 import com.eventmanagement.backend.dto.EventDto;
+import com.eventmanagement.backend.service.AuthService;
 import com.eventmanagement.backend.service.EventService;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,14 +23,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class EventController {
 
     private final EventService eventService;
+    private final AuthService authService;
 
     @GetMapping
     public List<EventDto.EventResponse> getEvents(
         @RequestParam(defaultValue = "") String search,
         @RequestParam(defaultValue = "") String category,
-        @RequestParam(defaultValue = "") String city
+        @RequestParam(defaultValue = "") String city,
+        @RequestParam(defaultValue = "") String sort,
+        @RequestParam(defaultValue = "false") boolean freeOnly
     ) {
-        return eventService.getEvents(search, category, city);
+        return eventService.getEvents(search, category, city, sort, freeOnly);
     }
 
     @GetMapping("/{id}")
@@ -37,17 +42,24 @@ public class EventController {
     }
 
     @PostMapping
-    public EventDto.EventResponse addEvent(@Valid @RequestBody EventDto.EventRequest request) {
+    public EventDto.EventResponse addEvent(@Valid @RequestBody EventDto.EventRequest request, HttpServletRequest httpRequest) {
+        authService.requireAdmin(httpRequest);
         return eventService.addEvent(request);
     }
 
     @PutMapping("/{id}")
-    public EventDto.EventResponse updateEvent(@PathVariable Long id, @Valid @RequestBody EventDto.EventRequest request) {
+    public EventDto.EventResponse updateEvent(
+        @PathVariable Long id,
+        @Valid @RequestBody EventDto.EventRequest request,
+        HttpServletRequest httpRequest
+    ) {
+        authService.requireAdmin(httpRequest);
         return eventService.updateEvent(id, request);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteEvent(@PathVariable Long id) {
+    public void deleteEvent(@PathVariable Long id, HttpServletRequest httpRequest) {
+        authService.requireAdmin(httpRequest);
         eventService.deleteEvent(id);
     }
 

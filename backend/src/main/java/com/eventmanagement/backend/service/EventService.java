@@ -1,7 +1,8 @@
 package com.eventmanagement.backend.service;
 
 import com.eventmanagement.backend.dto.EventDto;
-import java.util.ArrayList;
+import com.eventmanagement.backend.model.Event;
+import com.eventmanagement.backend.repository.EventRepository;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -15,85 +16,29 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class EventService {
 
-    private static final List<EventDto.EventResponse> STARTER_EVENTS = List.of(
-        new EventDto.EventResponse(
-            1L,
-            "Colombo Music Night",
-            "Music",
-            "Lotus Hall",
-            "Colombo",
-            "2026-04-12",
-            "7:00 PM",
-            "LKR 2,500",
-            "Live music, local artists, and a full evening show.",
-            "Enjoy a full evening with live bands, food stalls, and an easy seat booking flow in Colombo.",
-            120
-        ),
-        new EventDto.EventResponse(
-            2L,
-            "Startup Meetup 2026",
-            "Business",
-            "City Innovation Hub",
-            "Kandy",
-            "2026-04-20",
-            "10:00 AM",
-            "Free",
-            "A meetup for students, founders, and small teams.",
-            "Join talks, networking sessions, and simple startup discussions with local speakers and student founders.",
-            80
-        ),
-        new EventDto.EventResponse(
-            3L,
-            "Food Festival Weekend",
-            "Food & Drink",
-            "Ocean View Grounds",
-            "Galle",
-            "2026-04-28",
-            "4:00 PM",
-            "LKR 1,200",
-            "Street food, music, and family fun by the coast.",
-            "Taste local food, watch live cooking, and enjoy a relaxed weekend event with family and friends.",
-            200
-        ),
-        new EventDto.EventResponse(
-            4L,
-            "Creative Design Workshop",
-            "Workshops",
-            "Studio 8",
-            "Colombo",
-            "2026-05-03",
-            "1:00 PM",
-            "LKR 3,000",
-            "A hands-on design session for beginners.",
-            "Learn design basics, layout ideas, and team project tips in a guided workshop for beginners.",
-            35
-        )
-    );
+    private final EventRepository eventRepository;
 
-    private final List<EventDto.EventResponse> events = new ArrayList<>(STARTER_EVENTS);
-
-    public List<EventDto.EventResponse> getEvents(String search, String category, String city) {
+    public List<EventDto.EventResponse> getEvents(String search, String category, String city, String sort, boolean freeOnly) {
         String searchValue = normalize(search);
         String categoryValue = normalize(category);
         String cityValue = normalize(city);
 
-        return events.stream()
+        return sortEvents(eventRepository.findAll().stream()
             .filter(event -> matchesSearch(event, searchValue))
             .filter(event -> matchesCategory(event, categoryValue))
             .filter(event -> matchesCity(event, cityValue))
-            .toList();
+            .filter(event -> !freeOnly || "Free".equalsIgnoreCase(event.getPrice()))
+            .map(this::toResponse)
+            .toList(), normalize(sort));
     }
 
     public EventDto.EventResponse getEventById(Long id) {
-        return events.stream()
-            .filter(event -> event.getId().equals(id))
-            .findFirst()
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
+        return toResponse(findEvent(id));
     }
 
     public List<EventDto.CategoryResponse> getCategories() {
-        return events.stream()
-            .collect(java.util.stream.Collectors.groupingBy(EventDto.EventResponse::getCategory, java.util.stream.Collectors.counting()))
+        return eventRepository.findAll().stream()
+            .collect(java.util.stream.Collectors.groupingBy(Event::getCategory, java.util.stream.Collectors.counting()))
             .entrySet()
             .stream()
             .sorted(Map.Entry.comparingByKey())
@@ -102,8 +47,8 @@ public class EventService {
     }
 
     public List<EventDto.CityResponse> getCities() {
-        return events.stream()
-            .collect(java.util.stream.Collectors.groupingBy(EventDto.EventResponse::getCity, java.util.stream.Collectors.counting()))
+        return eventRepository.findAll().stream()
+            .collect(java.util.stream.Collectors.groupingBy(Event::getCity, java.util.stream.Collectors.counting()))
             .entrySet()
             .stream()
             .sorted(Map.Entry.comparingByKey())
@@ -112,7 +57,7 @@ public class EventService {
     }
 
     public List<EventDto.VenueResponse> getVenues() {
-        return events.stream()
+        return eventRepository.findAll().stream()
             .collect(
                 java.util.stream.Collectors.groupingBy(
                     event -> event.getVenue() + "||" + event.getCity(),
@@ -130,9 +75,10 @@ public class EventService {
     }
 
     public EventDto.VenueDetailsResponse getVenueDetails(String city, String name) {
-        List<EventDto.EventResponse> venueEvents = events.stream()
+        List<EventDto.EventResponse> venueEvents = eventRepository.findAll().stream()
             .filter(event -> event.getCity().equalsIgnoreCase(city))
             .filter(event -> event.getVenue().equalsIgnoreCase(name))
+            .map(this::toResponse)
             .toList();
 
         if (venueEvents.isEmpty()) {
@@ -150,60 +96,22 @@ public class EventService {
     }
 
     public EventDto.EventResponse addEvent(EventDto.EventRequest request) {
-        EventDto.EventResponse event = new EventDto.EventResponse(
-            nextId(),
-            request.getTitle().trim(),
-            request.getCategory().trim(),
-            request.getVenue().trim(),
-            request.getCity().trim(),
-            request.getDate().trim(),
-            request.getTime().trim(),
-            request.getPrice().trim(),
-            request.getShortDescription().trim(),
-            request.getDescription().trim(),
-            request.getAvailableSeats()
-        );
-
-        events.add(event);
-        return event;
+        Event event = new Event();
+        applyRequest(event, request);
+        return toResponse(eventRepository.save(event));
     }
 
     public EventDto.EventResponse updateEvent(Long id, EventDto.EventRequest request) {
-        for (int index = 0; index < events.size(); index++) {
-            EventDto.EventResponse current = events.get(index);
-
-            if (current.getId().equals(id)) {
-                EventDto.EventResponse updatedEvent = new EventDto.EventResponse(
-                    current.getId(),
-                    request.getTitle().trim(),
-                    request.getCategory().trim(),
-                    request.getVenue().trim(),
-                    request.getCity().trim(),
-                    request.getDate().trim(),
-                    request.getTime().trim(),
-                    request.getPrice().trim(),
-                    request.getShortDescription().trim(),
-                    request.getDescription().trim(),
-                    request.getAvailableSeats()
-                );
-
-                events.set(index, updatedEvent);
-                return updatedEvent;
-            }
-        }
-
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found");
+        Event event = findEvent(id);
+        applyRequest(event, request);
+        return toResponse(eventRepository.save(event));
     }
 
     public void deleteEvent(Long id) {
-        boolean removed = events.removeIf(event -> event.getId().equals(id));
-
-        if (!removed) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found");
-        }
+        eventRepository.delete(findEvent(id));
     }
 
-    private boolean matchesSearch(EventDto.EventResponse event, String search) {
+    private boolean matchesSearch(Event event, String search) {
         if (search.isBlank()) {
             return true;
         }
@@ -211,14 +119,15 @@ public class EventService {
         return contains(event.getTitle(), search)
             || contains(event.getCategory(), search)
             || contains(event.getCity(), search)
-            || contains(event.getVenue(), search);
+            || contains(event.getVenue(), search)
+            || contains(event.getDescription(), search);
     }
 
-    private boolean matchesCategory(EventDto.EventResponse event, String category) {
+    private boolean matchesCategory(Event event, String category) {
         return category.isBlank() || event.getCategory().equalsIgnoreCase(category);
     }
 
-    private boolean matchesCity(EventDto.EventResponse event, String city) {
+    private boolean matchesCity(Event event, String city) {
         return city.isBlank() || event.getCity().equalsIgnoreCase(city);
     }
 
@@ -230,10 +139,54 @@ public class EventService {
         return value == null ? "" : value.trim().toLowerCase(Locale.ROOT);
     }
 
-    private Long nextId() {
+    private Event findEvent(Long id) {
+        return eventRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
+    }
+
+    private void applyRequest(Event event, EventDto.EventRequest request) {
+        event.setTitle(request.getTitle().trim());
+        event.setCategory(request.getCategory().trim());
+        event.setVenue(request.getVenue().trim());
+        event.setCity(request.getCity().trim());
+        event.setDate(request.getDate().trim());
+        event.setTime(request.getTime().trim());
+        event.setPrice(request.getPrice().trim());
+        event.setShortDescription(request.getShortDescription().trim());
+        event.setDescription(request.getDescription().trim());
+        event.setAvailableSeats(request.getAvailableSeats());
+    }
+
+    private EventDto.EventResponse toResponse(Event event) {
+        return new EventDto.EventResponse(
+            event.getId(),
+            event.getTitle(),
+            event.getCategory(),
+            event.getVenue(),
+            event.getCity(),
+            event.getDate(),
+            event.getTime(),
+            event.getPrice(),
+            event.getShortDescription(),
+            event.getDescription(),
+            event.getAvailableSeats()
+        );
+    }
+
+    private List<EventDto.EventResponse> sortEvents(List<EventDto.EventResponse> events, String sort) {
+        Comparator<EventDto.EventResponse> comparator = Comparator.comparing(EventDto.EventResponse::getDate);
+
+        if ("title".equals(sort)) {
+            comparator = Comparator.comparing(EventDto.EventResponse::getTitle, String.CASE_INSENSITIVE_ORDER);
+        } else if ("city".equals(sort)) {
+            comparator = Comparator.comparing(EventDto.EventResponse::getCity, String.CASE_INSENSITIVE_ORDER)
+                .thenComparing(EventDto.EventResponse::getTitle, String.CASE_INSENSITIVE_ORDER);
+        } else if ("latest".equals(sort)) {
+            comparator = Comparator.comparing(EventDto.EventResponse::getDate).reversed();
+        }
+
         return events.stream()
-            .map(EventDto.EventResponse::getId)
-            .max(Long::compareTo)
-            .orElse(0L) + 1;
+            .sorted(comparator)
+            .toList();
     }
 }
