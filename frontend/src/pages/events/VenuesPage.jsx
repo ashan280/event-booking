@@ -6,6 +6,10 @@ function getVenuePath(venue) {
   return `/venues/${encodeURIComponent(venue.city)}/${encodeURIComponent(venue.name)}`;
 }
 
+function getVenueTheme(index) {
+  return `venue-card-theme-${(index % 4) + 1}`;
+}
+
 function VenuesPage() {
   const [venues, setVenues] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -71,19 +75,22 @@ function VenuesPage() {
 
         {!isLoading && venues.length ? (
           <section className="venue-grid">
-            {venues.map((venue) => (
-              <article className="venue-card" key={`${venue.name}-${venue.city}`}>
-                <div className="venue-card-top">
-                  <span className="event-image-badge">{venue.city}</span>
-                  <strong>{venue.name}</strong>
-                </div>
-                <div className="event-list-body">
-                  <h2>{venue.name}</h2>
-                  <p>{venue.eventCount} event{venue.eventCount === 1 ? "" : "s"} available in this place.</p>
-                  <div className="event-meta-grid">
+            {venues.map((venue, index) => (
+              <article className={`venue-card ${getVenueTheme(index)}`} key={`${venue.name}-${venue.city}`}>
+                <div className="venue-showcase">
+                  <div className="venue-showcase-label">
                     <span>{venue.city}</span>
-                    <span>{venue.eventCount} event{venue.eventCount === 1 ? "" : "s"}</span>
+                    <strong>{venue.name}</strong>
+                    <p>{venue.eventCount} event{venue.eventCount === 1 ? "" : "s"}</p>
                   </div>
+                  <div className="venue-showcase-image venue-showcase-image-main" />
+                  <div className="venue-showcase-image venue-showcase-image-side" />
+                </div>
+                <div className="venue-card-body">
+                  <h2>{venue.name}</h2>
+                  <p className="venue-card-title">{venue.city} venue for live events and bookings.</p>
+                  <p className="venue-card-meta">{venue.city}</p>
+                  <p className="venue-card-meta">{venue.eventCount} event{venue.eventCount === 1 ? "" : "s"} available</p>
                   <Link className="primary-link" to={getVenuePath(venue)}>
                     View venue
                   </Link>
