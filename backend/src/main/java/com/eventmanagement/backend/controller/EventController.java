@@ -1,9 +1,7 @@
 package com.eventmanagement.backend.controller;
 
 import com.eventmanagement.backend.dto.EventDto;
-import com.eventmanagement.backend.service.AuthService;
 import com.eventmanagement.backend.service.EventService;
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,17 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class EventController {
 
     private final EventService eventService;
-    private final AuthService authService;
 
     @GetMapping
     public List<EventDto.EventResponse> getEvents(
         @RequestParam(defaultValue = "") String search,
         @RequestParam(defaultValue = "") String category,
-        @RequestParam(defaultValue = "") String city,
-        @RequestParam(defaultValue = "") String sort,
-        @RequestParam(defaultValue = "false") boolean freeOnly
+        @RequestParam(defaultValue = "") String city
     ) {
-        return eventService.getEvents(search, category, city, sort, freeOnly);
+        return eventService.getEvents(search, category, city);
     }
 
     @GetMapping("/{id}")
@@ -42,24 +37,20 @@ public class EventController {
     }
 
     @PostMapping
-    public EventDto.EventResponse addEvent(@Valid @RequestBody EventDto.EventRequest request, HttpServletRequest httpRequest) {
-        authService.requireAdmin(httpRequest);
+    public EventDto.EventResponse addEvent(@Valid @RequestBody EventDto.EventRequest request) {
         return eventService.addEvent(request);
     }
 
     @PutMapping("/{id}")
     public EventDto.EventResponse updateEvent(
         @PathVariable Long id,
-        @Valid @RequestBody EventDto.EventRequest request,
-        HttpServletRequest httpRequest
+        @Valid @RequestBody EventDto.EventRequest request
     ) {
-        authService.requireAdmin(httpRequest);
         return eventService.updateEvent(id, request);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteEvent(@PathVariable Long id, HttpServletRequest httpRequest) {
-        authService.requireAdmin(httpRequest);
+    public void deleteEvent(@PathVariable Long id) {
         eventService.deleteEvent(id);
     }
 

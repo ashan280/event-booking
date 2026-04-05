@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { getAuth, isAdmin } from "../../lib/auth";
 import { apiRequest } from "../../lib/api";
 
 function getEventTheme(category) {
@@ -9,8 +8,6 @@ function getEventTheme(category) {
 
 function EventDetailsPage() {
   const navigate = useNavigate();
-  const auth = getAuth();
-  const canManageEvents = isAdmin(auth);
   const { eventId } = useParams();
   const [event, setEvent] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -47,8 +44,7 @@ function EventDetailsPage() {
 
     try {
       await apiRequest(`/api/events/${eventId}`, {
-        method: "DELETE",
-        auth: true
+        method: "DELETE"
       });
 
       navigate("/events");
@@ -66,12 +62,10 @@ function EventDetailsPage() {
             <Link className="ghost-link" to="/events">
               Back to events
             </Link>
-            {canManageEvents ? (
-              <Link className="ghost-link" to="/events/create">
-                Add event
-              </Link>
-            ) : null}
-            {event && canManageEvents ? (
+            <Link className="ghost-link" to="/events/create">
+              Add event
+            </Link>
+            {event ? (
               <Link className="ghost-link" to={`/events/${event.id}/edit`}>
                 Edit event
               </Link>
@@ -84,12 +78,8 @@ function EventDetailsPage() {
           {event ? (
             <div className="event-details-layout">
               <div className="event-details-main">
-                <div className={`event-details-image event-theme-${getEventTheme(event.category)}`}>
+                <div className={`event-details-image simple-event-image event-theme-${getEventTheme(event.category)}`}>
                   <span className="event-image-badge">{event.category}</span>
-                  <div className="event-image-text">
-                    <strong>{event.city}</strong>
-                    <span>{event.date}</span>
-                  </div>
                 </div>
 
                 <div className="event-details-box">
@@ -119,30 +109,23 @@ function EventDetailsPage() {
                   </Link>
                 </div>
 
-                {canManageEvents ? (
-                  <div className="event-details-box">
-                    <h2>Manage event</h2>
-                    <p>You can edit this event or remove it from the event list.</p>
-                    <div className="auth-link-list">
-                      <Link className="ghost-link" to={`/events/${event.id}/edit`}>
-                        Edit event
-                      </Link>
-                      <button
-                        className="ghost-link delete-link"
-                        type="button"
-                        onClick={handleDelete}
-                        disabled={isDeleting}
-                      >
-                        {isDeleting ? "Deleting..." : "Delete event"}
-                      </button>
-                    </div>
+                <div className="event-details-box">
+                  <h2>Manage event</h2>
+                  <p>You can edit this event or remove it from the event list.</p>
+                  <div className="auth-link-list">
+                    <Link className="ghost-link" to={`/events/${event.id}/edit`}>
+                      Edit event
+                    </Link>
+                    <button
+                      className="ghost-link delete-link"
+                      type="button"
+                      onClick={handleDelete}
+                      disabled={isDeleting}
+                    >
+                      {isDeleting ? "Deleting..." : "Delete event"}
+                    </button>
                   </div>
-                ) : (
-                  <div className="event-details-box">
-                    <h2>Manage event</h2>
-                    <p>Only admins can change event records. You can still view details and continue to booking.</p>
-                  </div>
-                )}
+                </div>
               </aside>
             </div>
           ) : null}

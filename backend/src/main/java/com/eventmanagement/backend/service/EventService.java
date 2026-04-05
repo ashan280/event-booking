@@ -3,10 +3,10 @@ package com.eventmanagement.backend.service;
 import com.eventmanagement.backend.dto.EventDto;
 import com.eventmanagement.backend.model.Event;
 import com.eventmanagement.backend.repository.EventRepository;
-import java.util.Comparator;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -18,18 +18,29 @@ public class EventService {
 
     private final EventRepository eventRepository;
 
-    public List<EventDto.EventResponse> getEvents(String search, String category, String city, String sort, boolean freeOnly) {
+    public List<EventDto.EventResponse> getEvents(String search, String category, String city) {
         String searchValue = normalize(search);
         String categoryValue = normalize(category);
         String cityValue = normalize(city);
+        List<EventDto.EventResponse> results = new ArrayList<>();
 
-        return sortEvents(eventRepository.findAll().stream()
-            .filter(event -> matchesSearch(event, searchValue))
-            .filter(event -> matchesCategory(event, categoryValue))
-            .filter(event -> matchesCity(event, cityValue))
-            .filter(event -> !freeOnly || "Free".equalsIgnoreCase(event.getPrice()))
-            .map(this::toResponse)
-            .toList(), normalize(sort));
+        for (Event event : eventRepository.findAll()) {
+            if (!matchesSearch(event, searchValue)) {
+                continue;
+            }
+
+            if (!matchesCategory(event, categoryValue)) {
+                continue;
+            }
+
+            if (!matchesCity(event, cityValue)) {
+                continue;
+            }
+
+            results.add(toResponse(event));
+        }
+
+        return results;
     }
 
     public EventDto.EventResponse getEventById(Long id) {
@@ -37,41 +48,53 @@ public class EventService {
     }
 
     public List<EventDto.CategoryResponse> getCategories() {
-        return eventRepository.findAll().stream()
-            .collect(java.util.stream.Collectors.groupingBy(Event::getCategory, java.util.stream.Collectors.counting()))
-            .entrySet()
-            .stream()
-            .sorted(Map.Entry.comparingByKey())
-            .map(entry -> new EventDto.CategoryResponse(entry.getKey(), entry.getValue()))
-            .toList();
+        LinkedHashMap<String, Long> categoryCounts = new LinkedHashMap<>();
+
+        for (Event event : eventRepository.findAll()) {
+            categoryCounts.put(event.getCategory(), categoryCounts.getOrDefault(event.getCategory(), 0L) + 1);
+        }
+
+        List<EventDto.CategoryResponse> results = new ArrayList<>();
+
+        for (String name : categoryCounts.keySet()) {
+            results.add(new EventDto.CategoryResponse(name, categoryCounts.get(name)));
+        }
+
+        return results;
     }
 
     public List<EventDto.CityResponse> getCities() {
-        return eventRepository.findAll().stream()
-            .collect(java.util.stream.Collectors.groupingBy(Event::getCity, java.util.stream.Collectors.counting()))
-            .entrySet()
-            .stream()
-            .sorted(Map.Entry.comparingByKey())
-            .map(entry -> new EventDto.CityResponse(entry.getKey(), entry.getValue()))
-            .toList();
+        LinkedHashMap<String, Long> cityCounts = new LinkedHashMap<>();
+
+        for (Event event : eventRepository.findAll()) {
+            cityCounts.put(event.getCity(), cityCounts.getOrDefault(event.getCity(), 0L) + 1);
+        }
+
+        List<EventDto.CityResponse> results = new ArrayList<>();
+
+        for (String name : cityCounts.keySet()) {
+            results.add(new EventDto.CityResponse(name, cityCounts.get(name)));
+        }
+
+        return results;
     }
 
     public List<EventDto.VenueResponse> getVenues() {
-        return eventRepository.findAll().stream()
-            .collect(
-                java.util.stream.Collectors.groupingBy(
-                    event -> event.getVenue() + "||" + event.getCity(),
-                    java.util.stream.Collectors.counting()
-                )
-            )
-            .entrySet()
-            .stream()
-            .map(entry -> {
-                String[] parts = entry.getKey().split("\\|\\|");
-                return new EventDto.VenueResponse(parts[0], parts[1], entry.getValue());
-            })
-            .sorted(Comparator.comparing(EventDto.VenueResponse::getCity).thenComparing(EventDto.VenueResponse::getName))
-            .toList();
+        LinkedHashMap<String, Long> venueCounts = new LinkedHashMap<>();
+
+        for (Event event : eventRepository.findAll()) {
+            String key = event.getVenue() + "||" + event.getCity();
+            venueCounts.put(key, venueCounts.getOrDefault(key, 0L) + 1);
+        }
+
+        List<EventDto.VenueResponse> results = new ArrayList<>();
+
+        for (String key : venueCounts.keySet()) {
+            String[] parts = key.split("\\|\\|");
+            results.add(new EventDto.VenueResponse(parts[0], parts[1], venueCounts.get(key)));
+        }
+
+        return results;
     }
 
     public EventDto.VenueDetailsResponse getVenueDetails(String city, String name) {
@@ -171,22 +194,5 @@ public class EventService {
             event.getDescription(),
             event.getAvailableSeats()
         );
-    }
-
-    private List<EventDto.EventResponse> sortEvents(List<EventDto.EventResponse> events, String sort) {
-        Comparator<EventDto.EventResponse> comparator = Comparator.comparing(EventDto.EventResponse::getDate);
-
-        if ("title".equals(sort)) {
-            comparator = Comparator.comparing(EventDto.EventResponse::getTitle, String.CASE_INSENSITIVE_ORDER);
-        } else if ("city".equals(sort)) {
-            comparator = Comparator.comparing(EventDto.EventResponse::getCity, String.CASE_INSENSITIVE_ORDER)
-                .thenComparing(EventDto.EventResponse::getTitle, String.CASE_INSENSITIVE_ORDER);
-        } else if ("latest".equals(sort)) {
-            comparator = Comparator.comparing(EventDto.EventResponse::getDate).reversed();
-        }
-
-        return events.stream()
-            .sorted(comparator)
-            .toList();
     }
 }

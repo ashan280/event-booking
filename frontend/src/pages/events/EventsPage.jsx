@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { getAuth, isAdmin } from "../../lib/auth";
 import { apiRequest } from "../../lib/api";
 
 function getEventTheme(category) {
@@ -8,8 +7,6 @@ function getEventTheme(category) {
 }
 
 function EventsPage() {
-  const auth = getAuth();
-  const canManageEvents = isAdmin(auth);
   const [searchParams, setSearchParams] = useSearchParams();
   const [events, setEvents] = useState([]);
   const [categories, setCategories] = useState(["All"]);
@@ -19,8 +16,6 @@ function EventsPage() {
   const [search, setSearch] = useState(searchParams.get("search") || "");
   const [category, setCategory] = useState(searchParams.get("category") || "All");
   const [city, setCity] = useState(searchParams.get("city") || "All");
-  const [sort, setSort] = useState(searchParams.get("sort") || "date");
-  const [freeOnly, setFreeOnly] = useState(searchParams.get("freeOnly") === "true");
 
   useEffect(() => {
     async function loadFilters() {
@@ -60,14 +55,6 @@ function EventsPage() {
         params.set("city", city);
       }
 
-      if (sort !== "date") {
-        params.set("sort", sort);
-      }
-
-      if (freeOnly) {
-        params.set("freeOnly", "true");
-      }
-
       setSearchParams(params, { replace: true });
 
       try {
@@ -82,14 +69,12 @@ function EventsPage() {
     }
 
     loadEvents();
-  }, [search, category, city, sort, freeOnly, setSearchParams]);
+  }, [search, category, city, setSearchParams]);
 
   function clearFilters() {
     setSearch("");
     setCategory("All");
     setCity("All");
-    setSort("date");
-    setFreeOnly(false);
   }
 
   return (
@@ -97,10 +82,9 @@ function EventsPage() {
       <div className="page-shell">
         <section className="events-page-header simple-panel">
           <p className="section-tag">Events</p>
-          <h1>Browse available events.</h1>
+          <h1>Browse events.</h1>
           <p>
-            Search events, filter by category, and open each event page to see
-            the details.
+            Search by name, category, or city and open any event to see more details.
           </p>
 
           <div className="events-filter-grid">
@@ -136,27 +120,6 @@ function EventsPage() {
               </select>
             </label>
 
-            <label>
-              Sort
-              <select value={sort} onChange={(event) => setSort(event.target.value)}>
-                <option value="date">Date</option>
-                <option value="latest">Latest first</option>
-                <option value="title">Title</option>
-                <option value="city">City</option>
-              </select>
-            </label>
-
-            <label className="filter-check">
-              <span>Price</span>
-              <div className="filter-check-row">
-                <input
-                  checked={freeOnly}
-                  type="checkbox"
-                  onChange={(event) => setFreeOnly(event.target.checked)}
-                />
-                <span>Show free events only</span>
-              </div>
-            </label>
           </div>
 
           <div className="auth-link-list">
@@ -169,11 +132,9 @@ function EventsPage() {
             <Link className="ghost-link" to="/venues">
               View venues
             </Link>
-            {canManageEvents ? (
-              <Link className="ghost-link" to="/events/create">
-                Add event
-              </Link>
-            ) : null}
+            <Link className="ghost-link" to="/events/create">
+              Add event
+            </Link>
             <button className="ghost-link" type="button" onClick={clearFilters}>
               Clear filters
             </button>
@@ -191,8 +152,8 @@ function EventsPage() {
         {!isLoading && !events.length ? (
           <section className="simple-panel empty-state-panel">
             <p className="section-tag">No events found</p>
-            <h2>Try a different filter.</h2>
-            <p>Your current search did not match any events. Clear the filters or check another city or category.</p>
+            <h2>Try another search.</h2>
+            <p>Nothing matched this search. Clear the filters or check a different city or category.</p>
             <div className="auth-link-list">
               <button className="ghost-link" type="button" onClick={clearFilters}>
                 Clear filters
@@ -208,12 +169,8 @@ function EventsPage() {
           <section className="event-list-grid">
             {events.map((event) => (
               <article className="event-list-card" key={event.id}>
-                <div className={`event-list-image event-theme-${getEventTheme(event.category)}`}>
+                <div className={`event-list-image simple-event-image event-theme-${getEventTheme(event.category)}`}>
                   <span className="event-image-badge">{event.category}</span>
-                  <div className="event-image-text">
-                    <strong>{event.city}</strong>
-                    <span>{event.date}</span>
-                  </div>
                 </div>
 
                 <div className="event-list-body">
