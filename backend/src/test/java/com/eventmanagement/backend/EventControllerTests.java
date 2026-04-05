@@ -39,6 +39,13 @@ class EventControllerTests {
     }
 
     @Test
+    void cityFilterWorks() throws Exception {
+        mockMvc.perform(get("/api/events").param("city", "Colombo"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$[0].city").value("Colombo"));
+    }
+
+    @Test
     void eventDetailsWork() throws Exception {
         mockMvc.perform(get("/api/events/1"))
             .andExpect(status().isOk())
@@ -49,6 +56,14 @@ class EventControllerTests {
     @Test
     void categoriesWork() throws Exception {
         mockMvc.perform(get("/api/events/categories"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$[0].name").exists())
+            .andExpect(jsonPath("$[0].eventCount").exists());
+    }
+
+    @Test
+    void citiesWork() throws Exception {
+        mockMvc.perform(get("/api/events/cities"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$[0].name").exists())
             .andExpect(jsonPath("$[0].eventCount").exists());

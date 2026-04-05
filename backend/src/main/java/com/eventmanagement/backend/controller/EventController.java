@@ -25,9 +25,10 @@ public class EventController {
     @GetMapping
     public List<EventDto.EventResponse> getEvents(
         @RequestParam(defaultValue = "") String search,
-        @RequestParam(defaultValue = "") String category
+        @RequestParam(defaultValue = "") String category,
+        @RequestParam(defaultValue = "") String city
     ) {
-        return eventService.getEvents(search, category);
+        return eventService.getEvents(search, category, city);
     }
 
     @GetMapping("/{id}")
@@ -53,6 +54,11 @@ public class EventController {
     @GetMapping("/categories")
     public List<EventDto.CategoryResponse> getCategories() {
         return eventService.getCategories();
+    }
+
+    @GetMapping("/cities")
+    public List<EventDto.CityResponse> getCities() {
+        return eventService.getCities();
     }
 
     @GetMapping("/venues")

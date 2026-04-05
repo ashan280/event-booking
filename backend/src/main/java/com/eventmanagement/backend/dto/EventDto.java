@@ -41,6 +41,14 @@ public final class EventDto {
 
     @Getter
     @AllArgsConstructor
+    public static class CityResponse {
+
+        private final String name;
+        private final Long eventCount;
+    }
+
+    @Getter
+    @AllArgsConstructor
     public static class VenueResponse {
 
         private final String name;

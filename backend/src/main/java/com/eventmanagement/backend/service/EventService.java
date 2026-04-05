@@ -72,13 +72,15 @@ public class EventService {
 
     private final List<EventDto.EventResponse> events = new ArrayList<>(STARTER_EVENTS);
 
-    public List<EventDto.EventResponse> getEvents(String search, String category) {
+    public List<EventDto.EventResponse> getEvents(String search, String category, String city) {
         String searchValue = normalize(search);
         String categoryValue = normalize(category);
+        String cityValue = normalize(city);
 
         return events.stream()
             .filter(event -> matchesSearch(event, searchValue))
             .filter(event -> matchesCategory(event, categoryValue))
+            .filter(event -> matchesCity(event, cityValue))
             .toList();
     }
 
@@ -96,6 +98,16 @@ public class EventService {
             .stream()
             .sorted(Map.Entry.comparingByKey())
             .map(entry -> new EventDto.CategoryResponse(entry.getKey(), entry.getValue()))
+            .toList();
+    }
+
+    public List<EventDto.CityResponse> getCities() {
+        return events.stream()
+            .collect(java.util.stream.Collectors.groupingBy(EventDto.EventResponse::getCity, java.util.stream.Collectors.counting()))
+            .entrySet()
+            .stream()
+            .sorted(Map.Entry.comparingByKey())
+            .map(entry -> new EventDto.CityResponse(entry.getKey(), entry.getValue()))
             .toList();
     }
 
@@ -204,6 +216,10 @@ public class EventService {
 
     private boolean matchesCategory(EventDto.EventResponse event, String category) {
         return category.isBlank() || event.getCategory().equalsIgnoreCase(category);
+    }
+
+    private boolean matchesCity(EventDto.EventResponse event, String city) {
+        return city.isBlank() || event.getCity().equalsIgnoreCase(city);
     }
 
     private boolean contains(String value, String search) {
