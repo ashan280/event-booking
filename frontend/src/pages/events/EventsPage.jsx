@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
 
 function getEventTheme(category) {
@@ -80,9 +81,11 @@ function EventsPage() {
   return (
     <main className="home-page">
       <div className="page-shell">
+        <PublicSiteHeader />
+
         <section className="events-page-header simple-panel">
           <p className="section-tag">Events</p>
-          <h1>Browse events.</h1>
+          <h1>Browse events by search, category, and city.</h1>
           <p>
             Search by name, category, or city and open any event to see more details.
           </p>

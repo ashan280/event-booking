@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
 
 function CategoriesPage() {
@@ -28,6 +29,8 @@ function CategoriesPage() {
   return (
     <main className="home-page">
       <div className="page-shell">
+        <PublicSiteHeader />
+
         <section className="simple-panel">
           <p className="section-tag">Categories</p>
           <h1>Browse event categories.</h1>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
 
 function VenueDetailsPage() {
@@ -31,6 +32,8 @@ function VenueDetailsPage() {
   return (
     <main className="home-page">
       <div className="page-shell">
+        <PublicSiteHeader />
+
         <section className="simple-panel">
           <div className="auth-link-list">
             <Link className="ghost-link" to="/venues">

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
 
 function getVenuePath(venue) {
@@ -32,6 +33,8 @@ function VenuesPage() {
   return (
     <main className="home-page">
       <div className="page-shell">
+        <PublicSiteHeader />
+
         <section className="simple-panel">
           <p className="section-tag">Venues</p>
           <h1>Browse event venues.</h1>

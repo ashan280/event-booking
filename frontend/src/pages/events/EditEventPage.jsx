@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
 
 const categoryOptions = ["Music", "Business", "Food & Drink", "Workshops", "Sports"];
@@ -120,6 +121,8 @@ function EditEventPage() {
   return (
     <main className="home-page">
       <div className="page-shell">
+        <PublicSiteHeader />
+
         <section className="simple-panel">
           <p className="section-tag">Edit event</p>
           <h1>Update event details.</h1>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
 
 function getEventTheme(category) {
@@ -57,6 +58,8 @@ function EventDetailsPage() {
   return (
     <main className="home-page">
       <div className="page-shell">
+        <PublicSiteHeader />
+
         <section className="simple-panel">
           <div className="auth-link-list">
             <Link className="ghost-link" to="/events">

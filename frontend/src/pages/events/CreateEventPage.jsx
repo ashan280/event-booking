@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
 
 const categoryOptions = ["Music", "Business", "Food & Drink", "Workshops", "Sports"];
@@ -89,6 +90,8 @@ function CreateEventPage() {
   return (
     <main className="home-page">
       <div className="page-shell">
+        <PublicSiteHeader />
+
         <section className="simple-panel">
           <p className="section-tag">Create event</p>
           <h1>Add a new event.</h1>
