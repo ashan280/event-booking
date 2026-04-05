@@ -526,6 +526,26 @@ label {
   gap: 20px;
 }
 
+.event-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.event-form-grid input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid rgba(31, 41, 55, 0.12);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--ink);
+}
+
+.event-form-full {
+  grid-column: 1 / -1;
+}
+
 .event-list-card,
 .event-details-box {
   padding: 24px;

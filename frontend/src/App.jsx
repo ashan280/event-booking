@@ -10,6 +10,7 @@ import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import ProfilePage from "./pages/auth/ProfilePage";
 import ReviewPage from "./pages/auth/ReviewPage";
 import CategoriesPage from "./pages/events/CategoriesPage";
+import CreateEventPage from "./pages/events/CreateEventPage";
 import EventDetailsPage from "./pages/events/EventDetailsPage";
 import EventsPage from "./pages/events/EventsPage";
 import VenuesPage from "./pages/events/VenuesPage";
@@ -99,6 +100,10 @@ function App() {
       <Route
         path="/categories"
         element={<CategoriesPage />}
+      />
+      <Route
+        path="/events/create"
+        element={<CreateEventPage />}
       />
       <Route
         path="/events/:eventId"

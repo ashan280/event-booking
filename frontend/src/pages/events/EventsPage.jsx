@@ -99,6 +99,9 @@ function EventsPage() {
             <Link className="ghost-link" to="/venues">
               View venues
             </Link>
+            <Link className="ghost-link" to="/events/create">
+              Add event
+            </Link>
           </div>
         </section>
 

@@ -34,6 +34,9 @@ function EventDetailsPage() {
             <Link className="ghost-link" to="/events">
               Back to events
             </Link>
+            <Link className="ghost-link" to="/events/create">
+              Add event
+            </Link>
           </div>
 
           {isLoading ? <p>Loading event details...</p> : null}
