@@ -42,6 +42,23 @@ function VenuesPage() {
               Back to events
             </Link>
           </div>
+
+          {!isLoading && venues.length ? (
+            <div className="venue-summary-grid">
+              <article>
+                <strong>{venues.length}</strong>
+                <span>venue locations</span>
+              </article>
+              <article>
+                <strong>{venues.reduce((total, venue) => total + venue.eventCount, 0)}</strong>
+                <span>events linked</span>
+              </article>
+              <article>
+                <strong>{new Set(venues.map((venue) => venue.city)).size}</strong>
+                <span>cities covered</span>
+              </article>
+            </div>
+          ) : null}
         </section>
 
         {error ? <p className="error-text">{error}</p> : null}
@@ -55,11 +72,18 @@ function VenuesPage() {
         {!isLoading && venues.length ? (
           <section className="venue-grid">
             {venues.map((venue) => (
-              <article className="event-list-card" key={`${venue.name}-${venue.city}`}>
+              <article className="venue-card" key={`${venue.name}-${venue.city}`}>
+                <div className="venue-card-top">
+                  <span className="event-image-badge">{venue.city}</span>
+                  <strong>{venue.name}</strong>
+                </div>
                 <div className="event-list-body">
-                  <p className="section-tag">{venue.city}</p>
                   <h2>{venue.name}</h2>
-                  <p>{venue.eventCount} event{venue.eventCount === 1 ? "" : "s"} available here.</p>
+                  <p>{venue.eventCount} event{venue.eventCount === 1 ? "" : "s"} available in this place.</p>
+                  <div className="event-meta-grid">
+                    <span>{venue.city}</span>
+                    <span>{venue.eventCount} event{venue.eventCount === 1 ? "" : "s"}</span>
+                  </div>
                   <Link className="primary-link" to={getVenuePath(venue)}>
                     View venue
                   </Link>

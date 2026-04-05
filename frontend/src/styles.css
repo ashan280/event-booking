@@ -526,6 +526,69 @@ label {
   gap: 20px;
 }
 
+.venue-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.venue-summary-grid article {
+  padding: 18px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid var(--border);
+}
+
+.venue-summary-grid strong {
+  display: block;
+  font-family: "Space Grotesk", "Trebuchet MS", sans-serif;
+  font-size: 1.6rem;
+  color: var(--navy);
+}
+
+.venue-summary-grid span {
+  color: var(--muted);
+}
+
+.venue-card {
+  border-radius: 24px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.venue-card-top {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: 140px;
+  padding: 20px;
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.14), transparent),
+    linear-gradient(135deg, #143664, #ee6d36);
+  color: white;
+}
+
+.venue-card-top strong {
+  font-family: "Space Grotesk", "Trebuchet MS", sans-serif;
+  font-size: 1.45rem;
+}
+
+.venue-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(240px, 0.9fr);
+  gap: 24px;
+  margin-top: 20px;
+  margin-bottom: 24px;
+}
+
+.venue-hero-copy {
+  display: grid;
+  gap: 12px;
+}
+
 .venue-event-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -756,7 +819,8 @@ label {
 
   .insight-strip,
   .hero-stats,
-  .event-details-layout {
+  .event-details-layout,
+  .venue-hero {
     grid-template-columns: 1fr;
   }
 }

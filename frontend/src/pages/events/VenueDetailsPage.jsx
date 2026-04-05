@@ -46,9 +46,24 @@ function VenueDetailsPage() {
 
           {venue ? (
             <>
-              <p className="section-tag">{venue.city}</p>
-              <h1>{venue.name}</h1>
-              <p>{venue.eventCount} event{venue.eventCount === 1 ? "" : "s"} available in this venue.</p>
+              <div className="venue-hero">
+                <div className="venue-hero-copy">
+                  <p className="section-tag">{venue.city}</p>
+                  <h1>{venue.name}</h1>
+                  <p>{venue.eventCount} event{venue.eventCount === 1 ? "" : "s"} available in this venue.</p>
+                </div>
+
+                <div className="venue-summary-grid">
+                  <article>
+                    <strong>{venue.eventCount}</strong>
+                    <span>events now</span>
+                  </article>
+                  <article>
+                    <strong>{venue.city}</strong>
+                    <span>location</span>
+                  </article>
+                </div>
+              </div>
 
               <section className="venue-event-grid">
                 {venue.events.map((event) => (
