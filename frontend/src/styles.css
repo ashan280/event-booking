@@ -513,6 +513,29 @@ label {
   color: var(--ink);
 }
 
+.filter-check {
+  align-content: end;
+}
+
+.filter-check-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 54px;
+  padding: 0 2px;
+}
+
+.filter-check-row input {
+  width: 18px;
+  height: 18px;
+}
+
+.empty-state-panel h2 {
+  margin: 0;
+  font-family: "Space Grotesk", "Trebuchet MS", sans-serif;
+  color: #18212f;
+}
+
 .event-list-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
