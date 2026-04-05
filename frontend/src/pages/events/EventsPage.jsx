@@ -10,22 +10,30 @@ function EventsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [events, setEvents] = useState([]);
   const [categories, setCategories] = useState(["All"]);
+  const [cities, setCities] = useState(["All"]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [search, setSearch] = useState(searchParams.get("search") || "");
   const [category, setCategory] = useState(searchParams.get("category") || "All");
+  const [city, setCity] = useState(searchParams.get("city") || "All");
 
   useEffect(() => {
-    async function loadCategories() {
+    async function loadFilters() {
       try {
-        const data = await apiRequest("/api/events/categories");
-        setCategories(["All", ...data.map((item) => item.name)]);
+        const [categoryData, cityData] = await Promise.all([
+          apiRequest("/api/events/categories"),
+          apiRequest("/api/events/cities")
+        ]);
+
+        setCategories(["All", ...categoryData.map((item) => item.name)]);
+        setCities(["All", ...cityData.map((item) => item.name)]);
       } catch {
         setCategories(["All"]);
+        setCities(["All"]);
       }
     }
 
-    loadCategories();
+    loadFilters();
   }, []);
 
   useEffect(() => {
@@ -43,6 +51,10 @@ function EventsPage() {
         params.set("category", category);
       }
 
+      if (city !== "All") {
+        params.set("city", city);
+      }
+
       setSearchParams(params, { replace: true });
 
       try {
@@ -57,7 +69,13 @@ function EventsPage() {
     }
 
     loadEvents();
-  }, [search, category, setSearchParams]);
+  }, [search, category, city, setSearchParams]);
+
+  function clearFilters() {
+    setSearch("");
+    setCategory("All");
+    setCity("All");
+  }
 
   return (
     <main className="home-page">
@@ -91,6 +109,17 @@ function EventsPage() {
                 ))}
               </select>
             </label>
+
+            <label>
+              City
+              <select value={city} onChange={(event) => setCity(event.target.value)}>
+                {cities.map((item) => (
+                  <option key={item} value={item}>
+                    {item}
+                  </option>
+                ))}
+              </select>
+            </label>
           </div>
 
           <div className="auth-link-list">
@@ -106,6 +135,9 @@ function EventsPage() {
             <Link className="ghost-link" to="/events/create">
               Add event
             </Link>
+            <button className="ghost-link" type="button" onClick={clearFilters}>
+              Clear filters
+            </button>
           </div>
         </section>
 
