@@ -117,6 +117,26 @@ public class EventService {
             .toList();
     }
 
+    public EventDto.VenueDetailsResponse getVenueDetails(String city, String name) {
+        List<EventDto.EventResponse> venueEvents = events.stream()
+            .filter(event -> event.getCity().equalsIgnoreCase(city))
+            .filter(event -> event.getVenue().equalsIgnoreCase(name))
+            .toList();
+
+        if (venueEvents.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Venue not found");
+        }
+
+        EventDto.EventResponse firstEvent = venueEvents.get(0);
+
+        return new EventDto.VenueDetailsResponse(
+            firstEvent.getVenue(),
+            firstEvent.getCity(),
+            (long) venueEvents.size(),
+            venueEvents
+        );
+    }
+
     public EventDto.EventResponse addEvent(EventDto.EventRequest request) {
         EventDto.EventResponse event = new EventDto.EventResponse(
             nextId(),

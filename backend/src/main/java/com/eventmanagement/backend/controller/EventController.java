@@ -59,4 +59,9 @@ public class EventController {
     public List<EventDto.VenueResponse> getVenues() {
         return eventService.getVenues();
     }
+
+    @GetMapping("/venues/{city}/{name}")
+    public EventDto.VenueDetailsResponse getVenueDetails(@PathVariable String city, @PathVariable String name) {
+        return eventService.getVenueDetails(city, name);
+    }
 }

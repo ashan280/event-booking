@@ -3,6 +3,7 @@ package com.eventmanagement.backend.dto;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,6 +46,16 @@ public final class EventDto {
         private final String name;
         private final String city;
         private final Long eventCount;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class VenueDetailsResponse {
+
+        private final String name;
+        private final String city;
+        private final Long eventCount;
+        private final List<EventResponse> events;
     }
 
     @Getter

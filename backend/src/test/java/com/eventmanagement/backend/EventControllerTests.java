@@ -63,6 +63,15 @@ class EventControllerTests {
     }
 
     @Test
+    void venueDetailsWork() throws Exception {
+        mockMvc.perform(get("/api/events/venues/{city}/{name}", "Colombo", "Lotus Hall"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.name").value("Lotus Hall"))
+            .andExpect(jsonPath("$.city").value("Colombo"))
+            .andExpect(jsonPath("$.events[0].title").value("Colombo Music Night"));
+    }
+
+    @Test
     void addEventWorks() throws Exception {
         mockMvc.perform(post("/api/events")
                 .contentType(MediaType.APPLICATION_JSON)
