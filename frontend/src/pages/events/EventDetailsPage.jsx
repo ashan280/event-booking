@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { apiRequest } from "../../lib/api";
 
 function getEventTheme(category) {
@@ -7,10 +7,12 @@ function getEventTheme(category) {
 }
 
 function EventDetailsPage() {
+  const navigate = useNavigate();
   const { eventId } = useParams();
   const [event, setEvent] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     async function loadEvent() {
@@ -29,6 +31,28 @@ function EventDetailsPage() {
 
     loadEvent();
   }, [eventId]);
+
+  async function handleDelete() {
+    const confirmed = window.confirm("Do you want to delete this event?");
+
+    if (!confirmed) {
+      return;
+    }
+
+    setIsDeleting(true);
+    setError("");
+
+    try {
+      await apiRequest(`/api/events/${eventId}`, {
+        method: "DELETE"
+      });
+
+      navigate("/events");
+    } catch (requestError) {
+      setError(requestError.message);
+      setIsDeleting(false);
+    }
+  }
 
   return (
     <main className="home-page">
@@ -87,6 +111,24 @@ function EventDetailsPage() {
                   <Link className="primary-link" to="/booking">
                     Continue to booking
                   </Link>
+                </div>
+
+                <div className="event-details-box">
+                  <h2>Manage event</h2>
+                  <p>You can edit this event or remove it from the event list.</p>
+                  <div className="auth-link-list">
+                    <Link className="ghost-link" to={`/events/${event.id}/edit`}>
+                      Edit event
+                    </Link>
+                    <button
+                      className="ghost-link delete-link"
+                      type="button"
+                      onClick={handleDelete}
+                      disabled={isDeleting}
+                    >
+                      {isDeleting ? "Deleting..." : "Delete event"}
+                    </button>
+                  </div>
                 </div>
               </aside>
             </div>

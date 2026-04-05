@@ -227,6 +227,11 @@ label {
   font-weight: 700;
 }
 
+.delete-link {
+  color: #9f1239;
+  border-color: rgba(159, 18, 57, 0.18);
+}
+
 .hero-stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
