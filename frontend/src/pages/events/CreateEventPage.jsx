@@ -2,11 +2,13 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
+import { getAuth, isAdmin } from "../../lib/auth";
 
 const categoryOptions = ["Music", "Business", "Food & Drink", "Workshops", "Sports"];
 
 function CreateEventPage() {
   const navigate = useNavigate();
+  const auth = getAuth();
   const [formData, setFormData] = useState({
     title: "",
     category: "",
@@ -73,6 +75,7 @@ function CreateEventPage() {
     try {
       const data = await apiRequest("/api/events", {
         method: "POST",
+        auth: true,
         body: JSON.stringify({
           ...formData,
           availableSeats: Number(formData.availableSeats)
@@ -85,6 +88,30 @@ function CreateEventPage() {
     } finally {
       setIsSaving(false);
     }
+  }
+
+  if (!isAdmin(auth)) {
+    return (
+      <main className="home-page">
+        <div className="page-shell">
+          <PublicSiteHeader />
+
+          <section className="simple-panel">
+            <p className="section-tag">Admin</p>
+            <h1>Admin account needed.</h1>
+            <p>Only admins can add new events from this page.</p>
+            <div className="auth-link-list">
+              <Link className="ghost-link" to="/admin">
+                Open dashboard
+              </Link>
+              <Link className="ghost-link" to="/events">
+                Back to events
+              </Link>
+            </div>
+          </section>
+        </div>
+      </main>
+    );
   }
 
   return (

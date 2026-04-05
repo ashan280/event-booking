@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
+import { getAuth, isAdmin, isLoggedIn } from "../../lib/auth";
 
 function getEventTheme(category) {
   return category.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 }
 
 function EventsPage() {
+  const auth = getAuth();
+  const canManageEvents = isAdmin(auth);
   const [searchParams, setSearchParams] = useSearchParams();
   const [events, setEvents] = useState([]);
   const [categories, setCategories] = useState(["All"]);
@@ -129,15 +132,19 @@ function EventsPage() {
             <Link className="ghost-link" to="/">
               Back to home
             </Link>
-            <Link className="ghost-link" to="/categories">
-              View categories
-            </Link>
             <Link className="ghost-link" to="/venues">
               View venues
             </Link>
-            <Link className="ghost-link" to="/events/create">
-              Add event
-            </Link>
+            {isLoggedIn(auth) ? (
+              <Link className="ghost-link" to="/booking">
+                My bookings
+              </Link>
+            ) : null}
+            {canManageEvents ? (
+              <Link className="ghost-link" to="/events/create">
+                Add event
+              </Link>
+            ) : null}
             <button className="ghost-link" type="button" onClick={clearFilters}>
               Clear filters
             </button>

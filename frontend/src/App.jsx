@@ -1,6 +1,9 @@
 import { Route, Routes } from "react-router-dom";
 import GuestRoute from "./components/GuestRoute";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
+import BookingHistoryPage from "./pages/booking/BookingHistoryPage";
+import BookingPage from "./pages/booking/BookingPage";
 import HomePage from "./pages/HomePage";
 import AuthHomePage from "./pages/auth/AuthHomePage";
 import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
@@ -9,7 +12,6 @@ import RegisterPage from "./pages/auth/RegisterPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import ProfilePage from "./pages/auth/ProfilePage";
 import ReviewPage from "./pages/auth/ReviewPage";
-import CategoriesPage from "./pages/events/CategoriesPage";
 import CreateEventPage from "./pages/events/CreateEventPage";
 import EditEventPage from "./pages/events/EditEventPage";
 import EventDetailsPage from "./pages/events/EventDetailsPage";
@@ -18,31 +20,10 @@ import VenueDetailsPage from "./pages/events/VenueDetailsPage";
 import VenuesPage from "./pages/events/VenuesPage";
 import PlaceholderPage from "./pages/PlaceholderPage";
 
-const modules = [
-  {
-    title: "Accounts",
-    path: "/auth",
-    description: "Login, account settings, and reviews",
-    summary: "Sign in, register, open protected pages, and manage reviews"
-  },
-  {
-    title: "Events",
-    path: "/events",
-    description: "Event discovery, categories, venues, and search",
-    summary: "Browse pages, filters, event details, and management tools"
-  },
-  {
-    title: "Bookings",
-    path: "/booking",
-    description: "Bookings, seats, payments, tickets, and reports",
-    summary: "Seat maps, checkout, payment flow, tickets, and booking history"
-  }
-];
-
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<HomePage modules={modules} />} />
+      <Route path="/" element={<HomePage />} />
       <Route
         path="/auth"
         element={<AuthHomePage />}
@@ -100,16 +81,20 @@ function App() {
         element={<EventsPage />}
       />
       <Route
-        path="/categories"
-        element={<CategoriesPage />}
-      />
-      <Route
         path="/events/create"
-        element={<CreateEventPage />}
+        element={
+          <ProtectedRoute>
+            <CreateEventPage />
+          </ProtectedRoute>
+        }
       />
       <Route
         path="/events/:eventId/edit"
-        element={<EditEventPage />}
+        element={
+          <ProtectedRoute>
+            <EditEventPage />
+          </ProtectedRoute>
+        }
       />
       <Route
         path="/events/:eventId"
@@ -126,10 +111,25 @@ function App() {
       <Route
         path="/booking"
         element={
-          <PlaceholderPage
-            title="Bookings"
-            description="Seat selection, checkout, and ticket pages will appear here."
-          />
+          <ProtectedRoute>
+            <BookingHistoryPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/booking/:eventId"
+        element={
+          <ProtectedRoute>
+            <BookingPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute>
+            <AdminDashboardPage />
+          </ProtectedRoute>
         }
       />
       <Route
