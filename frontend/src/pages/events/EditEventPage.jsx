@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { apiRequest } from "../../lib/api";
 
+const categoryOptions = ["Music", "Business", "Food & Drink", "Workshops", "Sports"];
+
 function EditEventPage() {
   const navigate = useNavigate();
   const { eventId } = useParams();
@@ -58,9 +60,44 @@ function EditEventPage() {
     }));
   }
 
+  function validateForm() {
+    if (!formData.title.trim()) {
+      return "Enter the event title";
+    }
+
+    if (!formData.category.trim()) {
+      return "Select a category";
+    }
+
+    if (!formData.city.trim() || !formData.venue.trim()) {
+      return "Enter the city and venue";
+    }
+
+    if (!formData.date.trim() || !formData.time.trim()) {
+      return "Enter the date and time";
+    }
+
+    if (!formData.shortDescription.trim() || !formData.description.trim()) {
+      return "Add a short description and full description";
+    }
+
+    if (Number(formData.availableSeats) < 1) {
+      return "Seats must be at least 1";
+    }
+
+    return "";
+  }
+
   async function handleSubmit(event) {
     event.preventDefault();
     setError("");
+    const validationMessage = validateForm();
+
+    if (validationMessage) {
+      setError(validationMessage);
+      return;
+    }
+
     setIsSaving(true);
 
     try {
@@ -103,31 +140,68 @@ function EditEventPage() {
             <form className="event-form-grid" onSubmit={handleSubmit}>
               <label>
                 Title
-                <input name="title" value={formData.title} onChange={handleChange} />
+                <input
+                  name="title"
+                  placeholder="Ex: Colombo Music Night"
+                  value={formData.title}
+                  onChange={handleChange}
+                />
               </label>
               <label>
                 Category
-                <input name="category" value={formData.category} onChange={handleChange} />
+                <select name="category" value={formData.category} onChange={handleChange}>
+                  <option value="">Select category</option>
+                  {categoryOptions.map((item) => (
+                    <option key={item} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </select>
               </label>
               <label>
                 Venue
-                <input name="venue" value={formData.venue} onChange={handleChange} />
+                <input
+                  name="venue"
+                  placeholder="Ex: Lotus Hall"
+                  value={formData.venue}
+                  onChange={handleChange}
+                />
               </label>
               <label>
                 City
-                <input name="city" value={formData.city} onChange={handleChange} />
+                <input
+                  name="city"
+                  placeholder="Ex: Colombo"
+                  value={formData.city}
+                  onChange={handleChange}
+                />
               </label>
               <label>
                 Date
-                <input name="date" value={formData.date} onChange={handleChange} />
+                <input
+                  name="date"
+                  type="date"
+                  value={formData.date}
+                  onChange={handleChange}
+                />
               </label>
               <label>
                 Time
-                <input name="time" value={formData.time} onChange={handleChange} />
+                <input
+                  name="time"
+                  placeholder="Ex: 6:00 PM"
+                  value={formData.time}
+                  onChange={handleChange}
+                />
               </label>
               <label>
                 Price
-                <input name="price" value={formData.price} onChange={handleChange} />
+                <input
+                  name="price"
+                  placeholder="Ex: LKR 1,500 or Free"
+                  value={formData.price}
+                  onChange={handleChange}
+                />
               </label>
               <label>
                 Seats
@@ -143,15 +217,19 @@ function EditEventPage() {
                 Short description
                 <input
                   name="shortDescription"
+                  maxLength="120"
+                  placeholder="Write one short line about the event"
                   value={formData.shortDescription}
                   onChange={handleChange}
                 />
+                <span className="field-note">Keep this short and clear.</span>
               </label>
               <label className="event-form-full">
                 Description
                 <textarea
                   className="auth-textarea"
                   name="description"
+                  placeholder="Write the full event details"
                   value={formData.description}
                   onChange={handleChange}
                 />
