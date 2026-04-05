@@ -14,6 +14,7 @@ import CreateEventPage from "./pages/events/CreateEventPage";
 import EditEventPage from "./pages/events/EditEventPage";
 import EventDetailsPage from "./pages/events/EventDetailsPage";
 import EventsPage from "./pages/events/EventsPage";
+import VenueDetailsPage from "./pages/events/VenueDetailsPage";
 import VenuesPage from "./pages/events/VenuesPage";
 import PlaceholderPage from "./pages/PlaceholderPage";
 
@@ -117,6 +118,10 @@ function App() {
       <Route
         path="/venues"
         element={<VenuesPage />}
+      />
+      <Route
+        path="/venues/:city/:venueName"
+        element={<VenueDetailsPage />}
       />
       <Route
         path="/booking"

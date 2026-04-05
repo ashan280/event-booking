@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { apiRequest } from "../../lib/api";
 
+function getVenuePath(venue) {
+  return `/venues/${encodeURIComponent(venue.city)}/${encodeURIComponent(venue.name)}`;
+}
+
 function VenuesPage() {
   const [venues, setVenues] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -52,12 +56,14 @@ function VenuesPage() {
           <section className="venue-grid">
             {venues.map((venue) => (
               <article className="event-list-card" key={`${venue.name}-${venue.city}`}>
-                <p className="section-tag">{venue.city}</p>
-                <h2>{venue.name}</h2>
-                <p>{venue.eventCount} event{venue.eventCount === 1 ? "" : "s"} available here.</p>
-                <Link className="primary-link" to="/events">
-                  View events
-                </Link>
+                <div className="event-list-body">
+                  <p className="section-tag">{venue.city}</p>
+                  <h2>{venue.name}</h2>
+                  <p>{venue.eventCount} event{venue.eventCount === 1 ? "" : "s"} available here.</p>
+                  <Link className="primary-link" to={getVenuePath(venue)}>
+                    View venue
+                  </Link>
+                </div>
               </article>
             ))}
           </section>
