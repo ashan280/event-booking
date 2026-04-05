@@ -3,19 +3,17 @@
 :root {
   font-family: "DM Sans", "Trebuchet MS", sans-serif;
   color: #1f2937;
-  background:
-    radial-gradient(circle at top left, rgba(246, 196, 126, 0.45), transparent 30%),
-    linear-gradient(180deg, #fff8ef 0%, #f7f1e8 45%, #f4f6fb 100%);
+  background: linear-gradient(180deg, #fffdfb 0%, #f7f5f2 100%);
   line-height: 1.5;
   font-weight: 400;
   --ink: #1f2937;
   --muted: #5f6574;
-  --surface: rgba(255, 255, 255, 0.82);
+  --surface: rgba(255, 255, 255, 0.96);
   --border: rgba(31, 41, 55, 0.1);
-  --accent: #c84c20;
-  --accent-deep: #9f3412;
-  --navy: #13315c;
-  --shadow: 0 24px 60px rgba(31, 41, 55, 0.12);
+  --accent: #f05537;
+  --accent-deep: #cb472d;
+  --navy: #241b2f;
+  --shadow: 0 10px 24px rgba(31, 41, 55, 0.07);
 }
 
 * {
@@ -51,7 +49,7 @@ label {
 }
 
 .home-page {
-  padding: 24px;
+  padding: 20px;
 }
 
 .page-shell {
@@ -75,12 +73,11 @@ label {
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-  padding: 18px 22px;
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 24px;
-  backdrop-filter: blur(18px);
-  box-shadow: 0 12px 40px rgba(31, 41, 55, 0.08);
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  box-shadow: var(--shadow);
 }
 
 .brand-block {
@@ -100,19 +97,20 @@ label {
 
 .brand-subtitle {
   color: var(--muted);
-  font-size: 0.92rem;
+  font-size: 0.88rem;
 }
 
 .top-links {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 18px;
+  gap: 14px;
   color: var(--ink);
 }
 
 .top-links a {
   font-weight: 600;
+  font-size: 0.95rem;
 }
 
 .nav-cta,
@@ -133,11 +131,11 @@ label {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  padding: 14px 18px;
+  padding: 10px 14px;
   background: linear-gradient(135deg, var(--accent), #ee6d36);
   color: #fff;
-  font-weight: 700;
-  box-shadow: 0 14px 28px rgba(200, 76, 32, 0.25);
+  font-weight: 600;
+  box-shadow: 0 8px 18px rgba(240, 85, 55, 0.18);
 }
 
 .nav-cta:hover,
@@ -162,8 +160,8 @@ label {
 
 .hero-section,
 .simple-panel {
-  border-radius: 32px;
-  padding: 32px;
+  border-radius: 28px;
+  padding: 24px;
 }
 
 .hero-section {
@@ -191,8 +189,8 @@ label {
 
 .hero-copy h1 {
   max-width: 680px;
-  font-size: clamp(2.4rem, 6vw, 4.8rem);
-  line-height: 0.96;
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  line-height: 1.02;
 }
 
 .section-tag,
@@ -222,18 +220,18 @@ label {
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
-  margin-top: 28px;
+  margin-top: 24px;
 }
 
 .ghost-link {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  padding: 14px 18px;
+  padding: 10px 14px;
   border: 1px solid rgba(19, 49, 92, 0.16);
   background: rgba(255, 255, 255, 0.7);
   color: var(--navy);
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .delete-link {
@@ -245,12 +243,12 @@ label {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
-  margin-top: 28px;
+  margin-top: 24px;
 }
 
 .hero-stats article {
-  padding: 18px;
-  background: rgba(255, 255, 255, 0.58);
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.88);
   border: 1px solid rgba(19, 49, 92, 0.08);
   border-radius: 20px;
 }
@@ -273,18 +271,20 @@ label {
   align-content: start;
   padding: 24px;
   border-radius: 28px;
-  background: linear-gradient(180deg, #143664 0%, #1a4a86 100%);
-  color: #fff;
+  background: linear-gradient(180deg, #fff5ef 0%, #ffffff 100%);
+  color: var(--ink);
+  border: 1px solid rgba(240, 85, 55, 0.12);
 }
 
 .spotlight-panel {
   display: grid;
   gap: 16px;
   align-content: start;
-  padding: 28px;
+  padding: 24px;
   border-radius: 28px;
-  background: linear-gradient(180deg, #143664 0%, #1a4a86 100%);
-  color: #fff;
+  background: linear-gradient(180deg, #fff5ef 0%, #ffffff 100%);
+  color: var(--ink);
+  border: 1px solid rgba(240, 85, 55, 0.12);
   box-shadow: var(--shadow);
 }
 
@@ -297,7 +297,7 @@ label {
 
 .spotlight-panel p {
   margin: 0;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--muted);
 }
 
 .spotlight-meta {
@@ -310,11 +310,12 @@ label {
 .spotlight-venue {
   padding: 12px 14px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(240, 85, 55, 0.08);
+  border: 1px solid rgba(240, 85, 55, 0.12);
 }
 
 .search-panel label {
-  color: #f2f6fb;
+  color: var(--ink);
   font-size: 0.95rem;
 }
 
@@ -353,8 +354,8 @@ label {
 
 .quick-filter-chip {
   padding: 10px 14px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background: rgba(240, 85, 55, 0.08);
+  color: var(--ink);
 }
 
 .insight-strip {
@@ -380,7 +381,7 @@ label {
 }
 
 .category-chip {
-  padding: 14px 18px;
+  padding: 12px 16px;
   color: var(--ink);
   background: rgba(255, 255, 255, 0.72);
 }
@@ -414,11 +415,11 @@ label {
 .event-image {
   display: flex;
   align-items: flex-end;
-  height: 180px;
+  height: 150px;
   padding: 18px;
   background:
     linear-gradient(160deg, rgba(255, 255, 255, 0.18), transparent),
-    linear-gradient(135deg, #c84c20, #f3a542 55%, #143664);
+    linear-gradient(135deg, #f7a36f, #f7c18d 55%, #f05537);
 }
 
 .event-image span {
@@ -579,9 +580,16 @@ label {
   padding: 22px 24px;
 }
 
+.panel-title {
+  margin: 0;
+  font-family: "Space Grotesk", "Trebuchet MS", sans-serif;
+  font-size: 1.6rem;
+  color: #18212f;
+}
+
 .event-list-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 24px;
   align-items: stretch;
 }
@@ -720,7 +728,7 @@ label {
 .event-list-card,
 .event-details-box {
   border-radius: 24px;
-  background: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.94);
   border: 1px solid var(--border);
   box-shadow: var(--shadow);
 }
@@ -785,7 +793,7 @@ label {
   align-items: flex-start;
   background:
     linear-gradient(160deg, rgba(255, 255, 255, 0.14), transparent),
-    linear-gradient(135deg, #15345f, #ec6d35);
+    linear-gradient(135deg, #f8aa79, #f05537);
   color: white;
 }
 
@@ -801,7 +809,7 @@ label {
   left: 20px;
   padding: 8px 12px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.24);
   font-size: 0.82rem;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -833,31 +841,31 @@ label {
 .event-theme-music {
   background:
     linear-gradient(160deg, rgba(255, 255, 255, 0.14), transparent),
-    linear-gradient(135deg, #4f1d95, #ec4899 55%, #fb923c);
+    linear-gradient(135deg, #8b5cf6, #ec4899 55%, #fb923c);
 }
 
 .event-theme-business {
   background:
     linear-gradient(160deg, rgba(255, 255, 255, 0.14), transparent),
-    linear-gradient(135deg, #0f172a, #2563eb 55%, #38bdf8);
+    linear-gradient(135deg, #334155, #3b82f6 55%, #60a5fa);
 }
 
 .event-theme-food-drink {
   background:
     linear-gradient(160deg, rgba(255, 255, 255, 0.14), transparent),
-    linear-gradient(135deg, #9a3412, #f97316 55%, #facc15);
+    linear-gradient(135deg, #c2410c, #f97316 55%, #facc15);
 }
 
 .event-theme-workshops {
   background:
     linear-gradient(160deg, rgba(255, 255, 255, 0.14), transparent),
-    linear-gradient(135deg, #14532d, #16a34a 55%, #84cc16);
+    linear-gradient(135deg, #15803d, #22c55e 55%, #84cc16);
 }
 
 .event-theme-sports {
   background:
     linear-gradient(160deg, rgba(255, 255, 255, 0.14), transparent),
-    linear-gradient(135deg, #991b1b, #ef4444 55%, #f59e0b);
+    linear-gradient(135deg, #b91c1c, #ef4444 55%, #f59e0b);
 }
 
 .event-meta-grid {
@@ -881,7 +889,7 @@ label {
 .event-meta-grid span {
   padding: 10px 12px;
   border-radius: 14px;
-  background: rgba(255, 248, 239, 0.9);
+  background: rgba(255, 245, 239, 1);
   color: var(--navy);
   font-weight: 600;
 }
@@ -899,6 +907,96 @@ label {
   gap: 20px;
 }
 
+.booking-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+  gap: 24px;
+}
+
+.booking-info-grid {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.booking-info-grid p,
+.booking-history-card p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.booking-form {
+  display: grid;
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.booking-form input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid rgba(31, 41, 55, 0.12);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--ink);
+}
+
+.booking-total-box {
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(255, 245, 239, 1);
+  border: 1px solid rgba(209, 65, 12, 0.1);
+}
+
+.booking-total-box p,
+.booking-total-box strong {
+  margin: 0;
+}
+
+.booking-total-box strong {
+  display: block;
+  margin-top: 6px;
+  color: var(--navy);
+  font-size: 1.3rem;
+}
+
+.booking-history-grid,
+.admin-summary-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.booking-history-grid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.admin-summary-grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  margin-bottom: 24px;
+}
+
+.booking-history-card {
+  display: grid;
+  gap: 16px;
+}
+
+.admin-booking-card {
+  padding: 20px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.admin-booking-card h3,
+.admin-booking-card p {
+  margin: 0;
+}
+
+.admin-booking-card h3 {
+  font-family: "Space Grotesk", "Trebuchet MS", sans-serif;
+  color: #18212f;
+}
+
 @media (max-width: 900px) {
   .hero-section {
     grid-template-columns: 1fr;
@@ -914,6 +1012,7 @@ label {
 
   .insight-strip,
   .hero-stats,
+  .booking-layout,
   .event-details-layout,
   .venue-hero {
     grid-template-columns: 1fr;

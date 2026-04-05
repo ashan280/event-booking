@@ -99,11 +99,10 @@ function HomePage() {
 
         <section className="hero-section home-hero">
           <div className="hero-copy">
-            <p className="section-tag">Event guide</p>
-            <h1>Find today&apos;s events, upcoming plans, and venue locations.</h1>
+            <p className="section-tag">What&apos;s on</p>
+            <h1>See today&apos;s events, upcoming plans, and places to go.</h1>
             <p className="hero-text">
-              Browse what is happening now, check what is coming next, and move
-              to booking from one simple event home page.
+              Start from today&apos;s picks, check upcoming events, then move to booking in a simple flow.
             </p>
 
             <div className="hero-actions">
@@ -118,7 +117,7 @@ function HomePage() {
             <div className="hero-stats">
               <article>
                 <strong>{events.length}</strong>
-                <span>events listed</span>
+                <span>events live</span>
               </article>
               <article>
                 <strong>{todayEvents.length}</strong>
@@ -237,8 +236,8 @@ function HomePage() {
 
             <section className="category-section">
               <div className="section-head">
-                <p className="section-tag">Categories</p>
-                <h2>Popular event categories</h2>
+                <p className="section-tag">Quick filters</p>
+                <h2>Browse by category</h2>
               </div>
               <div className="category-list">
                 {categories.map((category) => (
