@@ -22,3 +22,7 @@ export function getAuth() {
 export function clearAuth() {
   localStorage.removeItem(AUTH_KEY);
 }
+
+export function isAdmin(authData = getAuth()) {
+  return authData?.role === "ADMIN";
+}
