@@ -93,6 +93,9 @@ function EventsPage() {
             <Link className="ghost-link" to="/">
               Back to home
             </Link>
+            <Link className="ghost-link" to="/categories">
+              View categories
+            </Link>
             <Link className="ghost-link" to="/venues">
               View venues
             </Link>
