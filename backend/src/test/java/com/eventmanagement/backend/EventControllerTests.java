@@ -10,6 +10,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -107,5 +108,14 @@ class EventControllerTests {
             .andExpect(jsonPath("$.title").value("Colombo Music Night Updated"))
             .andExpect(jsonPath("$.time").value("8:00 PM"))
             .andExpect(jsonPath("$.availableSeats").value(100));
+    }
+
+    @Test
+    void deleteEventWorks() throws Exception {
+        mockMvc.perform(delete("/api/events/1"))
+            .andExpect(status().isOk());
+
+        mockMvc.perform(get("/api/events/1"))
+            .andExpect(status().isNotFound());
     }
 }

@@ -163,6 +163,14 @@ public class EventService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found");
     }
 
+    public void deleteEvent(Long id) {
+        boolean removed = events.removeIf(event -> event.getId().equals(id));
+
+        if (!removed) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found");
+        }
+    }
+
     private boolean matchesSearch(EventDto.EventResponse event, String search) {
         if (search.isBlank()) {
             return true;
