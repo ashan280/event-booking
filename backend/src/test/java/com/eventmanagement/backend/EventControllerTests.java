@@ -4,16 +4,19 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class EventControllerTests {
 
     @Autowired
@@ -80,5 +83,29 @@ class EventControllerTests {
             .andExpect(jsonPath("$.title").value("Student Coding Workshop"))
             .andExpect(jsonPath("$.venue").value("Tech Lab"))
             .andExpect(jsonPath("$.availableSeats").value(40));
+    }
+
+    @Test
+    void updateEventWorks() throws Exception {
+        mockMvc.perform(put("/api/events/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {
+                      "title": "Colombo Music Night Updated",
+                      "category": "Music",
+                      "venue": "Lotus Hall",
+                      "city": "Colombo",
+                      "date": "2026-04-14",
+                      "time": "8:00 PM",
+                      "price": "LKR 2,800",
+                      "shortDescription": "Updated music event details.",
+                      "description": "Updated event details for the music night with a new time and date.",
+                      "availableSeats": 100
+                    }
+                    """))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.title").value("Colombo Music Night Updated"))
+            .andExpect(jsonPath("$.time").value("8:00 PM"))
+            .andExpect(jsonPath("$.availableSeats").value(100));
     }
 }

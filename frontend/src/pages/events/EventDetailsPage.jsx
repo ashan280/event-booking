@@ -41,6 +41,11 @@ function EventDetailsPage() {
             <Link className="ghost-link" to="/events/create">
               Add event
             </Link>
+            {event ? (
+              <Link className="ghost-link" to={`/events/${event.id}/edit`}>
+                Edit event
+              </Link>
+            ) : null}
           </div>
 
           {isLoading ? <p>Loading event details...</p> : null}

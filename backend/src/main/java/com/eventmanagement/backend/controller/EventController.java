@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,6 +37,11 @@ public class EventController {
     @PostMapping
     public EventDto.EventResponse addEvent(@Valid @RequestBody EventDto.EventRequest request) {
         return eventService.addEvent(request);
+    }
+
+    @PutMapping("/{id}")
+    public EventDto.EventResponse updateEvent(@PathVariable Long id, @Valid @RequestBody EventDto.EventRequest request) {
+        return eventService.updateEvent(id, request);
     }
 
     @GetMapping("/categories")

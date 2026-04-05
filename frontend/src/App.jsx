@@ -11,6 +11,7 @@ import ProfilePage from "./pages/auth/ProfilePage";
 import ReviewPage from "./pages/auth/ReviewPage";
 import CategoriesPage from "./pages/events/CategoriesPage";
 import CreateEventPage from "./pages/events/CreateEventPage";
+import EditEventPage from "./pages/events/EditEventPage";
 import EventDetailsPage from "./pages/events/EventDetailsPage";
 import EventsPage from "./pages/events/EventsPage";
 import VenuesPage from "./pages/events/VenuesPage";
@@ -104,6 +105,10 @@ function App() {
       <Route
         path="/events/create"
         element={<CreateEventPage />}
+      />
+      <Route
+        path="/events/:eventId/edit"
+        element={<EditEventPage />}
       />
       <Route
         path="/events/:eventId"

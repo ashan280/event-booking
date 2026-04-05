@@ -25,8 +25,8 @@ public class EventService {
             "2026-04-12",
             "7:00 PM",
             "LKR 2,500",
-            "A live music night with local artists and bands.",
-            "Enjoy a full evening with live music, food stalls, and a simple seat booking flow in Colombo.",
+            "Live music, local artists, and a full evening show.",
+            "Enjoy a full evening with live bands, food stalls, and an easy seat booking flow in Colombo.",
             120
         ),
         new EventDto.EventResponse(
@@ -38,8 +38,8 @@ public class EventService {
             "2026-04-20",
             "10:00 AM",
             "Free",
-            "A meetup for students, founders, and small business teams.",
-            "Join talks, networking sessions, and startup discussions with local business speakers and student founders.",
+            "A meetup for students, founders, and small teams.",
+            "Join talks, networking sessions, and simple startup discussions with local speakers and student founders.",
             80
         ),
         new EventDto.EventResponse(
@@ -51,8 +51,8 @@ public class EventService {
             "2026-04-28",
             "4:00 PM",
             "LKR 1,200",
-            "Street food, music, and family activities by the coast.",
-            "Taste local food, watch live cooking sessions, and enjoy a relaxed weekend event with family and friends.",
+            "Street food, music, and family fun by the coast.",
+            "Taste local food, watch live cooking, and enjoy a relaxed weekend event with family and friends.",
             200
         ),
         new EventDto.EventResponse(
@@ -64,22 +64,9 @@ public class EventService {
             "2026-05-03",
             "1:00 PM",
             "LKR 3,000",
-            "A hands-on design session for beginners and students.",
-            "Learn simple design basics, layout ideas, and team project tips in a guided workshop for beginners.",
+            "A hands-on design session for beginners.",
+            "Learn design basics, layout ideas, and team project tips in a guided workshop for beginners.",
             35
-        ),
-        new EventDto.EventResponse(
-            5L,
-            "City Basketball Challenge",
-            "Sports",
-            "Metro Sports Arena",
-            "Kurunegala",
-            "2026-05-09",
-            "5:30 PM",
-            "LKR 800",
-            "A local sports event with team matches and fan seating.",
-            "Watch local teams compete, enjoy the match atmosphere, and reserve your seat before the event day.",
-            150
         )
     );
 
@@ -147,6 +134,33 @@ public class EventService {
 
         events.add(event);
         return event;
+    }
+
+    public EventDto.EventResponse updateEvent(Long id, EventDto.EventRequest request) {
+        for (int index = 0; index < events.size(); index++) {
+            EventDto.EventResponse current = events.get(index);
+
+            if (current.getId().equals(id)) {
+                EventDto.EventResponse updatedEvent = new EventDto.EventResponse(
+                    current.getId(),
+                    request.getTitle().trim(),
+                    request.getCategory().trim(),
+                    request.getVenue().trim(),
+                    request.getCity().trim(),
+                    request.getDate().trim(),
+                    request.getTime().trim(),
+                    request.getPrice().trim(),
+                    request.getShortDescription().trim(),
+                    request.getDescription().trim(),
+                    request.getAvailableSeats()
+                );
+
+                events.set(index, updatedEvent);
+                return updatedEvent;
+            }
+        }
+
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found");
     }
 
     private boolean matchesSearch(EventDto.EventResponse event, String search) {
