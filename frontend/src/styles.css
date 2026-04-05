@@ -688,6 +688,14 @@ label {
   margin-top: 24px;
 }
 
+.venue-event-card .venue-showcase-label strong {
+  font-size: 1.15rem;
+}
+
+.venue-event-card .venue-card-body {
+  min-height: 220px;
+}
+
 .category-page-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));

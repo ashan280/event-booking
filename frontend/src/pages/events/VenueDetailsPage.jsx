@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { apiRequest } from "../../lib/api";
 
+function getVenueEventTheme(index) {
+  return `venue-card-theme-${(index % 4) + 1}`;
+}
+
 function VenueDetailsPage() {
   const { city, venueName } = useParams();
   const [venue, setVenue] = useState(null);
@@ -66,18 +70,23 @@ function VenueDetailsPage() {
               </div>
 
               <section className="venue-event-grid">
-                {venue.events.map((event) => (
-                  <article className="event-list-card" key={event.id}>
-                    <div className="event-list-body">
-                      <p className="section-tag">{event.category}</p>
-                      <h2>{event.title}</h2>
-                      <p className="event-summary-text">{event.shortDescription}</p>
-                      <div className="event-meta-grid">
-                        <span>{event.date}</span>
-                        <span>{event.time}</span>
-                        <span>{event.price}</span>
-                        <span>{event.availableSeats} seats</span>
+                {venue.events.map((event, index) => (
+                  <article className={`venue-card venue-event-card ${getVenueEventTheme(index)}`} key={event.id}>
+                    <div className="venue-showcase">
+                      <div className="venue-showcase-label">
+                        <span>{event.category}</span>
+                        <strong>{event.title}</strong>
+                        <p>{event.date} | {event.time}</p>
                       </div>
+                      <div className="venue-showcase-image venue-showcase-image-main" />
+                      <div className="venue-showcase-image venue-showcase-image-side" />
+                    </div>
+
+                    <div className="venue-card-body">
+                      <h2>{event.title}</h2>
+                      <p className="venue-card-title">{event.shortDescription}</p>
+                      <p className="venue-card-meta">{event.price}</p>
+                      <p className="venue-card-meta">{event.availableSeats} seats left</p>
                       <Link className="primary-link" to={`/events/${event.id}`}>
                         View event
                       </Link>
