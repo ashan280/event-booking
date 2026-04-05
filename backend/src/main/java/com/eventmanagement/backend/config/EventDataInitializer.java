@@ -1,10 +1,13 @@
 package com.eventmanagement.backend.config;
 
 import com.eventmanagement.backend.model.Event;
+import com.eventmanagement.backend.model.User;
 import com.eventmanagement.backend.repository.EventRepository;
+import com.eventmanagement.backend.repository.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,10 +15,13 @@ import org.springframework.stereotype.Component;
 public class EventDataInitializer implements CommandLineRunner {
 
     private final EventRepository eventRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) {
         seedEvents();
+        seedAdminUser();
     }
 
     private void seedEvents() {
@@ -63,5 +69,18 @@ public class EventDataInitializer implements CommandLineRunner {
         event.setDescription(description);
         event.setAvailableSeats(availableSeats);
         return event;
+    }
+
+    private void seedAdminUser() {
+        if (userRepository.findByEmail("admin@eventhub.com").isPresent()) {
+            return;
+        }
+
+        User admin = new User();
+        admin.setFullName("Event Admin");
+        admin.setEmail("admin@eventhub.com");
+        admin.setPasswordHash(passwordEncoder.encode("admin123"));
+        admin.setRole("ADMIN");
+        userRepository.save(admin);
     }
 }

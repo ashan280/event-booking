@@ -1,5 +1,7 @@
 package com.eventmanagement.backend;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -7,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -22,6 +25,9 @@ class EventControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Test
     void eventListWorks() throws Exception {
@@ -97,7 +103,10 @@ class EventControllerTests {
 
     @Test
     void addEventWorks() throws Exception {
+        String adminToken = loginAsAdmin();
+
         mockMvc.perform(post("/api/events")
+                .header("Authorization", "Bearer " + adminToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                     {
@@ -121,7 +130,10 @@ class EventControllerTests {
 
     @Test
     void updateEventWorks() throws Exception {
+        String adminToken = loginAsAdmin();
+
         mockMvc.perform(put("/api/events/1")
+                .header("Authorization", "Bearer " + adminToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                     {
@@ -145,10 +157,70 @@ class EventControllerTests {
 
     @Test
     void deleteEventWorks() throws Exception {
-        mockMvc.perform(delete("/api/events/1"))
+        String adminToken = loginAsAdmin();
+
+        mockMvc.perform(delete("/api/events/1")
+                .header("Authorization", "Bearer " + adminToken))
             .andExpect(status().isOk());
 
         mockMvc.perform(get("/api/events/1"))
             .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void addEventNeedsAdmin() throws Exception {
+        String userToken = registerAsUser();
+
+        mockMvc.perform(post("/api/events")
+                .header("Authorization", "Bearer " + userToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {
+                      "title": "User Event",
+                      "category": "Music",
+                      "venue": "Hall A",
+                      "city": "Colombo",
+                      "date": "2026-06-01",
+                      "time": "6:00 PM",
+                      "price": "Free",
+                      "shortDescription": "User should not create this.",
+                      "description": "This request should fail because the user is not an admin.",
+                      "availableSeats": 20
+                    }
+                    """))
+            .andExpect(status().isForbidden());
+    }
+
+    private String loginAsAdmin() throws Exception {
+        MvcResult result = mockMvc.perform(post("/api/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {
+                      "email": "admin@eventhub.com",
+                      "password": "admin123"
+                    }
+                    """))
+            .andExpect(status().isOk())
+            .andReturn();
+
+        JsonNode response = objectMapper.readTree(result.getResponse().getContentAsString());
+        return response.get("token").asText();
+    }
+
+    private String registerAsUser() throws Exception {
+        MvcResult result = mockMvc.perform(post("/api/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {
+                      "fullName": "Test User",
+                      "email": "user@example.com",
+                      "password": "password123"
+                    }
+                    """))
+            .andExpect(status().isOk())
+            .andReturn();
+
+        JsonNode response = objectMapper.readTree(result.getResponse().getContentAsString());
+        return response.get("token").asText();
     }
 }

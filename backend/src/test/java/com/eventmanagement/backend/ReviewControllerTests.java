@@ -1,5 +1,6 @@
 package com.eventmanagement.backend;
 
+import com.eventmanagement.backend.repository.BookingRepository;
 import com.eventmanagement.backend.repository.ReviewRepository;
 import com.eventmanagement.backend.repository.UserRepository;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -34,8 +35,12 @@ class ReviewControllerTests {
     @Autowired
     private ReviewRepository reviewRepository;
 
+    @Autowired
+    private BookingRepository bookingRepository;
+
     @BeforeEach
     void clearData() {
+        bookingRepository.deleteAll();
         reviewRepository.deleteAll();
         userRepository.deleteAll();
     }

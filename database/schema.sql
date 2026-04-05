@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS bookings (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     user_id BIGINT NOT NULL,
     event_id BIGINT NOT NULL,
+    seat_count INT NOT NULL,
     total_amount DECIMAL(10, 2) NOT NULL,
     booking_status VARCHAR(50) NOT NULL DEFAULT 'PENDING',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
