@@ -1,0 +1,129 @@
+import { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import { apiRequest } from "../../lib/api";
+
+const categories = ["All", "Music", "Business", "Food & Drink", "Workshops", "Sports"];
+
+function EventsPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [events, setEvents] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [search, setSearch] = useState(searchParams.get("search") || "");
+  const [category, setCategory] = useState(searchParams.get("category") || "All");
+
+  useEffect(() => {
+    async function loadEvents() {
+      setIsLoading(true);
+      setError("");
+
+      const params = new URLSearchParams();
+
+      if (search.trim()) {
+        params.set("search", search.trim());
+      }
+
+      if (category !== "All") {
+        params.set("category", category);
+      }
+
+      setSearchParams(params, { replace: true });
+
+      try {
+        const query = params.toString();
+        const data = await apiRequest(`/api/events${query ? `?${query}` : ""}`);
+        setEvents(data);
+      } catch (requestError) {
+        setError(requestError.message);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    loadEvents();
+  }, [search, category, setSearchParams]);
+
+  return (
+    <main className="home-page">
+      <div className="page-shell">
+        <section className="events-page-header simple-panel">
+          <p className="section-tag">Events</p>
+          <h1>Browse available events.</h1>
+          <p>
+            Search events, filter by category, and open each event page to see
+            the details.
+          </p>
+
+          <div className="events-filter-grid">
+            <label>
+              Search
+              <input
+                type="text"
+                placeholder="Search by title, city, or venue"
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+              />
+            </label>
+
+            <label>
+              Category
+              <select value={category} onChange={(event) => setCategory(event.target.value)}>
+                {categories.map((item) => (
+                  <option key={item} value={item}>
+                    {item}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+
+          <div className="auth-link-list">
+            <Link className="ghost-link" to="/">
+              Back to home
+            </Link>
+          </div>
+        </section>
+
+        {error ? <p className="error-text">{error}</p> : null}
+
+        {isLoading ? (
+          <section className="simple-panel">
+            <p>Loading events...</p>
+          </section>
+        ) : null}
+
+        {!isLoading && !events.length ? (
+          <section className="simple-panel">
+            <p>No events found for this filter.</p>
+          </section>
+        ) : null}
+
+        {!isLoading && events.length ? (
+          <section className="event-list-grid">
+            {events.map((event) => (
+              <article className="event-list-card" key={event.id}>
+                <p className="section-tag">{event.category}</p>
+                <h2>{event.title}</h2>
+                <p>{event.shortDescription}</p>
+                <div className="event-meta-grid">
+                  <span>{event.date}</span>
+                  <span>{event.time}</span>
+                  <span>{event.city}</span>
+                  <span>{event.price}</span>
+                </div>
+                <p className="event-venue-text">
+                  {event.venue} • {event.availableSeats} seats left
+                </p>
+                <Link className="primary-link" to={`/events/${event.id}`}>
+                  View details
+                </Link>
+              </article>
+            ))}
+          </section>
+        ) : null}
+      </div>
+    </main>
+  );
+}
+
+export default EventsPage;

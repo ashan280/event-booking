@@ -9,6 +9,8 @@ import RegisterPage from "./pages/auth/RegisterPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import ProfilePage from "./pages/auth/ProfilePage";
 import ReviewPage from "./pages/auth/ReviewPage";
+import EventDetailsPage from "./pages/events/EventDetailsPage";
+import EventsPage from "./pages/events/EventsPage";
 import PlaceholderPage from "./pages/PlaceholderPage";
 
 const modules = [
@@ -90,12 +92,11 @@ function App() {
       />
       <Route
         path="/events"
-        element={
-          <PlaceholderPage
-            title="Events"
-            description="Event browsing and event details will appear here."
-          />
-        }
+        element={<EventsPage />}
+      />
+      <Route
+        path="/events/:eventId"
+        element={<EventDetailsPage />}
       />
       <Route
         path="/booking"
