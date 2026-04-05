@@ -24,7 +24,7 @@ public class EventDataInitializer implements CommandLineRunner {
         }
 
         eventRepository.saveAll(List.of(
-            event("Colombo Music Night", "Music", "Lotus Hall", "Colombo", "2026-04-12", "7:00 PM", "LKR 2,500",
+            event("Colombo Music Night", "Music", "Lotus Hall", "Colombo", "2026-04-08", "7:00 PM", "LKR 2,500",
                 "Live music, local artists, and a full evening show.",
                 "Enjoy a full evening with live bands, food stalls, and an easy seat booking flow in Colombo.", 120),
             event("Startup Meetup 2026", "Business", "City Innovation Hub", "Kandy", "2026-04-20", "10:00 AM", "Free",

@@ -90,6 +90,7 @@ label {
 
 .brand-name {
   margin: 0;
+  display: inline-block;
   font-family: "Space Grotesk", "Trebuchet MS", sans-serif;
   font-size: 1.6rem;
   font-weight: 700;
@@ -108,6 +109,10 @@ label {
   flex-wrap: wrap;
   gap: 18px;
   color: var(--ink);
+}
+
+.top-links a {
+  font-weight: 600;
 }
 
 .nav-cta,
@@ -165,6 +170,10 @@ label {
   display: grid;
   grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.95fr);
   gap: 24px;
+  align-items: stretch;
+}
+
+.home-hero {
   align-items: stretch;
 }
 
@@ -268,6 +277,42 @@ label {
   color: #fff;
 }
 
+.spotlight-panel {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+  padding: 28px;
+  border-radius: 28px;
+  background: linear-gradient(180deg, #143664 0%, #1a4a86 100%);
+  color: #fff;
+  box-shadow: var(--shadow);
+}
+
+.spotlight-panel h2 {
+  margin: 0;
+  font-family: "Space Grotesk", "Trebuchet MS", sans-serif;
+  font-size: 2rem;
+  line-height: 1.05;
+}
+
+.spotlight-panel p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.spotlight-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.spotlight-meta span,
+.spotlight-venue {
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
 .search-panel label {
   color: #f2f6fb;
   font-size: 0.95rem;
@@ -360,6 +405,12 @@ label {
   padding: 22px;
 }
 
+.collection-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .event-image {
   display: flex;
   align-items: flex-end;
@@ -388,6 +439,11 @@ label {
 
 .primary-link {
   margin-top: 10px;
+}
+
+.collection-card .ghost-link,
+.event-content .primary-link {
+  align-self: flex-start;
 }
 
 .secondary-link {
@@ -517,6 +573,10 @@ label {
   margin: 0;
   font-family: "Space Grotesk", "Trebuchet MS", sans-serif;
   color: #18212f;
+}
+
+.compact-panel {
+  padding: 22px 24px;
 }
 
 .event-list-grid {
@@ -844,6 +904,10 @@ label {
     grid-template-columns: 1fr;
   }
 
+  .spotlight-meta {
+    grid-template-columns: 1fr 1fr;
+  }
+
   .event-list-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -875,6 +939,14 @@ label {
 
   .search-panel {
     padding: 20px;
+  }
+
+  .spotlight-panel {
+    padding: 24px;
+  }
+
+  .spotlight-meta {
+    grid-template-columns: 1fr;
   }
 
   .event-list-grid {
