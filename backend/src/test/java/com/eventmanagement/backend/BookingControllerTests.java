@@ -55,25 +55,40 @@ class BookingControllerTests {
     void loggedInUserCanBookAndSeeHistory() throws Exception {
         String token = registerUserAndGetToken();
 
-        mockMvc.perform(post("/api/bookings")
+        MvcResult bookingResult = mockMvc.perform(post("/api/bookings")
                 .header("Authorization", "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                     {
                       "eventId": 1,
-                      "seatCount": 2
+                      "seatCount": 2,
+                      "paymentMethod": "Card"
                     }
                     """))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.eventTitle").value("Colombo Music Night"))
             .andExpect(jsonPath("$.seatCount").value(2))
-            .andExpect(jsonPath("$.bookingStatus").value("CONFIRMED"));
+            .andExpect(jsonPath("$.bookingStatus").value("CONFIRMED"))
+            .andExpect(jsonPath("$.paymentMethod").value("Card"))
+            .andExpect(jsonPath("$.paymentStatus").value("PAID"))
+            .andReturn();
+
+        JsonNode bookingResponse = objectMapper.readTree(bookingResult.getResponse().getContentAsString());
+        long bookingId = bookingResponse.get("id").asLong();
+        String ticketCode = bookingResponse.get("ticketCode").asText();
 
         mockMvc.perform(get("/api/bookings")
                 .header("Authorization", "Bearer " + token))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$[0].eventTitle").value("Colombo Music Night"))
-            .andExpect(jsonPath("$[0].seatCount").value(2));
+            .andExpect(jsonPath("$[0].seatCount").value(2))
+            .andExpect(jsonPath("$[0].ticketCode").value(ticketCode));
+
+        mockMvc.perform(get("/api/bookings/" + bookingId)
+                .header("Authorization", "Bearer " + token))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(bookingId))
+            .andExpect(jsonPath("$.ticketCode").value(ticketCode));
     }
 
     @Test
@@ -83,7 +98,8 @@ class BookingControllerTests {
                 .content("""
                     {
                       "eventId": 1,
-                      "seatCount": 1
+                      "seatCount": 1,
+                      "paymentMethod": "Card"
                     }
                     """))
             .andExpect(status().isUnauthorized())
@@ -100,7 +116,8 @@ class BookingControllerTests {
                 .content("""
                     {
                       "eventId": 1,
-                      "seatCount": 1
+                      "seatCount": 1,
+                      "paymentMethod": "Card"
                     }
                     """))
             .andExpect(status().isOk());

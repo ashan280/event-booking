@@ -5,6 +5,7 @@ import com.eventmanagement.backend.service.BookingService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.util.List;
+import org.springframework.web.bind.annotation.PathVariable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,5 +31,10 @@ public class BookingController {
     @GetMapping
     public List<BookingDto.BookingResponse> getUserBookings(HttpServletRequest request) {
         return bookingService.getUserBookings(request);
+    }
+
+    @GetMapping("/{bookingId}")
+    public BookingDto.BookingResponse getBookingById(@PathVariable Long bookingId, HttpServletRequest request) {
+        return bookingService.getBookingById(request, bookingId);
     }
 }

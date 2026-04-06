@@ -33,6 +33,9 @@ CREATE TABLE IF NOT EXISTS bookings (
     seat_count INT NOT NULL,
     total_amount DECIMAL(10, 2) NOT NULL,
     booking_status VARCHAR(50) NOT NULL DEFAULT 'PENDING',
+    payment_method VARCHAR(50) NOT NULL,
+    payment_status VARCHAR(50) NOT NULL,
+    ticket_code VARCHAR(100) NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (event_id) REFERENCES events(id)

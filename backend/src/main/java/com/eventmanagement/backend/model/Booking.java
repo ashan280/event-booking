@@ -42,6 +42,15 @@ public class Booking {
     @Column(name = "booking_status", nullable = false)
     private String bookingStatus;
 
+    @Column(name = "payment_method", nullable = false)
+    private String paymentMethod;
+
+    @Column(name = "payment_status", nullable = false)
+    private String paymentStatus;
+
+    @Column(name = "ticket_code", nullable = false, unique = true)
+    private String ticketCode;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 

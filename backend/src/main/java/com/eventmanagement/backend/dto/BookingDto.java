@@ -25,6 +25,8 @@ public final class BookingDto {
         @NotNull(message = "Seat count is required")
         @Min(value = 1, message = "Seat count must be at least 1")
         private Integer seatCount;
+
+        private String paymentMethod;
     }
 
     @Getter
@@ -41,6 +43,9 @@ public final class BookingDto {
         private final Integer seatCount;
         private final BigDecimal totalAmount;
         private final String bookingStatus;
+        private final String paymentMethod;
+        private final String paymentStatus;
+        private final String ticketCode;
         private final LocalDateTime createdAt;
     }
 }

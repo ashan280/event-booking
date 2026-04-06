@@ -9,6 +9,7 @@ import com.eventmanagement.backend.repository.EventRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,9 @@ public class BookingService {
         booking.setSeatCount(bookingRequest.getSeatCount());
         booking.setTotalAmount(parsePrice(event.getPrice()).multiply(BigDecimal.valueOf(bookingRequest.getSeatCount())));
         booking.setBookingStatus("CONFIRMED");
+        booking.setPaymentMethod(getPaymentMethod(bookingRequest.getPaymentMethod(), event.getPrice()));
+        booking.setPaymentStatus(isFreeEvent(event.getPrice()) ? "FREE" : "PAID");
+        booking.setTicketCode(buildTicketCode());
 
         return toResponse(bookingRepository.save(booking));
     }
@@ -51,6 +55,21 @@ public class BookingService {
             .toList();
     }
 
+    public BookingDto.BookingResponse getBookingById(HttpServletRequest request, Long bookingId) {
+        User user = authService.getCurrentUser(request);
+        Booking booking = bookingRepository.findById(bookingId)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+
+        boolean isOwner = booking.getUser().getId().equals(user.getId());
+        boolean isAdmin = "ADMIN".equalsIgnoreCase(user.getRole());
+
+        if (!isOwner && !isAdmin) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot open this booking");
+        }
+
+        return toResponse(booking);
+    }
+
     public List<BookingDto.BookingResponse> getRecentBookings() {
         return bookingRepository.findTop5ByOrderByCreatedAtDesc().stream()
             .map(this::toResponse)
@@ -58,7 +77,7 @@ public class BookingService {
     }
 
     private BigDecimal parsePrice(String price) {
-        if (price == null || price.isBlank() || "Free".equalsIgnoreCase(price.trim())) {
+        if (isFreeEvent(price)) {
             return BigDecimal.ZERO;
         }
 
@@ -69,6 +88,26 @@ public class BookingService {
         } catch (NumberFormatException exception) {
             return BigDecimal.ZERO;
         }
+    }
+
+    private boolean isFreeEvent(String price) {
+        return price == null || price.isBlank() || "Free".equalsIgnoreCase(price.trim());
+    }
+
+    private String getPaymentMethod(String paymentMethod, String price) {
+        if (isFreeEvent(price)) {
+            return "Free";
+        }
+
+        if (paymentMethod == null || paymentMethod.isBlank()) {
+            return "Card";
+        }
+
+        return paymentMethod.trim();
+    }
+
+    private String buildTicketCode() {
+        return "TKT-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     }
 
     private BookingDto.BookingResponse toResponse(Booking booking) {
@@ -83,6 +122,9 @@ public class BookingService {
             booking.getSeatCount(),
             booking.getTotalAmount(),
             booking.getBookingStatus(),
+            booking.getPaymentMethod(),
+            booking.getPaymentStatus(),
+            booking.getTicketCode(),
             booking.getCreatedAt()
         );
     }
