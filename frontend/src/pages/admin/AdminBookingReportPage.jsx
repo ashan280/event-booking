@@ -12,9 +12,9 @@ function formatAmount(value) {
   }).format(value || 0);
 }
 
-function AdminDashboardPage() {
+function AdminBookingReportPage() {
   const auth = getAuth();
-  const [dashboard, setDashboard] = useState(null);
+  const [report, setReport] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -24,13 +24,13 @@ function AdminDashboardPage() {
       return;
     }
 
-    async function loadDashboard() {
+    async function loadReport() {
       setIsLoading(true);
       setError("");
 
       try {
-        const data = await apiRequest("/api/admin/dashboard", { auth: true });
-        setDashboard(data);
+        const data = await apiRequest("/api/admin/bookings/report", { auth: true });
+        setReport(data);
       } catch (requestError) {
         setError(requestError.message);
       } finally {
@@ -38,7 +38,7 @@ function AdminDashboardPage() {
       }
     }
 
-    loadDashboard();
+    loadReport();
   }, [auth]);
 
   if (!isAdmin(auth)) {
@@ -49,7 +49,7 @@ function AdminDashboardPage() {
 
           <section className="simple-panel">
             <p className="section-tag">Admin</p>
-            <h1>Admin dashboard only.</h1>
+            <h1>Admin report only.</h1>
             <p>You need an admin account to open this page.</p>
             <div className="auth-link-list">
               <Link className="ghost-link" to="/auth/login">
@@ -71,72 +71,77 @@ function AdminDashboardPage() {
         <PublicSiteHeader />
 
         <section className="simple-panel">
-          <p className="section-tag">Admin dashboard</p>
-          <h1>Manage events and bookings.</h1>
-          <p>Add events, update venue details in the forms, and check recent bookings from one place.</p>
+          <p className="section-tag">Booking report</p>
+          <h1>Check booking numbers and revenue.</h1>
+          <p>Use this page to see bookings, cancelled orders, seats booked, and recent ticket activity.</p>
 
           <div className="auth-link-list">
-            <Link className="ghost-link" to="/events/create">
-              Add event
+            <Link className="ghost-link" to="/admin">
+              Back to dashboard
             </Link>
             <Link className="ghost-link" to="/events">
-              Manage events
-            </Link>
-            <Link className="ghost-link" to="/venues">
-              View venues
-            </Link>
-            <Link className="ghost-link" to="/admin/reports">
-              Booking report
+              Open events
             </Link>
           </div>
         </section>
 
         {isLoading ? (
           <section className="simple-panel">
-            <p>Loading dashboard...</p>
+            <p>Loading booking report...</p>
           </section>
         ) : null}
 
         {error ? <p className="error-text">{error}</p> : null}
 
-        {dashboard ? (
+        {report ? (
           <>
             <section className="admin-summary-grid">
               <article className="simple-panel compact-panel">
-                <p className="section-tag">Users</p>
-                <h2 className="panel-title">{dashboard.totalUsers}</h2>
+                <p className="section-tag">Total bookings</p>
+                <h2 className="panel-title">{report.totalBookings}</h2>
               </article>
               <article className="simple-panel compact-panel">
-                <p className="section-tag">Events</p>
-                <h2 className="panel-title">{dashboard.totalEvents}</h2>
+                <p className="section-tag">Confirmed</p>
+                <h2 className="panel-title">{report.confirmedBookings}</h2>
               </article>
               <article className="simple-panel compact-panel">
-                <p className="section-tag">Bookings</p>
-                <h2 className="panel-title">{dashboard.totalBookings}</h2>
+                <p className="section-tag">Cancelled</p>
+                <h2 className="panel-title">{report.cancelledBookings}</h2>
               </article>
               <article className="simple-panel compact-panel">
-                <p className="section-tag">Venues</p>
-                <h2 className="panel-title">{dashboard.totalVenues}</h2>
+                <p className="section-tag">Seats booked</p>
+                <h2 className="panel-title">{report.totalSeatsBooked}</h2>
+              </article>
+              <article className="simple-panel compact-panel">
+                <p className="section-tag">Revenue</p>
+                <h2 className="panel-title">{formatAmount(report.totalRevenue)}</h2>
               </article>
             </section>
 
             <section className="simple-panel">
               <p className="section-tag">Recent bookings</p>
-              <h2 className="panel-title">Latest bookings</h2>
+              <h2 className="panel-title">Latest activity</h2>
 
-              {!dashboard.recentBookings.length ? (
+              {!report.recentBookings.length ? (
                 <p>No bookings yet.</p>
               ) : (
                 <div className="booking-history-grid">
-                  {dashboard.recentBookings.map((booking) => (
+                  {report.recentBookings.map((booking) => (
                     <article className="booking-history-card admin-booking-card" key={booking.id}>
+                      <p className="section-tag">{booking.bookingStatus}</p>
                       <h3>{booking.eventTitle}</h3>
                       <p>{booking.city} | {booking.venue}</p>
-                      <p>Seats: {booking.seatCount}</p>
+                      <p>Seats: {booking.seatLabels.join(", ")}</p>
+                      <p>Payment: {booking.paymentStatus}</p>
                       <p>Total: {formatAmount(booking.totalAmount)}</p>
-                      <Link className="ghost-link" to={`/events/${booking.eventId}`}>
-                        Open event
-                      </Link>
+                      <div className="auth-link-list">
+                        <Link className="ghost-link" to={`/events/${booking.eventId}`}>
+                          Open event
+                        </Link>
+                        <Link className="ghost-link" to={`/booking/tickets/${booking.id}`}>
+                          Open ticket
+                        </Link>
+                      </div>
                     </article>
                   ))}
                 </div>
@@ -149,4 +154,4 @@ function AdminDashboardPage() {
   );
 }
 
-export default AdminDashboardPage;
+export default AdminBookingReportPage;

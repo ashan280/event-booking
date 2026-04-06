@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import GuestRoute from "./components/GuestRoute";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminBookingReportPage from "./pages/admin/AdminBookingReportPage";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
 import BookingHistoryPage from "./pages/booking/BookingHistoryPage";
 import BookingPage from "./pages/booking/BookingPage";
@@ -147,6 +148,14 @@ function App() {
         element={
           <ProtectedRoute>
             <AdminDashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/reports"
+        element={
+          <ProtectedRoute>
+            <AdminBookingReportPage />
           </ProtectedRoute>
         }
       />
