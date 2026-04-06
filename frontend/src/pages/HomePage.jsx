@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import PublicSiteHeader from "../components/PublicSiteHeader";
 import { apiRequest } from "../lib/api";
 
+/* Get today's date as YYYY-MM-DD */
 function getTodayValue() {
   const date = new Date();
   const year = date.getFullYear();
@@ -11,6 +12,7 @@ function getTodayValue() {
   return `${year}-${month}-${day}`;
 }
 
+/* Format date string to short label like "Mon, 5 Apr" */
 function formatDateLabel(value) {
   const parsedDate = new Date(value);
 
@@ -25,11 +27,24 @@ function formatDateLabel(value) {
   });
 }
 
+/* Pick a category image from the public/images folder */
+function getCategoryImage(category) {
+  const lower = (category || "").toLowerCase();
+
+  if (lower.includes("music") || lower.includes("concert")) return "/images/concert.png";
+  if (lower.includes("business") || lower.includes("conference")) return "/images/conference.png";
+  if (lower.includes("sport")) return "/images/sports.png";
+  if (lower.includes("food") || lower.includes("drink")) return "/images/food.png";
+  if (lower.includes("workshop") || lower.includes("art")) return "/images/workshop.png";
+  return "/images/concert.png";
+}
+
 function HomePage() {
   const [events, setEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
+  /* Load events from backend API */
   useEffect(() => {
     async function loadHomeEvents() {
       setIsLoading(true);
@@ -50,21 +65,25 @@ function HomePage() {
 
   const todayValue = getTodayValue();
 
+  /* Sort events by date */
   const sortedEvents = useMemo(
     () => [...events].sort((first, second) => first.date.localeCompare(second.date)),
     [events]
   );
 
+  /* Filter today's events */
   const todayEvents = useMemo(
     () => sortedEvents.filter((event) => event.date === todayValue),
     [sortedEvents, todayValue]
   );
 
+  /* Get next 4 upcoming events */
   const upcomingEvents = useMemo(
     () => sortedEvents.filter((event) => event.date >= todayValue).slice(0, 4),
     [sortedEvents, todayValue]
   );
 
+  /* Group events by city for location cards */
   const locationCards = useMemo(() => {
     const cityMap = new Map();
 
@@ -85,11 +104,13 @@ function HomePage() {
     return Array.from(cityMap.values()).slice(0, 4);
   }, [sortedEvents]);
 
+  /* Get unique categories */
   const categories = useMemo(
     () => Array.from(new Set(sortedEvents.map((event) => event.category))).slice(0, 6),
     [sortedEvents]
   );
 
+  /* Pick a spotlight event (today's first event, or first upcoming, or first event) */
   const spotlightEvent = todayEvents[0] || upcomingEvents[0] || sortedEvents[0];
 
   return (
@@ -97,12 +118,22 @@ function HomePage() {
       <div className="page-shell">
         <PublicSiteHeader />
 
+        {/* Hero banner with image */}
+        <div className="hero-image-container">
+          <img src="/images/hero.png" alt="Event Booking Hero - discover amazing events" />
+          <div className="hero-image-overlay">
+            <h2>Discover Amazing Events Near You</h2>
+            <p>Book seats, find venues, and enjoy unforgettable experiences</p>
+          </div>
+        </div>
+
+        {/* Hero section with stats and spotlight */}
         <section className="hero-section home-hero">
           <div className="hero-copy">
             <p className="section-tag">What&apos;s on</p>
-            <h1>See today&apos;s events, upcoming plans, and places to go.</h1>
+            <h1>Browse events, book seats, and enjoy the show.</h1>
             <p className="hero-text">
-              Start from today&apos;s picks, check upcoming events, then move to booking in a simple flow.
+              Find today&apos;s events, check upcoming plans, and book your seats in a few simple steps.
             </p>
 
             <div className="hero-actions">
@@ -117,19 +148,20 @@ function HomePage() {
             <div className="hero-stats">
               <article>
                 <strong>{events.length}</strong>
-                <span>events live</span>
+                <span>Events live</span>
               </article>
               <article>
                 <strong>{todayEvents.length}</strong>
-                <span>events today</span>
+                <span>Today</span>
               </article>
               <article>
                 <strong>{locationCards.length}</strong>
-                <span>main locations</span>
+                <span>Locations</span>
               </article>
             </div>
           </div>
 
+          {/* Spotlight panel - shows a featured event */}
           <aside className="spotlight-panel">
             <p className="search-eyebrow">Event spotlight</p>
             {spotlightEvent ? (
@@ -163,6 +195,7 @@ function HomePage() {
 
         {!isLoading ? (
           <>
+            {/* Today's events section */}
             <section className="featured-section">
               <div className="section-head">
                 <p className="section-tag">Today</p>
@@ -173,9 +206,11 @@ function HomePage() {
                 <div className="event-grid">
                   {todayEvents.map((event) => (
                     <article className="event-card" key={event.id}>
-                      <div className="event-image">
-                        <span>{event.category}</span>
-                      </div>
+                      <img
+                        className="event-card-image"
+                        src={getCategoryImage(event.category)}
+                        alt={event.title}
+                      />
                       <div className="event-content">
                         <p className="event-date">{formatDateLabel(event.date)}</p>
                         <h3>{event.title}</h3>
@@ -195,6 +230,7 @@ function HomePage() {
               )}
             </section>
 
+            {/* Upcoming events section */}
             <section className="collection-section">
               <div className="section-head">
                 <p className="section-tag">Upcoming</p>
@@ -215,6 +251,7 @@ function HomePage() {
               </div>
             </section>
 
+            {/* Browse by location section */}
             <section className="collection-section">
               <div className="section-head">
                 <p className="section-tag">Locations</p>
@@ -234,6 +271,7 @@ function HomePage() {
               </div>
             </section>
 
+            {/* Browse by category section */}
             <section className="category-section">
               <div className="section-head">
                 <p className="section-tag">Quick filters</p>
@@ -253,6 +291,17 @@ function HomePage() {
             </section>
           </>
         ) : null}
+
+        {/* Footer */}
+        <footer className="site-footer">
+          <p><strong>EventHub</strong> — Event Booking & Seat Reservation System</p>
+          <div className="footer-links">
+            <Link to="/">Home</Link>
+            <Link to="/events">Events</Link>
+            <Link to="/venues">Venues</Link>
+            <Link to="/auth">Account</Link>
+          </div>
+        </footer>
       </div>
     </main>
   );
