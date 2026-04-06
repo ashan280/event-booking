@@ -35,6 +35,10 @@ function TicketPage() {
     loadTicket();
   }, [bookingId]);
 
+  function handlePrint() {
+    window.print();
+  }
+
   return (
     <main className="home-page">
       <div className="page-shell">
@@ -54,6 +58,9 @@ function TicketPage() {
                 Event details
               </Link>
             ) : null}
+            <button className="ghost-link" type="button" onClick={handlePrint}>
+              Print ticket
+            </button>
           </div>
         </section>
 

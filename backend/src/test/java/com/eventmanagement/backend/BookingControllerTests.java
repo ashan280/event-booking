@@ -162,7 +162,9 @@ class BookingControllerTests {
             .andExpect(jsonPath("$.totalBookings").exists())
             .andExpect(jsonPath("$.confirmedBookings").exists())
             .andExpect(jsonPath("$.totalSeatsBooked").exists())
-            .andExpect(jsonPath("$.totalRevenue").exists());
+            .andExpect(jsonPath("$.totalRevenue").exists())
+            .andExpect(jsonPath("$.citySummaries[0].city").value("Colombo"))
+            .andExpect(jsonPath("$.citySummaries[0].bookingCount").exists());
     }
 
     private String registerUserAndGetToken() throws Exception {

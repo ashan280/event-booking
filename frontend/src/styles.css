@@ -1165,6 +1165,63 @@ label {
   color: #18212f;
 }
 
+.admin-city-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.admin-city-card {
+  padding: 20px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.admin-city-card h3,
+.admin-city-card p {
+  margin: 0;
+}
+
+.admin-city-card h3 {
+  margin-bottom: 10px;
+  font-family: "Space Grotesk", "Trebuchet MS", sans-serif;
+  color: #18212f;
+}
+
+.admin-city-card p + p {
+  margin-top: 6px;
+}
+
+@media print {
+  .top-bar,
+  .auth-link-list,
+  .nav-cta,
+  button,
+  .ghost-link {
+    display: none !important;
+  }
+
+  .home-page {
+    padding: 0;
+    background: #fff;
+  }
+
+  .page-shell,
+  .ticket-layout {
+    max-width: none;
+    display: block;
+  }
+
+  .simple-panel {
+    box-shadow: none;
+    border: 1px solid #d1d5db;
+    background: #fff;
+    break-inside: avoid;
+  }
+}
+
 @media (max-width: 900px) {
   .hero-section {
     grid-template-columns: 1fr;

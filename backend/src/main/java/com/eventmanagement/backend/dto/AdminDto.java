@@ -30,6 +30,17 @@ public final class AdminDto {
         private final long cancelledBookings;
         private final long totalSeatsBooked;
         private final BigDecimal totalRevenue;
+        private final List<CitySummary> citySummaries;
         private final List<BookingDto.BookingResponse> recentBookings;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class CitySummary {
+
+        private final String city;
+        private final long bookingCount;
+        private final long seatsBooked;
+        private final BigDecimal revenue;
     }
 }

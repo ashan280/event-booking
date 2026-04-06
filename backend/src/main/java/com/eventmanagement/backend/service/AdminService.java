@@ -8,6 +8,9 @@ import com.eventmanagement.backend.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +46,7 @@ public class AdminService {
         long cancelledBookings = 0;
         long totalSeatsBooked = 0;
         BigDecimal totalRevenue = BigDecimal.ZERO;
+        Map<String, CityReportData> cityDataMap = new LinkedHashMap<>();
 
         for (Booking booking : bookingRepository.findAll()) {
             if ("CANCELLED".equalsIgnoreCase(booking.getBookingStatus())) {
@@ -53,7 +57,22 @@ public class AdminService {
             confirmedBookings += 1;
             totalSeatsBooked += booking.getSeatCount();
             totalRevenue = totalRevenue.add(booking.getTotalAmount());
+
+            String city = booking.getEvent().getCity();
+            CityReportData cityData = cityDataMap.computeIfAbsent(city, ignored -> new CityReportData());
+            cityData.bookingCount += 1;
+            cityData.seatsBooked += booking.getSeatCount();
+            cityData.revenue = cityData.revenue.add(booking.getTotalAmount());
         }
+
+        List<AdminDto.CitySummary> citySummaries = cityDataMap.entrySet().stream()
+            .map(entry -> new AdminDto.CitySummary(
+                entry.getKey(),
+                entry.getValue().bookingCount,
+                entry.getValue().seatsBooked,
+                entry.getValue().revenue
+            ))
+            .toList();
 
         return new AdminDto.BookingReportResponse(
             bookingRepository.count(),
@@ -61,7 +80,15 @@ public class AdminService {
             cancelledBookings,
             totalSeatsBooked,
             totalRevenue,
+            citySummaries,
             bookingService.getRecentBookings()
         );
+    }
+
+    private static class CityReportData {
+
+        private long bookingCount;
+        private long seatsBooked;
+        private BigDecimal revenue = BigDecimal.ZERO;
     }
 }

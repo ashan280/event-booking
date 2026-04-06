@@ -119,6 +119,26 @@ function AdminBookingReportPage() {
             </section>
 
             <section className="simple-panel">
+              <p className="section-tag">By city</p>
+              <h2 className="panel-title">Bookings by location</h2>
+
+              {!report.citySummaries.length ? (
+                <p>No city data yet.</p>
+              ) : (
+                <div className="admin-city-grid">
+                  {report.citySummaries.map((item) => (
+                    <article className="admin-city-card" key={item.city}>
+                      <h3>{item.city}</h3>
+                      <p>Bookings: {item.bookingCount}</p>
+                      <p>Seats: {item.seatsBooked}</p>
+                      <p>Revenue: {formatAmount(item.revenue)}</p>
+                    </article>
+                  ))}
+                </div>
+              )}
+            </section>
+
+            <section className="simple-panel">
               <p className="section-tag">Recent bookings</p>
               <h2 className="panel-title">Latest activity</h2>
 
