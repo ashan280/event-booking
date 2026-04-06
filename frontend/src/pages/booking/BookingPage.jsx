@@ -144,7 +144,7 @@ function BookingPage() {
       labels: selectedSeats.join(",")
     });
 
-    navigate(`/booking/${eventId}/payment?${searchParams.toString()}`);
+    navigate(`/booking/${eventId}/summary?${searchParams.toString()}`);
   }
 
   return (
@@ -260,7 +260,7 @@ function BookingPage() {
 
               <form className="booking-form" onSubmit={handleSubmit}>
                 <button className="primary-link" type="submit" disabled={!selectedSeats.length}>
-                  Continue to payment
+                  Continue to summary
                 </button>
                 <button className="ghost-link" type="button" onClick={clearSelection}>
                   Clear selection

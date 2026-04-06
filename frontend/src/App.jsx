@@ -5,6 +5,7 @@ import AdminBookingReportPage from "./pages/admin/AdminBookingReportPage";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
 import BookingHistoryPage from "./pages/booking/BookingHistoryPage";
 import BookingPage from "./pages/booking/BookingPage";
+import BookingSummaryPage from "./pages/booking/BookingSummaryPage";
 import PaymentPage from "./pages/booking/PaymentPage";
 import TicketPage from "./pages/booking/TicketPage";
 import HomePage from "./pages/HomePage";
@@ -124,6 +125,14 @@ function App() {
         element={
           <ProtectedRoute>
             <BookingPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/booking/:eventId/summary"
+        element={
+          <ProtectedRoute>
+            <BookingSummaryPage />
           </ProtectedRoute>
         }
       />
