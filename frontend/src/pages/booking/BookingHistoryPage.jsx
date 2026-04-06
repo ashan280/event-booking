@@ -91,11 +91,19 @@ function BookingHistoryPage() {
                   <p><strong>City:</strong> {booking.city}</p>
                   <p><strong>Seats:</strong> {booking.seatCount}</p>
                   <p><strong>Total:</strong> {formatAmount(booking.totalAmount)}</p>
+                  <p><strong>Payment:</strong> {booking.paymentStatus}</p>
+                  <p><strong>Method:</strong> {booking.paymentMethod}</p>
+                  <p><strong>Ticket:</strong> {booking.ticketCode}</p>
                   <p><strong>Booked at:</strong> {formatDateTime(booking.createdAt)}</p>
                 </div>
-                <Link className="ghost-link" to={`/events/${booking.eventId}`}>
-                  View event
-                </Link>
+                <div className="auth-link-list">
+                  <Link className="ghost-link" to={`/events/${booking.eventId}`}>
+                    View event
+                  </Link>
+                  <Link className="ghost-link" to={`/booking/tickets/${booking.id}`}>
+                    View ticket
+                  </Link>
+                </div>
               </article>
             ))}
           </section>

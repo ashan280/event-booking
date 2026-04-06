@@ -4,6 +4,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
 import BookingHistoryPage from "./pages/booking/BookingHistoryPage";
 import BookingPage from "./pages/booking/BookingPage";
+import PaymentPage from "./pages/booking/PaymentPage";
+import TicketPage from "./pages/booking/TicketPage";
 import HomePage from "./pages/HomePage";
 import AuthHomePage from "./pages/auth/AuthHomePage";
 import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
@@ -121,6 +123,22 @@ function App() {
         element={
           <ProtectedRoute>
             <BookingPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/booking/:eventId/payment"
+        element={
+          <ProtectedRoute>
+            <PaymentPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/booking/tickets/:bookingId"
+        element={
+          <ProtectedRoute>
+            <TicketPage />
           </ProtectedRoute>
         }
       />

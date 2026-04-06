@@ -27,7 +27,6 @@ function BookingPage() {
   const [event, setEvent] = useState(null);
   const [seatCount, setSeatCount] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -56,26 +55,23 @@ function BookingPage() {
     return parsePrice(event.price) * Number(seatCount || 0);
   }, [event, seatCount]);
 
-  async function handleSubmit(eventObject) {
+  function handleSubmit(eventObject) {
     eventObject.preventDefault();
-    setIsSaving(true);
     setError("");
 
-    try {
-      await apiRequest("/api/bookings", {
-        method: "POST",
-        auth: true,
-        body: JSON.stringify({
-          eventId: Number(eventId),
-          seatCount: Number(seatCount)
-        })
-      });
+    const selectedSeatCount = Number(seatCount);
 
-      navigate("/booking");
-    } catch (requestError) {
-      setError(requestError.message);
-      setIsSaving(false);
+    if (Number.isNaN(selectedSeatCount) || selectedSeatCount < 1) {
+      setError("Enter a valid number of seats.");
+      return;
     }
+
+    if (event && selectedSeatCount > event.availableSeats) {
+      setError("Selected seats are more than the seats left.");
+      return;
+    }
+
+    navigate(`/booking/${eventId}/payment?seats=${selectedSeatCount}`);
   }
 
   return (
@@ -145,8 +141,8 @@ function BookingPage() {
                   <strong>{formatAmount(totalAmount)}</strong>
                 </div>
 
-                <button className="primary-link" disabled={isSaving} type="submit">
-                  {isSaving ? "Saving booking..." : "Confirm booking"}
+                <button className="primary-link" type="submit">
+                  Continue to payment
                 </button>
               </form>
             </article>
