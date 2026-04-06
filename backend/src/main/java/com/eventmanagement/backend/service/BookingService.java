@@ -8,7 +8,11 @@ import com.eventmanagement.backend.repository.BookingRepository;
 import com.eventmanagement.backend.repository.EventRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,9 +31,22 @@ public class BookingService {
         User user = authService.getCurrentUser(request);
         Event event = eventRepository.findById(bookingRequest.getEventId())
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
+        List<String> selectedSeats = cleanSeatLabels(bookingRequest.getSeatLabels());
 
         if (event.getAvailableSeats() < bookingRequest.getSeatCount()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough seats available");
+        }
+
+        if (selectedSeats.size() != bookingRequest.getSeatCount()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Select the same number of seats as the seat count");
+        }
+
+        Set<String> bookedSeats = getBookedSeatSet(event.getId());
+
+        for (String seatLabel : selectedSeats) {
+            if (bookedSeats.contains(seatLabel)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "One or more seats are already booked");
+            }
         }
 
         event.setAvailableSeats(event.getAvailableSeats() - bookingRequest.getSeatCount());
@@ -39,6 +56,7 @@ public class BookingService {
         booking.setUser(user);
         booking.setEvent(event);
         booking.setSeatCount(bookingRequest.getSeatCount());
+        booking.setSeatLabels(String.join(",", selectedSeats));
         booking.setTotalAmount(parsePrice(event.getPrice()).multiply(BigDecimal.valueOf(bookingRequest.getSeatCount())));
         booking.setBookingStatus("CONFIRMED");
         booking.setPaymentMethod(getPaymentMethod(bookingRequest.getPaymentMethod(), event.getPrice()));
@@ -55,6 +73,24 @@ public class BookingService {
             .toList();
     }
 
+    public BookingDto.SeatAvailabilityResponse getSeatAvailability(Long eventId) {
+        Event event = eventRepository.findById(eventId)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
+        List<Booking> activeBookings = getActiveEventBookings(eventId);
+        List<String> bookedSeats = activeBookings.stream()
+            .flatMap(booking -> splitSeatLabels(booking.getSeatLabels()).stream())
+            .toList();
+        long bookedSeatCount = activeBookings.stream()
+            .mapToLong(Booking::getSeatCount)
+            .sum();
+
+        return new BookingDto.SeatAvailabilityResponse(
+            event.getAvailableSeats() + bookedSeatCount,
+            event.getAvailableSeats(),
+            bookedSeats
+        );
+    }
+
     public BookingDto.BookingResponse getBookingById(HttpServletRequest request, Long bookingId) {
         User user = authService.getCurrentUser(request);
         Booking booking = bookingRepository.findById(bookingId)
@@ -68,6 +104,32 @@ public class BookingService {
         }
 
         return toResponse(booking);
+    }
+
+    public BookingDto.BookingResponse cancelBooking(HttpServletRequest request, Long bookingId) {
+        User user = authService.getCurrentUser(request);
+        Booking booking = bookingRepository.findById(bookingId)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+
+        boolean isOwner = booking.getUser().getId().equals(user.getId());
+        boolean isAdmin = "ADMIN".equalsIgnoreCase(user.getRole());
+
+        if (!isOwner && !isAdmin) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot cancel this booking");
+        }
+
+        if ("CANCELLED".equalsIgnoreCase(booking.getBookingStatus())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Booking is already cancelled");
+        }
+
+        Event event = booking.getEvent();
+        event.setAvailableSeats(event.getAvailableSeats() + booking.getSeatCount());
+        eventRepository.save(event);
+
+        booking.setBookingStatus("CANCELLED");
+        booking.setPaymentStatus(booking.getTotalAmount().compareTo(BigDecimal.ZERO) > 0 ? "REFUNDED" : "FREE");
+
+        return toResponse(bookingRepository.save(booking));
     }
 
     public List<BookingDto.BookingResponse> getRecentBookings() {
@@ -92,6 +154,47 @@ public class BookingService {
 
     private boolean isFreeEvent(String price) {
         return price == null || price.isBlank() || "Free".equalsIgnoreCase(price.trim());
+    }
+
+    private List<Booking> getActiveEventBookings(Long eventId) {
+        return bookingRepository.findByEventIdOrderByCreatedAtAsc(eventId).stream()
+            .filter(booking -> !"CANCELLED".equalsIgnoreCase(booking.getBookingStatus()))
+            .toList();
+    }
+
+    private Set<String> getBookedSeatSet(Long eventId) {
+        return new LinkedHashSet<>(
+            getActiveEventBookings(eventId).stream()
+                .flatMap(booking -> splitSeatLabels(booking.getSeatLabels()).stream())
+                .toList()
+        );
+    }
+
+    private List<String> cleanSeatLabels(List<String> seatLabels) {
+        if (seatLabels == null || seatLabels.isEmpty()) {
+            return List.of();
+        }
+
+        Set<String> uniqueSeats = new LinkedHashSet<>();
+
+        for (String seatLabel : seatLabels) {
+            if (seatLabel != null && !seatLabel.isBlank()) {
+                uniqueSeats.add(seatLabel.trim().toUpperCase());
+            }
+        }
+
+        return new ArrayList<>(uniqueSeats);
+    }
+
+    private List<String> splitSeatLabels(String seatLabels) {
+        if (seatLabels == null || seatLabels.isBlank()) {
+            return List.of();
+        }
+
+        return Arrays.stream(seatLabels.split(","))
+            .map(String::trim)
+            .filter(value -> !value.isBlank())
+            .toList();
     }
 
     private String getPaymentMethod(String paymentMethod, String price) {
@@ -120,6 +223,7 @@ public class BookingService {
             booking.getEvent().getVenue(),
             booking.getEvent().getCity(),
             booking.getSeatCount(),
+            splitSeatLabels(booking.getSeatLabels()),
             booking.getTotalAmount(),
             booking.getBookingStatus(),
             booking.getPaymentMethod(),

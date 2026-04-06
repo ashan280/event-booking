@@ -19,4 +19,9 @@ public class AdminController {
     public AdminDto.DashboardResponse getDashboard(HttpServletRequest request) {
         return adminService.getDashboard(request);
     }
+
+    @GetMapping("/bookings/report")
+    public AdminDto.BookingReportResponse getBookingReport(HttpServletRequest request) {
+        return adminService.getBookingReport(request);
+    }
 }

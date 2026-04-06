@@ -36,6 +36,9 @@ public class Booking {
     @Column(name = "seat_count", nullable = false)
     private Integer seatCount;
 
+    @Column(name = "seat_labels", nullable = false, length = 300)
+    private String seatLabels;
+
     @Column(name = "total_amount", nullable = false, precision = 10, scale = 2)
     private BigDecimal totalAmount;
 

@@ -33,8 +33,18 @@ public class BookingController {
         return bookingService.getUserBookings(request);
     }
 
+    @GetMapping("/events/{eventId}/seats")
+    public BookingDto.SeatAvailabilityResponse getSeatAvailability(@PathVariable Long eventId) {
+        return bookingService.getSeatAvailability(eventId);
+    }
+
     @GetMapping("/{bookingId}")
     public BookingDto.BookingResponse getBookingById(@PathVariable Long bookingId, HttpServletRequest request) {
         return bookingService.getBookingById(request, bookingId);
+    }
+
+    @PostMapping("/{bookingId}/cancel")
+    public BookingDto.BookingResponse cancelBooking(@PathVariable Long bookingId, HttpServletRequest request) {
+        return bookingService.cancelBooking(request, bookingId);
     }
 }
