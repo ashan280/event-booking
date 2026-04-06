@@ -24,25 +24,50 @@ function formatAmount(value) {
 function BookingHistoryPage() {
   const [bookings, setBookings] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeBookingId, setActiveBookingId] = useState(null);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    async function loadBookings() {
-      setIsLoading(true);
-      setError("");
+  async function loadBookings() {
+    setIsLoading(true);
+    setError("");
 
-      try {
-        const data = await apiRequest("/api/bookings", { auth: true });
-        setBookings(data);
-      } catch (requestError) {
-        setError(requestError.message);
-      } finally {
-        setIsLoading(false);
-      }
+    try {
+      const data = await apiRequest("/api/bookings", { auth: true });
+      setBookings(data);
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setIsLoading(false);
     }
+  }
 
+  useEffect(() => {
     loadBookings();
   }, []);
+
+  async function handleCancel(bookingId) {
+    const confirmed = window.confirm("Do you want to cancel this booking?");
+
+    if (!confirmed) {
+      return;
+    }
+
+    setActiveBookingId(bookingId);
+    setError("");
+
+    try {
+      await apiRequest(`/api/bookings/${bookingId}/cancel`, {
+        method: "POST",
+        auth: true
+      });
+
+      await loadBookings();
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setActiveBookingId(null);
+    }
+  }
 
   return (
     <main className="home-page">
@@ -90,6 +115,7 @@ function BookingHistoryPage() {
                   <p><strong>Venue:</strong> {booking.venue}</p>
                   <p><strong>City:</strong> {booking.city}</p>
                   <p><strong>Seats:</strong> {booking.seatCount}</p>
+                  <p><strong>Seat numbers:</strong> {booking.seatLabels.join(", ")}</p>
                   <p><strong>Total:</strong> {formatAmount(booking.totalAmount)}</p>
                   <p><strong>Payment:</strong> {booking.paymentStatus}</p>
                   <p><strong>Method:</strong> {booking.paymentMethod}</p>
@@ -103,6 +129,16 @@ function BookingHistoryPage() {
                   <Link className="ghost-link" to={`/booking/tickets/${booking.id}`}>
                     View ticket
                   </Link>
+                  {booking.bookingStatus !== "CANCELLED" ? (
+                    <button
+                      className="ghost-link delete-link"
+                      type="button"
+                      onClick={() => handleCancel(booking.id)}
+                      disabled={activeBookingId === booking.id}
+                    >
+                      {activeBookingId === booking.id ? "Cancelling..." : "Cancel booking"}
+                    </button>
+                  ) : null}
                 </div>
               </article>
             ))}
