@@ -33,6 +33,17 @@ function getSeatValue(value) {
   return amount;
 }
 
+function getSeatLabels(value) {
+  if (!value) {
+    return [];
+  }
+
+  return value
+    .split(",")
+    .map((item) => item.trim().toUpperCase())
+    .filter((item) => item);
+}
+
 function PaymentPage() {
   const navigate = useNavigate();
   const { eventId } = useParams();
@@ -43,6 +54,7 @@ function PaymentPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
   const seatCount = getSeatValue(searchParams.get("seats"));
+  const seatLabels = getSeatLabels(searchParams.get("labels"));
 
   useEffect(() => {
     async function loadEvent() {
@@ -79,6 +91,12 @@ function PaymentPage() {
     setIsSaving(true);
     setError("");
 
+    if (!seatLabels.length || seatLabels.length !== seatCount) {
+      setError("Go back and select your seats again.");
+      setIsSaving(false);
+      return;
+    }
+
     try {
       const data = await apiRequest("/api/bookings", {
         method: "POST",
@@ -86,7 +104,8 @@ function PaymentPage() {
         body: JSON.stringify({
           eventId: Number(eventId),
           seatCount,
-          paymentMethod
+          paymentMethod,
+          seatLabels
         })
       });
 
@@ -109,7 +128,7 @@ function PaymentPage() {
 
           <div className="auth-link-list">
             <Link className="ghost-link" to={`/booking/${eventId}`}>
-              Back to booking
+              Back to seat selection
             </Link>
             <Link className="ghost-link" to="/booking">
               My bookings
@@ -136,6 +155,7 @@ function PaymentPage() {
                 <p><strong>Venue:</strong> {event.venue}</p>
                 <p><strong>City:</strong> {event.city}</p>
                 <p><strong>Seats:</strong> {seatCount}</p>
+                <p><strong>Seat numbers:</strong> {seatLabels.join(", ")}</p>
                 <p><strong>Price:</strong> {event.price}</p>
               </div>
 

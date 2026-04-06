@@ -77,6 +77,7 @@ function TicketPage() {
                 <p><strong>Venue:</strong> {booking.venue}</p>
                 <p><strong>City:</strong> {booking.city}</p>
                 <p><strong>Seats:</strong> {booking.seatCount}</p>
+                <p><strong>Seat numbers:</strong> {booking.seatLabels.join(", ")}</p>
               </div>
             </article>
 

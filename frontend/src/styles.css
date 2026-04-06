@@ -937,6 +937,138 @@ label {
   margin-top: 18px;
 }
 
+.booking-summary-stack {
+  display: grid;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.seat-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.seat-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.seat-box {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  border: 1px solid rgba(31, 41, 55, 0.12);
+}
+
+.seat-box-open {
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.seat-box-selected {
+  background: var(--accent);
+  border-color: rgba(240, 85, 55, 0.28);
+}
+
+.seat-box-booked {
+  background: rgba(31, 41, 55, 0.18);
+  border-color: rgba(31, 41, 55, 0.2);
+}
+
+.seat-map {
+  display: grid;
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.seat-row {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+}
+
+.seat-row-label {
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.seat-row-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(58px, 1fr));
+  gap: 10px;
+}
+
+.seat-button {
+  padding: 12px 10px;
+  border: 1px solid rgba(31, 41, 55, 0.12);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--navy);
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 160ms ease, background 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+
+.seat-button:hover {
+  transform: translateY(-1px);
+}
+
+.seat-button.is-selected {
+  background: linear-gradient(135deg, var(--accent), #ee6d36);
+  border-color: rgba(240, 85, 55, 0.24);
+  color: #fff;
+}
+
+.seat-button.is-booked {
+  background: rgba(31, 41, 55, 0.12);
+  color: rgba(31, 41, 55, 0.44);
+  cursor: not-allowed;
+}
+
+.seat-selection-box {
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--border);
+}
+
+.seat-selection-label,
+.seat-selection-empty {
+  margin: 0;
+}
+
+.seat-selection-label {
+  color: var(--muted);
+}
+
+.seat-selection-empty {
+  margin-top: 10px;
+  color: var(--muted);
+}
+
+.selected-seat-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.selected-seat-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(240, 85, 55, 0.1);
+  color: var(--navy);
+  font-weight: 700;
+}
+
 .payment-method-list {
   display: grid;
   gap: 12px;
@@ -1087,5 +1219,13 @@ label {
 
   .event-list-grid {
     grid-template-columns: 1fr;
+  }
+
+  .seat-row {
+    grid-template-columns: 1fr;
+  }
+
+  .seat-row-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
