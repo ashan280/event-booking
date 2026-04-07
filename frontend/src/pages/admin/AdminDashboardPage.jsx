@@ -15,13 +15,16 @@ function formatAmount(value) {
 
 function AdminDashboardPage() {
   const auth = getAuth();
+  const authToken = auth?.token || "";
+  const adminAccess = isAdmin(auth);
   const [dashboard, setDashboard] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!isAdmin(auth)) {
+    if (!adminAccess || !authToken) {
       setIsLoading(false);
+      setDashboard(null);
       return;
     }
 
@@ -40,9 +43,9 @@ function AdminDashboardPage() {
     }
 
     loadDashboard();
-  }, [auth]);
+  }, [adminAccess, authToken]);
 
-  if (!isAdmin(auth)) {
+  if (!adminAccess) {
     return (
       <main className="home-page">
         <div className="page-shell">
@@ -146,27 +149,34 @@ function AdminDashboardPage() {
                           <p>{booking.city} | {booking.venue}</p>
                         </div>
                       </div>
-                      <div className="booking-detail-grid admin-booking-detail-grid">
-                        <article className="booking-detail-card">
-                          <span className="booking-detail-label">Seats</span>
-                          <strong className="booking-detail-value">{booking.seatCount}</strong>
-                        </article>
-                        <article className="booking-detail-card">
-                          <span className="booking-detail-label">Payment</span>
-                          <strong className="booking-detail-value">{booking.paymentStatus}</strong>
-                        </article>
-                        <article className="booking-detail-card">
-                          <span className="booking-detail-label">Total</span>
-                          <strong className="booking-detail-value">{formatAmount(booking.totalAmount)}</strong>
-                        </article>
-                        <article className="booking-detail-card">
-                          <span className="booking-detail-label">Ticket</span>
-                          <strong className="booking-detail-value">{booking.ticketCode}</strong>
-                        </article>
+                      <div className="booking-history-summary">
+                        <div className="booking-history-detail-grid admin-booking-detail-grid">
+                          <article className="booking-history-detail-card">
+                            <span>Seats</span>
+                            <strong>{booking.seatCount}</strong>
+                          </article>
+                          <article className="booking-history-detail-card">
+                            <span>Payment</span>
+                            <strong>{booking.paymentStatus}</strong>
+                          </article>
+                          <article className="booking-history-detail-card">
+                            <span>Total</span>
+                            <strong>{formatAmount(booking.totalAmount)}</strong>
+                          </article>
+                          <article className="booking-history-detail-card">
+                            <span>Ticket</span>
+                            <strong>{booking.ticketCode}</strong>
+                          </article>
+                        </div>
                       </div>
-                      <Link className="ghost-link" to={`/events/${booking.eventId}`}>
-                        Open event
-                      </Link>
+                      <div className="booking-history-actions">
+                        <Link className="ghost-link" to={`/events/${booking.eventId}`}>
+                          Open event
+                        </Link>
+                        <Link className="ghost-link" to={`/booking/tickets/${booking.id}`}>
+                          Open ticket
+                        </Link>
+                      </div>
                     </article>
                   ))}
                 </div>

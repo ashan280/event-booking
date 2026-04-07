@@ -13,15 +13,32 @@ function formatAmount(value) {
   }).format(value || 0);
 }
 
+function formatDateTime(value) {
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return date.toLocaleString();
+}
+
 function AdminBookingReportPage() {
   const auth = getAuth();
+  const authToken = auth?.token || "";
+  const adminAccess = isAdmin(auth);
   const [report, setReport] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
+  function handlePrint() {
+    window.print();
+  }
+
   useEffect(() => {
-    if (!isAdmin(auth)) {
+    if (!adminAccess || !authToken) {
       setIsLoading(false);
+      setReport(null);
       return;
     }
 
@@ -40,9 +57,9 @@ function AdminBookingReportPage() {
     }
 
     loadReport();
-  }, [auth]);
+  }, [adminAccess, authToken]);
 
-  if (!isAdmin(auth)) {
+  if (!adminAccess) {
     return (
       <main className="home-page">
         <div className="page-shell">
@@ -79,6 +96,9 @@ function AdminBookingReportPage() {
           description="Check bookings, cancelled orders, seats booked, and ticket details."
           actions={(
             <>
+              <button className="ghost-link" type="button" onClick={handlePrint}>
+                Print report
+              </button>
               <Link className="ghost-link" to="/admin">
                 Back to dashboard
               </Link>
@@ -98,8 +118,14 @@ function AdminBookingReportPage() {
         {error ? <p className="error-text">{error}</p> : null}
 
         {report ? (
-          <>
-            <section className="admin-summary-grid">
+          <div className="admin-report-print">
+            <section className="simple-panel compact-panel print-only admin-report-print-head">
+              <p className="section-tag">Admin report</p>
+              <h1 className="panel-title">Booking report</h1>
+              <p>This report shows totals, city details, and recent bookings.</p>
+            </section>
+
+            <section className="admin-summary-grid admin-report-section">
               <article className="simple-panel compact-panel admin-stat-card">
                 <p className="section-tag">Total bookings</p>
                 <h2 className="panel-title">{report.totalBookings}</h2>
@@ -122,88 +148,94 @@ function AdminBookingReportPage() {
               </article>
             </section>
 
-            <section className="simple-panel">
+            <section className="simple-panel admin-report-section">
               <p className="section-tag">By city</p>
               <h2 className="panel-title">Bookings by location</h2>
 
               {!report.citySummaries.length ? (
                 <p>No city data yet.</p>
               ) : (
-                <div className="admin-city-grid">
-                  {report.citySummaries.map((item) => (
-                    <article className="admin-city-card" key={item.city}>
-                      <p className="section-tag">City</p>
-                      <h3>{item.city}</h3>
-                      <div className="booking-detail-grid admin-city-detail-grid">
-                        <article className="booking-detail-card">
-                          <span className="booking-detail-label">Bookings</span>
-                          <strong className="booking-detail-value">{item.bookingCount}</strong>
-                        </article>
-                        <article className="booking-detail-card">
-                          <span className="booking-detail-label">Seats</span>
-                          <strong className="booking-detail-value">{item.seatsBooked}</strong>
-                        </article>
-                        <article className="booking-detail-card booking-detail-card-wide">
-                          <span className="booking-detail-label">Revenue</span>
-                          <strong className="booking-detail-value">{formatAmount(item.revenue)}</strong>
-                        </article>
-                      </div>
-                    </article>
-                  ))}
+                <div className="report-table-wrap">
+                  <table className="report-table">
+                    <thead>
+                      <tr>
+                        <th>City</th>
+                        <th>Bookings</th>
+                        <th>Seats</th>
+                        <th>Revenue</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {report.citySummaries.map((item) => (
+                        <tr key={item.city}>
+                          <td>{item.city}</td>
+                          <td>{item.bookingCount}</td>
+                          <td>{item.seatsBooked}</td>
+                          <td>{formatAmount(item.revenue)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               )}
             </section>
 
-            <section className="simple-panel">
+            <section className="simple-panel admin-report-section">
               <p className="section-tag">Recent bookings</p>
               <h2 className="panel-title">Recent bookings</h2>
 
               {!report.recentBookings.length ? (
                 <p>No bookings yet.</p>
               ) : (
-                <div className="booking-history-grid">
-                  {report.recentBookings.map((booking) => (
-                    <article className="booking-history-card admin-booking-card" key={booking.id}>
-                      <div className="booking-history-hero">
-                        <img
-                          className="booking-history-photo"
-                          src={booking.eventImageUrl || "/images/concert.png"}
-                          alt={booking.eventTitle}
-                        />
-                        <div className="booking-history-copy">
-                          <p className="section-tag">{booking.bookingStatus}</p>
-                          <h3>{booking.eventTitle}</h3>
-                          <p>{booking.city} | {booking.venue}</p>
-                        </div>
-                      </div>
-                      <div className="booking-detail-grid admin-booking-detail-grid">
-                        <article className="booking-detail-card booking-detail-card-wide">
-                          <span className="booking-detail-label">Seats</span>
-                          <strong className="booking-detail-value">{booking.seatLabels.join(", ")}</strong>
-                        </article>
-                        <article className="booking-detail-card">
-                          <span className="booking-detail-label">Payment</span>
-                          <strong className="booking-detail-value">{booking.paymentStatus}</strong>
-                        </article>
-                        <article className="booking-detail-card">
-                          <span className="booking-detail-label">Total</span>
-                          <strong className="booking-detail-value">{formatAmount(booking.totalAmount)}</strong>
-                        </article>
-                      </div>
-                      <div className="auth-link-list">
-                        <Link className="ghost-link" to={`/events/${booking.eventId}`}>
-                          Open event
-                        </Link>
-                        <Link className="ghost-link" to={`/booking/tickets/${booking.id}`}>
-                          Open ticket
-                        </Link>
-                      </div>
-                    </article>
-                  ))}
+                <div className="report-table-wrap">
+                  <table className="report-table report-table-bookings">
+                    <thead>
+                      <tr>
+                        <th>Event</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                        <th>Seats</th>
+                        <th>Payment</th>
+                        <th>Total</th>
+                        <th>Ticket</th>
+                        <th>Booked at</th>
+                        <th className="print-hide">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {report.recentBookings.map((booking) => (
+                        <tr key={booking.id}>
+                          <td>
+                            <div className="report-event-cell">
+                              <strong>{booking.eventTitle}</strong>
+                              <span>{booking.seatLabels.join(", ")}</span>
+                            </div>
+                          </td>
+                          <td>{booking.city} / {booking.venue}</td>
+                          <td>{booking.bookingStatus}</td>
+                          <td>{booking.seatCount}</td>
+                          <td>{booking.paymentStatus}</td>
+                          <td>{formatAmount(booking.totalAmount)}</td>
+                          <td>{booking.ticketCode}</td>
+                          <td>{formatDateTime(booking.createdAt)}</td>
+                          <td className="print-hide">
+                            <div className="report-table-actions">
+                              <Link className="ghost-link" to={`/events/${booking.eventId}`}>
+                                Event
+                              </Link>
+                              <Link className="ghost-link" to={`/booking/tickets/${booking.id}`}>
+                                Ticket
+                              </Link>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               )}
             </section>
-          </>
+          </div>
         ) : null}
       </div>
     </main>
