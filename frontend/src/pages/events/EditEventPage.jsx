@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import PageIntro from "../../components/PageIntro";
 import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
 import { getAuth, isAdmin } from "../../lib/auth";
@@ -20,7 +21,8 @@ function EditEventPage() {
     price: "",
     shortDescription: "",
     description: "",
-    availableSeats: "50"
+    availableSeats: "50",
+    imageUrl: "/images/concert.png"
   });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -43,7 +45,8 @@ function EditEventPage() {
           price: data.price,
           shortDescription: data.shortDescription,
           description: data.description,
-          availableSeats: String(data.availableSeats)
+          availableSeats: String(data.availableSeats),
+          imageUrl: data.imageUrl || "/images/concert.png"
         });
       } catch (requestError) {
         setError(requestError.message);
@@ -127,19 +130,21 @@ function EditEventPage() {
         <div className="page-shell">
           <PublicSiteHeader />
 
-          <section className="simple-panel">
-            <p className="section-tag">Admin</p>
-            <h1>Admin account needed.</h1>
-            <p>Only admins can edit event details from this page.</p>
-            <div className="auth-link-list">
-              <Link className="ghost-link" to="/admin">
-                Open dashboard
-              </Link>
-              <Link className="ghost-link" to="/events">
-                Back to events
-              </Link>
-            </div>
-          </section>
+          <PageIntro
+            eyebrow="Admin"
+            title="Admin account needed."
+            description="Admins can edit event details here."
+            actions={(
+              <>
+                <Link className="ghost-link" to="/admin">
+                  Admin page
+                </Link>
+                <Link className="ghost-link" to="/events">
+                  Back to events
+                </Link>
+              </>
+            )}
+          />
         </div>
       </main>
     );
@@ -150,20 +155,23 @@ function EditEventPage() {
       <div className="page-shell">
         <PublicSiteHeader />
 
+        <PageIntro
+          eyebrow="Edit event"
+          title="Update event details."
+          description="Change the event information and save it again."
+          actions={(
+            <>
+              <Link className="ghost-link" to="/events">
+                Back to events
+              </Link>
+              <Link className="ghost-link" to={`/events/${eventId}`}>
+                Back to details
+              </Link>
+            </>
+          )}
+        />
+
         <section className="simple-panel">
-          <p className="section-tag">Edit event</p>
-          <h1>Update event details.</h1>
-          <p>Change the event information and save it again.</p>
-
-          <div className="auth-link-list">
-            <Link className="ghost-link" to="/events">
-              Back to events
-            </Link>
-            <Link className="ghost-link" to={`/events/${eventId}`}>
-              Back to details
-            </Link>
-          </div>
-
           {isLoading ? <p>Loading event...</p> : null}
 
           {!isLoading ? (
@@ -242,6 +250,16 @@ function EditEventPage() {
                   value={formData.availableSeats}
                   onChange={handleChange}
                 />
+              </label>
+              <label className="event-form-full">
+                Image URL
+                <input
+                  name="imageUrl"
+                  placeholder="Ex: /images/music.png"
+                  value={formData.imageUrl}
+                  onChange={handleChange}
+                />
+                <span className="field-note">Use paths like /images/music.png, /images/business.png, etc.</span>
               </label>
               <label className="event-form-full">
                 Short description

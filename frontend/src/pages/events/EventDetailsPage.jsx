@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import PageIntro from "../../components/PageIntro";
 import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
 import { getAuth, isAdmin } from "../../lib/auth";
@@ -64,88 +65,94 @@ function EventDetailsPage() {
       <div className="page-shell">
         <PublicSiteHeader />
 
-        <section className="simple-panel">
-          <div className="auth-link-list">
-            <Link className="ghost-link" to="/events">
-              Back to events
-            </Link>
-            {canManageEvents ? (
-              <Link className="ghost-link" to="/events/create">
-                Add event
-              </Link>
-            ) : null}
-            {event && canManageEvents ? (
-              <Link className="ghost-link" to={`/events/${event.id}/edit`}>
-                Edit event
-              </Link>
-            ) : null}
-          </div>
+        {event ? (
+          <PageIntro
+            eyebrow={event.category}
+            title={event.title}
+            description={event.shortDescription}
+            actions={(
+              <>
+                <Link className="ghost-link" to="/events">
+                  Back to events
+                </Link>
+                {canManageEvents ? (
+                  <Link className="ghost-link" to="/events/create">
+                    Add event
+                  </Link>
+                ) : null}
+                {canManageEvents ? (
+                  <Link className="ghost-link" to={`/events/${event.id}/edit`}>
+                    Edit event
+                  </Link>
+                ) : null}
+              </>
+            )}
+          />
+        ) : null}
 
-          {isLoading ? <p>Loading event details...</p> : null}
-          {error ? <p className="error-text">{error}</p> : null}
+        {isLoading ? <section className="simple-panel"><p>Loading event details...</p></section> : null}
+        {error ? <p className="error-text">{error}</p> : null}
 
-          {event ? (
-            <div className="event-details-layout">
-              <div className="event-details-main">
-                <div className={`event-details-image simple-event-image event-theme-${getEventTheme(event.category)}`}>
-                  <span className="event-image-badge">{event.category}</span>
-                </div>
-
-                <div className="event-details-box">
-                  <p className="section-tag">{event.category}</p>
-                  <h1>{event.title}</h1>
-                  <p>{event.description}</p>
-                </div>
-
-                <div className="event-details-box">
-                  <h2>Event details</h2>
-                  <div className="event-meta-grid">
-                    <span>Date: {event.date}</span>
-                    <span>Time: {event.time}</span>
-                    <span>City: {event.city}</span>
-                    <span>Venue: {event.venue}</span>
-                  </div>
-                </div>
+        {event ? (
+          <section className="event-details-layout">
+            <div className="event-details-main">
+              <div className={`event-details-image simple-event-image event-theme-${getEventTheme(event.category)}`}>
+                <span className="event-image-badge">{event.category}</span>
               </div>
 
-              <aside className="event-details-side">
-                <div className="event-details-box">
-                  <h2>Book this event</h2>
-                  <p>Price: {event.price}</p>
-                  <p>Seats left: {event.availableSeats}</p>
-                  <Link className="primary-link" to={`/booking/${event.id}`}>
-                    Book now
-                  </Link>
-                </div>
+              <div className="event-details-box">
+                <h2>About this event</h2>
+                <p>{event.description}</p>
+              </div>
 
-                {canManageEvents ? (
-                  <div className="event-details-box">
-                    <h2>Manage event</h2>
-                    <p>You can edit this event or remove it from the event list.</p>
-                    <div className="auth-link-list">
-                      <Link className="ghost-link" to={`/events/${event.id}/edit`}>
-                        Edit event
-                      </Link>
-                      <button
-                        className="ghost-link delete-link"
-                        type="button"
-                        onClick={handleDelete}
-                        disabled={isDeleting}
-                      >
-                        {isDeleting ? "Deleting..." : "Delete event"}
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="event-details-box">
-                    <h2>Admin</h2>
-                    <p>Admins can update this event from the admin page.</p>
-                  </div>
-                )}
-              </aside>
+              <div className="event-details-box">
+                <h2>Event details</h2>
+                <div className="event-meta-grid">
+                  <span>Date: {event.date}</span>
+                  <span>Time: {event.time}</span>
+                  <span>City: {event.city}</span>
+                  <span>Venue: {event.venue}</span>
+                </div>
+              </div>
             </div>
-          ) : null}
-        </section>
+
+            <aside className="event-details-side">
+              <div className="event-details-box">
+                <h2>Book this event</h2>
+                <p>Price: {event.price}</p>
+                <p>Seats left: {event.availableSeats}</p>
+                <Link className="primary-link" to={`/booking/${event.id}`}>
+                  Book now
+                </Link>
+              </div>
+
+              {canManageEvents ? (
+                <div className="event-details-box">
+                  <h2>Manage event</h2>
+                  <p>You can edit this event or remove it from the event list.</p>
+                  <div className="auth-link-list">
+                    <Link className="ghost-link" to={`/events/${event.id}/edit`}>
+                      Edit event
+                    </Link>
+                    <button
+                      className="ghost-link delete-link"
+                      type="button"
+                      onClick={handleDelete}
+                      disabled={isDeleting}
+                    >
+                      {isDeleting ? "Deleting..." : "Delete event"}
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="event-details-box">
+                  <h2>Admin</h2>
+                  <p>Admins can update this event from the admin page.</p>
+                </div>
+              )}
+            </aside>
+          </section>
+        ) : null}
       </div>
     </main>
   );

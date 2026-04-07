@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import PageIntro from "../../components/PageIntro";
 import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
 import { getAuth, isAdmin } from "../../lib/auth";
@@ -19,7 +20,8 @@ function CreateEventPage() {
     price: "",
     shortDescription: "",
     description: "",
-    availableSeats: "50"
+    availableSeats: "50",
+    imageUrl: "/images/concert.png"
   });
   const [error, setError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
@@ -96,19 +98,21 @@ function CreateEventPage() {
         <div className="page-shell">
           <PublicSiteHeader />
 
-          <section className="simple-panel">
-            <p className="section-tag">Admin</p>
-            <h1>Admin account needed.</h1>
-            <p>Only admins can add new events from this page.</p>
-            <div className="auth-link-list">
-              <Link className="ghost-link" to="/admin">
-                Open dashboard
-              </Link>
-              <Link className="ghost-link" to="/events">
-                Back to events
-              </Link>
-            </div>
-          </section>
+          <PageIntro
+            eyebrow="Admin"
+            title="Admin account needed."
+            description="Admins can add events here."
+            actions={(
+              <>
+                <Link className="ghost-link" to="/admin">
+                  Admin page
+                </Link>
+                <Link className="ghost-link" to="/events">
+                  Back to events
+                </Link>
+              </>
+            )}
+          />
         </div>
       </main>
     );
@@ -119,17 +123,18 @@ function CreateEventPage() {
       <div className="page-shell">
         <PublicSiteHeader />
 
-        <section className="simple-panel">
-          <p className="section-tag">Create event</p>
-          <h1>Add a new event.</h1>
-          <p>Fill the form and save the event details.</p>
-
-          <div className="auth-link-list">
+        <PageIntro
+          eyebrow="Create event"
+          title="Add a new event."
+          description="Fill the form and save the event details."
+          actions={(
             <Link className="ghost-link" to="/events">
               Back to events
             </Link>
-          </div>
+          )}
+        />
 
+        <section className="simple-panel">
           <form className="event-form-grid" onSubmit={handleSubmit}>
             <label>
               Title
@@ -205,6 +210,16 @@ function CreateEventPage() {
                 value={formData.availableSeats}
                 onChange={handleChange}
               />
+            </label>
+            <label className="event-form-full">
+              Image URL
+              <input
+                name="imageUrl"
+                placeholder="Ex: /images/music.png"
+                value={formData.imageUrl}
+                onChange={handleChange}
+              />
+              <span className="field-note">Use paths like /images/music.png, /images/business.png, etc.</span>
             </label>
             <label className="event-form-full">
               Short description

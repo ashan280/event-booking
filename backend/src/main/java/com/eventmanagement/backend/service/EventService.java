@@ -178,6 +178,9 @@ public class EventService {
         event.setShortDescription(request.getShortDescription().trim());
         event.setDescription(request.getDescription().trim());
         event.setAvailableSeats(request.getAvailableSeats());
+        if (request.getImageUrl() != null && !request.getImageUrl().isBlank()) {
+            event.setImageUrl(request.getImageUrl().trim());
+        }
     }
 
     private EventDto.EventResponse toResponse(Event event) {
@@ -192,7 +195,8 @@ public class EventService {
             event.getPrice(),
             event.getShortDescription(),
             event.getDescription(),
-            event.getAvailableSeats()
+            event.getAvailableSeats(),
+            event.getImageUrl() != null ? event.getImageUrl() : "/images/concert.png"
         );
     }
 }

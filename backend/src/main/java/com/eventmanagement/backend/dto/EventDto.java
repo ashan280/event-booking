@@ -29,6 +29,7 @@ public final class EventDto {
         private final String shortDescription;
         private final String description;
         private final Integer availableSeats;
+        private final String imageUrl;
     }
 
     @Getter
@@ -102,5 +103,7 @@ public final class EventDto {
 
         @Min(value = 1, message = "Available seats must be at least 1")
         private Integer availableSeats;
+
+        private String imageUrl;
     }
 }

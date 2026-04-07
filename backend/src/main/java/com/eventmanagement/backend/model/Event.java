@@ -48,4 +48,7 @@ public class Event {
 
     @Column(name = "available_seats", nullable = false)
     private Integer availableSeats;
+
+    @Column(name = "image_url", length = 255)
+    private String imageUrl;
 }

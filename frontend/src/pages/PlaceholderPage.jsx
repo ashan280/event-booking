@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import PageIntro from "../components/PageIntro";
 import PublicSiteHeader from "../components/PublicSiteHeader";
 
 function PlaceholderPage({ title, description }) {
@@ -7,14 +8,16 @@ function PlaceholderPage({ title, description }) {
       <div className="page-shell">
         <PublicSiteHeader />
 
-        <section className="simple-panel">
-          <p className="section-tag">Coming soon</p>
-          <h1>{title}</h1>
-          <p>{description}</p>
-          <Link className="primary-link" to="/">
-            Back to home
-          </Link>
-        </section>
+        <PageIntro
+          eyebrow="Coming soon"
+          title={title}
+          description={description}
+          actions={(
+            <Link className="primary-link" to="/">
+              Back to home
+            </Link>
+          )}
+        />
       </div>
     </main>
   );

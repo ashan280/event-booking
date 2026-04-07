@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import PageIntro from "../../components/PageIntro";
 import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
 
@@ -35,17 +36,16 @@ function VenuesPage() {
       <div className="page-shell">
         <PublicSiteHeader />
 
-        <section className="simple-panel">
-          <p className="section-tag">Venues</p>
-          <h1>Browse event venues.</h1>
-          <p>Check each venue, the city, and how many events are linked to it.</p>
-
-          <div className="auth-link-list">
+        <PageIntro
+          eyebrow="Venues"
+          title="Venues."
+          description="Check each venue, the city, and how many events are linked to it."
+          actions={(
             <Link className="ghost-link" to="/events">
               Back to events
             </Link>
-          </div>
-
+          )}
+        >
           {!isLoading && venues.length ? (
             <div className="venue-summary-grid">
               <article>
@@ -62,7 +62,7 @@ function VenuesPage() {
               </article>
             </div>
           ) : null}
-        </section>
+        </PageIntro>
 
         {error ? <p className="error-text">{error}</p> : null}
 

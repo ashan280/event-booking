@@ -23,7 +23,8 @@ CREATE TABLE IF NOT EXISTS events (
     price VARCHAR(40) NOT NULL,
     short_description VARCHAR(120) NOT NULL,
     description VARCHAR(500) NOT NULL,
-    available_seats INT NOT NULL
+    available_seats INT NOT NULL,
+    image_url VARCHAR(255) DEFAULT '/images/concert.png'
 );
 
 CREATE TABLE IF NOT EXISTS bookings (

@@ -1,11 +1,22 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import PageIntro from "../../components/PageIntro";
 import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
 import { getAuth, isAdmin, isLoggedIn } from "../../lib/auth";
 
-function getEventTheme(category) {
-  return category.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+function formatDateLabel(value) {
+  const parsedDate = new Date(value);
+
+  if (Number.isNaN(parsedDate.getTime())) {
+    return value;
+  }
+
+  return parsedDate.toLocaleDateString("en-GB", {
+    weekday: "short",
+    day: "numeric",
+    month: "short"
+  });
 }
 
 function EventsPage() {
@@ -86,13 +97,34 @@ function EventsPage() {
       <div className="page-shell">
         <PublicSiteHeader />
 
-        <section className="events-page-header simple-panel">
-          <p className="section-tag">Events</p>
-          <h1>Browse events by search, category, and city.</h1>
-          <p>
-            Search by name, category, or city and open any event to see more details.
-          </p>
-
+        <PageIntro
+          eyebrow="Events"
+          title="Browse events."
+          description="Use search, category, and city to find events."
+          actions={(
+            <>
+              <Link className="ghost-link" to="/">
+                Back to home
+              </Link>
+              <Link className="ghost-link" to="/venues">
+                View venues
+              </Link>
+              {isLoggedIn(auth) ? (
+                <Link className="ghost-link" to="/booking">
+                  My bookings
+                </Link>
+              ) : null}
+              {canManageEvents ? (
+                <Link className="ghost-link" to="/events/create">
+                  Add event
+                </Link>
+              ) : null}
+              <button className="ghost-link" type="button" onClick={clearFilters}>
+                Clear filters
+              </button>
+            </>
+          )}
+        >
           <div className="events-filter-grid">
             <label>
               Search
@@ -125,31 +157,8 @@ function EventsPage() {
                 ))}
               </select>
             </label>
-
           </div>
-
-          <div className="auth-link-list">
-            <Link className="ghost-link" to="/">
-              Back to home
-            </Link>
-            <Link className="ghost-link" to="/venues">
-              View venues
-            </Link>
-            {isLoggedIn(auth) ? (
-              <Link className="ghost-link" to="/booking">
-                My bookings
-              </Link>
-            ) : null}
-            {canManageEvents ? (
-              <Link className="ghost-link" to="/events/create">
-                Add event
-              </Link>
-            ) : null}
-            <button className="ghost-link" type="button" onClick={clearFilters}>
-              Clear filters
-            </button>
-          </div>
-        </section>
+        </PageIntro>
 
         {error ? <p className="error-text">{error}</p> : null}
 
@@ -179,7 +188,12 @@ function EventsPage() {
           <section className="event-list-grid">
             {events.map((event) => (
               <article className="event-list-card" key={event.id}>
-                <div className={`event-list-image simple-event-image event-theme-${getEventTheme(event.category)}`}>
+                <div className="event-list-image">
+                  <img
+                    className="event-list-card-image"
+                    src={event.imageUrl || "/images/concert.png"}
+                    alt={event.title}
+                  />
                   <span className="event-image-badge">{event.category}</span>
                 </div>
 
@@ -187,7 +201,7 @@ function EventsPage() {
                   <h2>{event.title}</h2>
                   <p className="event-summary-text">{event.shortDescription}</p>
                   <div className="event-meta-grid">
-                    <span>{event.date}</span>
+                    <span>{formatDateLabel(event.date)}</span>
                     <span>{event.time}</span>
                     <span>{event.city}</span>
                     <span>{event.price}</span>
