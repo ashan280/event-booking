@@ -1,59 +1,39 @@
-# Event Booking and Seat Reservation System
+# Event Booking System
 
-This is a university group project for browsing events, booking seats, making payments, and viewing tickets.
-
-## Tech Used
-
-- React
-- Vite
-- Spring Boot
-- Spring Security
-- JPA
-- H2 or MySQL
+This is a university group project for browsing events, booking seats, making payments, and viewing tickets online.
 
 ## Main Features
 
 - user register and login
-- JWT based authentication
-- profile and review pages
-- event list and event details
-- venue pages
+- JWT authentication
+- profile and reviews
+- event and venue pages
 - seat selection and booking summary
-- payment page and ticket page
+- payment and ticket page
 - booking history
 - admin dashboard and booking report
 
-## Project Folders
+## Tech Stack
 
-- `frontend/` React app
-- `backend/` Spring Boot app
-- `database/` SQL script
-- `docs/` for local notes only
+- React + Vite
+- Spring Boot
+- Spring Security
+- JPA
+- MySQL or H2
 
 ## Team Work
 
-- `Ashan` worked on auth, profile, and reviews
-- `Vinuri` worked on events and venues
-- `Nimesha` worked on booking, payment, tickets, and reports
+- Ashan: auth, profile, reviews
+- Vinuri: events, venues
+- Nimesha: booking, payment, tickets, reports
 
-## Branches
+## Project Structure
 
-- `main` final branch
-- `dev` team branch
-- `feature/ashan-auth-user`
-- `feature/vinuri-event-venue`
-- `feature/nimesha-booking-payment`
+- `frontend/` for the React app
+- `backend/` for the Spring Boot app
+- `database/` for the SQL script
 
-## Simple Git Flow
-
-1. Do one small task.
-2. Make one simple commit.
-3. Push to your feature branch.
-4. Merge feature branch into `dev`.
-5. Test in `dev`.
-6. Merge `dev` into `main` at the end.
-
-## Run the Project
+## Run The Project
 
 Frontend:
 
@@ -70,7 +50,7 @@ cd backend
 mvn spring-boot:run
 ```
 
-## Demo Accounts
+## Demo Login
 
 Admin:
 
@@ -81,49 +61,31 @@ User:
 
 - create a new account from the register page
 
-## Environment Values
+## Environment Variables
 
 Frontend:
 
-- `VITE_API_URL` for the backend URL
-- default: `http://localhost:8080`
+- `VITE_API_URL`
 
 Backend:
 
-- `FRONTEND_URL` for the frontend URL
-- `APP_JWT_SECRET` for the JWT secret
-- `DB_URL` for the database URL
-- `DB_USERNAME` for the database username
-- `DB_PASSWORD` for the database password
+- `FRONTEND_URL`
+- `APP_JWT_SECRET`
+- `DB_URL`
+- `DB_USERNAME`
+- `DB_PASSWORD`
 
 ## Security
 
 - passwords are hashed with BCrypt
 - JWT is used after login
 - booking pages need login
-- admin pages and admin event actions need admin role
+- admin pages need admin role
 
-## Data Exchange
+## Branches
 
-- the frontend and backend use JSON for requests and responses
-- the frontend calls backend APIs with `fetch`
-- the backend returns simple JSON responses
-
-## Simple Deployment Note
-
-For local demo or deployment, the frontend and backend should use matching URLs:
-
-- frontend `VITE_API_URL`
-- backend `FRONTEND_URL`
-
-Example:
-
-- frontend on `http://localhost:5173`
-- backend on `http://localhost:8080`
-
-## Simple Commit Names
-
-- `add login page`
-- `fix register form`
-- `add event list`
-- `add booking page`
+- `main`
+- `dev`
+- `feature/ashan-auth-user`
+- `feature/vinuri-event-venue`
+- `feature/nimesha-booking-payment`
