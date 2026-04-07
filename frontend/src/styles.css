@@ -1231,6 +1231,237 @@ label {
   gap: 24px;
 }
 
+.ticket-screen-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 24px;
+  align-items: start;
+}
+
+.ticket-page-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.ticket-card {
+  width: 100%;
+  max-width: 900px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.ticket-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 24px;
+  border-bottom: 1px dashed var(--border);
+}
+
+.ticket-brand h2,
+.ticket-brand p {
+  margin: 0;
+}
+
+.ticket-brand h2 {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 2rem;
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+.ticket-brand p:last-child {
+  margin-top: 8px;
+  color: var(--muted);
+}
+
+.ticket-code-box {
+  min-width: 190px;
+  padding: 16px 18px;
+  border-radius: var(--radius);
+  border: 1px solid #fdba74;
+  background: #fff7ed;
+}
+
+.ticket-code-box span,
+.ticket-footer-item span,
+.ticket-seat-row span,
+.ticket-detail-card span {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ticket-code-box span,
+.ticket-footer-item span,
+.ticket-detail-card span {
+  color: var(--muted);
+}
+
+.ticket-code-box strong {
+  display: block;
+  margin-top: 8px;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.15rem;
+  color: var(--primary-dark);
+  word-break: break-word;
+}
+
+.ticket-body {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 20px;
+  padding: 24px;
+}
+
+.ticket-body-simple {
+  grid-template-columns: 1fr;
+}
+
+.ticket-photo {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+  border-radius: var(--radius);
+}
+
+.ticket-info {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+}
+
+.ticket-info-full {
+  width: 100%;
+}
+
+.ticket-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.ticket-detail-card {
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: #fcfaf7;
+}
+
+.ticket-detail-card strong,
+.ticket-seat-row strong,
+.ticket-footer-item strong {
+  display: block;
+  margin-top: 6px;
+  color: var(--ink);
+  font-size: 0.98rem;
+}
+
+.ticket-seat-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  padding: 16px 18px;
+  border-radius: var(--radius);
+  border: 1px solid #fed7aa;
+  background: #fff8ee;
+}
+
+.ticket-seat-row span {
+  color: var(--primary-dark);
+}
+
+.ticket-seat-count {
+  min-width: 70px;
+  text-align: right;
+}
+
+.ticket-footer-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.ticket-footer-item {
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.ticket-footer-total {
+  background: var(--primary-light);
+  border-color: #fdba74;
+}
+
+.ticket-footer-total strong {
+  color: var(--primary-dark);
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.ticket-note {
+  margin: 0;
+  padding: 0 24px 24px;
+  color: var(--muted);
+}
+
+.ticket-side-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.ticket-side-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.ticket-side-card {
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: #fcfaf7;
+}
+
+.ticket-side-card span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ticket-side-card strong {
+  display: block;
+  margin-top: 6px;
+  color: var(--ink);
+  font-size: 0.98rem;
+  word-break: break-word;
+}
+
+.ticket-side-text {
+  margin: 10px 0 0;
+  color: var(--muted);
+}
+
+.ticket-side-actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.ticket-side-actions .primary-link,
+.ticket-side-actions .ghost-link {
+  width: 100%;
+  margin-top: 0;
+}
+
 .booking-info-grid {
   display: grid;
   gap: 8px;
@@ -1654,17 +1885,95 @@ label {
   gap: 20px;
 }
 
-.booking-history-card { display: grid; gap: 12px; }
+.booking-history-card {
+  display: grid;
+  gap: 14px;
+  height: 100%;
+}
 
 .booking-history-hero {
   display: grid;
-  grid-template-columns: 110px 1fr;
+  grid-template-columns: 96px 1fr;
   gap: 14px;
   align-items: center;
 }
 
 .booking-history-photo {
-  height: 96px;
+  height: 88px;
+}
+
+.booking-history-copy .panel-title {
+  font-size: 1.25rem;
+  line-height: 1.25;
+}
+
+.booking-history-summary {
+  display: grid;
+  gap: 12px;
+}
+
+.booking-history-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.booking-history-detail-card {
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: #fcfaf7;
+}
+
+.booking-history-detail-card span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.booking-history-detail-card strong {
+  display: block;
+  margin-top: 5px;
+  color: var(--ink);
+  font-size: 0.92rem;
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+.booking-history-note-box {
+  display: grid;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: #fffaf2;
+}
+
+.booking-history-note-box p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.booking-history-note-box strong {
+  color: var(--ink);
+}
+
+.booking-history-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.booking-history-actions .ghost-link,
+.booking-history-actions button {
+  width: 100%;
+}
+
+.booking-history-action-full {
+  grid-column: 1 / -1;
 }
 
 .booking-success-banner {
@@ -1834,17 +2143,145 @@ label {
 
 .footer-links a:hover { color: var(--primary); }
 
+.print-only {
+  display: none;
+}
+
+.admin-report-print {
+  display: grid;
+  gap: 24px;
+}
+
+.admin-report-print-head p:last-child {
+  margin: 10px 0 0;
+  color: var(--muted);
+}
+
+.admin-report-section {
+  break-inside: avoid;
+}
+
+.report-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 16px;
+}
+
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+}
+
+.report-table th,
+.report-table td {
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.report-table th {
+  background: #fcfaf7;
+  color: var(--ink);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.report-table td {
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 0.94rem;
+}
+
+.report-event-cell {
+  display: grid;
+  gap: 4px;
+}
+
+.report-event-cell strong {
+  color: var(--ink);
+}
+
+.report-event-cell span {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.report-table-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.report-table-actions .ghost-link {
+  padding: 6px 10px;
+  font-size: 0.82rem;
+}
+
 @media print {
-  .top-bar, .auth-link-list, .nav-cta, button, .ghost-link, .site-footer {
+  .top-bar, .auth-link-list, .nav-cta, button, .ghost-link, .site-footer, .page-intro, .print-hide {
     display: none !important;
   }
   .home-page { padding: 0; background: #fff; }
-  .page-shell, .ticket-layout { max-width: none; display: block; }
+  .page-shell,
+  .ticket-layout,
+  .ticket-screen-layout,
+  .ticket-page-wrap,
+  .ticket-body {
+    max-width: none;
+    display: block;
+  }
   .simple-panel {
     box-shadow: none;
     border: 1px solid #d1d5db;
     background: #fff;
     break-inside: avoid;
+  }
+  .print-only {
+    display: block !important;
+  }
+  .admin-report-print {
+    display: grid;
+    gap: 16px;
+  }
+  .admin-summary-grid,
+  .admin-city-grid,
+  .booking-history-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .admin-report-section,
+  .admin-booking-card,
+  .admin-city-card,
+  .admin-stat-card {
+    break-inside: avoid;
+  }
+  .report-table-wrap {
+    overflow: visible;
+    margin-top: 12px;
+  }
+  .report-table {
+    min-width: 0;
+  }
+  .report-table thead {
+    display: table-header-group;
+  }
+  .report-table tr {
+    break-inside: avoid;
+  }
+  .report-table th,
+  .report-table td {
+    padding: 10px 12px;
+    font-size: 0.85rem;
+  }
+  .ticket-card {
+    max-width: none;
+  }
+  .ticket-top,
+  .ticket-body {
+    padding: 18px;
   }
 }
 
@@ -1857,6 +2294,8 @@ label {
   .event-details-layout,
   .booking-layout,
   .ticket-layout,
+  .ticket-screen-layout,
+  .ticket-body,
   .venue-hero {
     grid-template-columns: 1fr;
   }
@@ -1889,8 +2328,20 @@ label {
   .booking-steps,
   .payment-form-grid,
   .booking-quick-grid,
-  .booking-detail-grid {
+  .booking-detail-grid,
+  .booking-history-detail-grid,
+  .ticket-detail-grid,
+  .ticket-footer-row,
+  .ticket-side-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ticket-top {
+    display: grid;
+  }
+
+  .ticket-code-box {
+    min-width: 0;
   }
 }
 
@@ -1937,8 +2388,20 @@ label {
   .payment-form-grid,
   .booking-quick-grid,
   .booking-detail-grid,
+  .booking-history-detail-grid,
+  .ticket-detail-grid,
+  .ticket-footer-row,
+  .ticket-side-grid,
   .booking-event-hero,
   .booking-history-hero { grid-template-columns: 1fr; }
+
+  .booking-history-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .booking-history-action-full {
+    grid-column: auto;
+  }
 
   .account-content {
     padding: 16px;
@@ -1949,5 +2412,19 @@ label {
 
   .booking-event-photo {
     height: 200px;
+  }
+
+  .ticket-top,
+  .ticket-body {
+    padding: 20px;
+  }
+
+  .ticket-seat-row {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .ticket-seat-count {
+    text-align: left;
   }
 }

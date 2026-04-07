@@ -60,8 +60,8 @@ function TicketPage() {
 
         <PageIntro
           eyebrow="Ticket"
-          title="Your ticket."
-          description="Keep this page for your booking details, ticket code, and payment summary."
+          title="Your event ticket"
+          description="Use this page to check your ticket code, seats, and payment details."
           actions={(
             <>
               <Link className="ghost-link" to="/booking">
@@ -90,88 +90,136 @@ function TicketPage() {
         {error ? <p className="error-text">{error}</p> : null}
 
         {booking ? (
-          <section className="ticket-layout">
-            <article className="simple-panel">
-              {showSuccess ? (
-                <div className="booking-success-banner">
-                  <strong>Payment successful</strong>
-                  <p>Your booking is confirmed and your ticket is ready.</p>
+          <section className="ticket-screen-layout">
+            <div className="ticket-page-wrap">
+              <article className="simple-panel ticket-card">
+                {showSuccess ? (
+                  <div className="booking-success-banner">
+                    <strong>Payment successful</strong>
+                    <p>Your booking is confirmed and your ticket is ready.</p>
+                  </div>
+                ) : null}
+
+                <div className="ticket-top">
+                  <div className="ticket-brand">
+                    <p className="section-tag">Event ticket</p>
+                    <h2>{booking.eventTitle}</h2>
+                    <p>
+                      {booking.eventDate} at {booking.eventTime}
+                    </p>
+                  </div>
+                  <div className="ticket-code-box">
+                    <span>Ticket code</span>
+                    <strong>{booking.ticketCode}</strong>
+                  </div>
                 </div>
-              ) : null}
 
-              <div className="booking-event-hero booking-event-hero-compact">
-                <img
-                  className="booking-event-photo"
-                  src={booking.eventImageUrl || "/images/concert.png"}
-                  alt={booking.eventTitle}
-                />
-                <div className="booking-event-copy">
-                  <p className="section-tag">Ticket code</p>
-                  <h2 className="panel-title">{booking.ticketCode}</h2>
-                  <p className="booking-event-text">{booking.eventTitle}</p>
+                <div className="ticket-body ticket-body-simple">
+                  <div className="ticket-info ticket-info-full">
+                    <div className="ticket-detail-grid">
+                      <article className="ticket-detail-card">
+                        <span>Venue</span>
+                        <strong>{booking.venue}</strong>
+                      </article>
+                      <article className="ticket-detail-card">
+                        <span>City</span>
+                        <strong>{booking.city}</strong>
+                      </article>
+                      <article className="ticket-detail-card">
+                        <span>Booking status</span>
+                        <strong>{booking.bookingStatus}</strong>
+                      </article>
+                      <article className="ticket-detail-card">
+                        <span>Payment</span>
+                        <strong>{booking.paymentStatus}</strong>
+                      </article>
+                      <article className="ticket-detail-card">
+                        <span>Method</span>
+                        <strong>{booking.paymentMethod}</strong>
+                      </article>
+                      <article className="ticket-detail-card">
+                        <span>Booked at</span>
+                        <strong>{formatDateTime(booking.createdAt)}</strong>
+                      </article>
+                    </div>
+
+                    <div className="ticket-seat-row">
+                      <div>
+                        <span>Seat numbers</span>
+                        <strong>{booking.seatLabels.join(", ")}</strong>
+                      </div>
+                      <div className="ticket-seat-count">
+                        <span>Seats</span>
+                        <strong>{booking.seatCount}</strong>
+                      </div>
+                    </div>
+
+                    <div className="ticket-footer-row">
+                      <article className="ticket-footer-item">
+                        <span>Date</span>
+                        <strong>{booking.eventDate}</strong>
+                      </article>
+                      <article className="ticket-footer-item">
+                        <span>Time</span>
+                        <strong>{booking.eventTime}</strong>
+                      </article>
+                      <article className="ticket-footer-item ticket-footer-total">
+                        <span>Total paid</span>
+                        <strong>{formatAmount(booking.totalAmount)}</strong>
+                      </article>
+                    </div>
+                  </div>
                 </div>
-              </div>
 
-              <div className="booking-detail-grid">
-                <article className="booking-detail-card">
-                  <span className="booking-detail-label">Date</span>
-                  <strong className="booking-detail-value">{booking.eventDate}</strong>
-                </article>
-                <article className="booking-detail-card">
-                  <span className="booking-detail-label">Time</span>
-                  <strong className="booking-detail-value">{booking.eventTime}</strong>
-                </article>
-                <article className="booking-detail-card">
-                  <span className="booking-detail-label">Venue</span>
-                  <strong className="booking-detail-value">{booking.venue}</strong>
-                </article>
-                <article className="booking-detail-card">
-                  <span className="booking-detail-label">City</span>
-                  <strong className="booking-detail-value">{booking.city}</strong>
-                </article>
-                <article className="booking-detail-card">
-                  <span className="booking-detail-label">Seats</span>
-                  <strong className="booking-detail-value">{booking.seatCount}</strong>
-                </article>
-                <article className="booking-detail-card booking-detail-card-wide">
-                  <span className="booking-detail-label">Seat numbers</span>
-                  <strong className="booking-detail-value">{booking.seatLabels.join(", ")}</strong>
-                </article>
-              </div>
-            </article>
+                <p className="ticket-note">
+                  Print this ticket or open it again from your bookings page.
+                </p>
+              </article>
+            </div>
 
-            <article className="simple-panel">
-              <p className="section-tag">Payment</p>
-              <h2 className="panel-title">Booking summary</h2>
-              <div className="booking-detail-grid">
-                <article className="booking-detail-card">
-                  <span className="booking-detail-label">Status</span>
-                  <strong className="booking-detail-value">{booking.bookingStatus}</strong>
-                </article>
-                <article className="booking-detail-card">
-                  <span className="booking-detail-label">Payment</span>
-                  <strong className="booking-detail-value">{booking.paymentStatus}</strong>
-                </article>
-                <article className="booking-detail-card">
-                  <span className="booking-detail-label">Method</span>
-                  <strong className="booking-detail-value">{booking.paymentMethod}</strong>
-                </article>
-                <article className="booking-detail-card">
-                  <span className="booking-detail-label">Booked at</span>
-                  <strong className="booking-detail-value">{formatDateTime(booking.createdAt)}</strong>
-                </article>
-              </div>
+            <aside className="ticket-side-panel print-hide">
+              <article className="simple-panel compact-panel">
+                <p className="section-tag">Booking details</p>
+                <h2 className="panel-title">Ticket summary</h2>
+                <div className="ticket-side-grid">
+                  <article className="ticket-side-card">
+                    <span>Status</span>
+                    <strong>{booking.bookingStatus}</strong>
+                  </article>
+                  <article className="ticket-side-card">
+                    <span>Payment</span>
+                    <strong>{booking.paymentStatus}</strong>
+                  </article>
+                  <article className="ticket-side-card">
+                    <span>Method</span>
+                    <strong>{booking.paymentMethod}</strong>
+                  </article>
+                  <article className="ticket-side-card">
+                    <span>Total</span>
+                    <strong>{formatAmount(booking.totalAmount)}</strong>
+                  </article>
+                </div>
+              </article>
 
-              <div className="booking-total-box">
-                <p>Total paid</p>
-                <strong>{formatAmount(booking.totalAmount)}</strong>
-              </div>
-
-              <div className="booking-note-box">
-                <strong>Keep this ticket</strong>
-                <p>You can reopen it later from the booking history page.</p>
-              </div>
-            </article>
+              <article className="simple-panel compact-panel">
+                <p className="section-tag">Actions</p>
+                <h2 className="panel-title">Use this ticket</h2>
+                <p className="ticket-side-text">
+                  Open this page again from your bookings list or print it before the event.
+                </p>
+                <div className="ticket-side-actions">
+                  <button className="primary-link" type="button" onClick={handlePrint}>
+                    Print ticket
+                  </button>
+                  <Link className="ghost-link" to="/booking">
+                    My bookings
+                  </Link>
+                  <Link className="ghost-link" to={`/events/${booking.eventId}`}>
+                    Event details
+                  </Link>
+                </div>
+              </article>
+            </aside>
           </section>
         ) : null}
       </div>

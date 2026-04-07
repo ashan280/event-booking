@@ -125,22 +125,46 @@ function BookingHistoryPage() {
                   <div className="booking-history-copy">
                     <p className="section-tag">{booking.bookingStatus}</p>
                     <h2 className="panel-title">{booking.eventTitle}</h2>
+                    <p>{booking.venue}, {booking.city}</p>
                   </div>
                 </div>
-                <div className="booking-info-grid">
-                  <p><strong>Date:</strong> {booking.eventDate}</p>
-                  <p><strong>Time:</strong> {booking.eventTime}</p>
-                  <p><strong>Venue:</strong> {booking.venue}</p>
-                  <p><strong>City:</strong> {booking.city}</p>
-                  <p><strong>Seats:</strong> {booking.seatCount}</p>
-                  <p><strong>Seat numbers:</strong> {booking.seatLabels.join(", ")}</p>
-                  <p><strong>Total:</strong> {formatAmount(booking.totalAmount)}</p>
-                  <p><strong>Payment:</strong> {booking.paymentStatus}</p>
-                  <p><strong>Method:</strong> {booking.paymentMethod}</p>
-                  <p><strong>Ticket:</strong> {booking.ticketCode}</p>
-                  <p><strong>Booked at:</strong> {formatDateTime(booking.createdAt)}</p>
+
+                <div className="booking-history-summary">
+                  <div className="booking-history-detail-grid">
+                    <article className="booking-history-detail-card">
+                      <span>Date</span>
+                      <strong>{booking.eventDate}</strong>
+                    </article>
+                    <article className="booking-history-detail-card">
+                      <span>Time</span>
+                      <strong>{booking.eventTime}</strong>
+                    </article>
+                    <article className="booking-history-detail-card">
+                      <span>Seats</span>
+                      <strong>{booking.seatCount}</strong>
+                    </article>
+                    <article className="booking-history-detail-card">
+                      <span>Total</span>
+                      <strong>{formatAmount(booking.totalAmount)}</strong>
+                    </article>
+                    <article className="booking-history-detail-card">
+                      <span>Payment</span>
+                      <strong>{booking.paymentStatus}</strong>
+                    </article>
+                    <article className="booking-history-detail-card">
+                      <span>Ticket</span>
+                      <strong>{booking.ticketCode}</strong>
+                    </article>
+                  </div>
+
+                  <div className="booking-history-note-box">
+                    <p><strong>Seat numbers:</strong> {booking.seatLabels.join(", ")}</p>
+                    <p><strong>Method:</strong> {booking.paymentMethod}</p>
+                    <p><strong>Booked at:</strong> {formatDateTime(booking.createdAt)}</p>
+                  </div>
                 </div>
-                <div className="auth-link-list">
+
+                <div className="booking-history-actions">
                   <Link className="ghost-link" to={`/events/${booking.eventId}`}>
                     View event
                   </Link>
@@ -149,7 +173,7 @@ function BookingHistoryPage() {
                   </Link>
                   {booking.bookingStatus !== "CANCELLED" ? (
                     <button
-                      className="ghost-link delete-link"
+                      className="ghost-link delete-link booking-history-action-full"
                       type="button"
                       onClick={() => handleCancel(booking.id)}
                       disabled={activeBookingId === booking.id}
