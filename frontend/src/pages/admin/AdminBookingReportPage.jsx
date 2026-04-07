@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import PageIntro from "../../components/PageIntro";
 import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
 import { getAuth, isAdmin } from "../../lib/auth";
@@ -47,19 +48,21 @@ function AdminBookingReportPage() {
         <div className="page-shell">
           <PublicSiteHeader />
 
-          <section className="simple-panel">
-            <p className="section-tag">Admin</p>
-            <h1>Admin report only.</h1>
-            <p>You need an admin account to open this page.</p>
-            <div className="auth-link-list">
-              <Link className="ghost-link" to="/auth/login">
-                Go to login
-              </Link>
-              <Link className="ghost-link" to="/">
-                Back to home
-              </Link>
-            </div>
-          </section>
+          <PageIntro
+            eyebrow="Admin"
+            title="Admin only."
+            description="You need an admin account to open this page."
+            actions={(
+              <>
+                <Link className="ghost-link" to="/auth/login">
+                  Go to login
+                </Link>
+                <Link className="ghost-link" to="/">
+                  Back to home
+                </Link>
+              </>
+            )}
+          />
         </div>
       </main>
     );
@@ -70,20 +73,21 @@ function AdminBookingReportPage() {
       <div className="page-shell">
         <PublicSiteHeader />
 
-        <section className="simple-panel">
-          <p className="section-tag">Booking report</p>
-          <h1>Check booking numbers and revenue.</h1>
-          <p>Use this page to see bookings, cancelled orders, seats booked, and recent ticket activity.</p>
-
-          <div className="auth-link-list">
-            <Link className="ghost-link" to="/admin">
-              Back to dashboard
-            </Link>
-            <Link className="ghost-link" to="/events">
-              Open events
-            </Link>
-          </div>
-        </section>
+        <PageIntro
+          eyebrow="Booking report"
+          title="Booking report."
+          description="Check bookings, cancelled orders, seats booked, and ticket details."
+          actions={(
+            <>
+              <Link className="ghost-link" to="/admin">
+                Back to dashboard
+              </Link>
+              <Link className="ghost-link" to="/events">
+                Events
+              </Link>
+            </>
+          )}
+        />
 
         {isLoading ? (
           <section className="simple-panel">
@@ -140,7 +144,7 @@ function AdminBookingReportPage() {
 
             <section className="simple-panel">
               <p className="section-tag">Recent bookings</p>
-              <h2 className="panel-title">Latest activity</h2>
+              <h2 className="panel-title">Recent bookings</h2>
 
               {!report.recentBookings.length ? (
                 <p>No bookings yet.</p>

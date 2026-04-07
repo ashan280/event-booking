@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import PageIntro from "../../components/PageIntro";
 import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
 
@@ -152,25 +153,26 @@ function BookingPage() {
       <div className="page-shell">
         <PublicSiteHeader />
 
-        <section className="simple-panel">
-          <p className="section-tag">Booking</p>
-          <h1>Select your seats.</h1>
-          <p>Pick the seats you want, check the total, and then continue to payment.</p>
-
-          <div className="auth-link-list">
-            <Link className="ghost-link" to="/events">
-              Back to events
-            </Link>
-            {event ? (
-              <Link className="ghost-link" to={`/events/${event.id}`}>
-                Back to event
+        <PageIntro
+          eyebrow="Booking"
+          title="Select your seats."
+          description="Pick the seats you want, check the total, and then continue to payment."
+          actions={(
+            <>
+              <Link className="ghost-link" to="/events">
+                Back to events
               </Link>
-            ) : null}
-            <Link className="ghost-link" to="/booking">
-              My bookings
-            </Link>
-          </div>
-        </section>
+              {event ? (
+                <Link className="ghost-link" to={`/events/${event.id}`}>
+                  Back to event
+                </Link>
+              ) : null}
+              <Link className="ghost-link" to="/booking">
+                My bookings
+              </Link>
+            </>
+          )}
+        />
 
         {isLoading ? (
           <section className="simple-panel">

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import PageIntro from "../../components/PageIntro";
 import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
 
@@ -121,20 +122,21 @@ function PaymentPage() {
       <div className="page-shell">
         <PublicSiteHeader />
 
-        <section className="simple-panel">
-          <p className="section-tag">Payment</p>
-          <h1>Complete your payment.</h1>
-          <p>Check the booking summary, choose a payment method, and confirm the booking.</p>
-
-          <div className="auth-link-list">
-            <Link className="ghost-link" to={`/booking/${eventId}/summary?${searchParams.toString()}`}>
-              Back to summary
-            </Link>
-            <Link className="ghost-link" to="/booking">
-              My bookings
-            </Link>
-          </div>
-        </section>
+        <PageIntro
+          eyebrow="Payment"
+          title="Pay for your booking."
+          description="Check the booking summary, choose a payment method, and confirm the booking."
+          actions={(
+            <>
+              <Link className="ghost-link" to={`/booking/${eventId}/summary?${searchParams.toString()}`}>
+                Back to summary
+              </Link>
+              <Link className="ghost-link" to="/booking">
+                My bookings
+              </Link>
+            </>
+          )}
+        />
 
         {isLoading ? (
           <section className="simple-panel">

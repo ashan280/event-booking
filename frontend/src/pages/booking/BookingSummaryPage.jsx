@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import PageIntro from "../../components/PageIntro";
 import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
 
@@ -94,20 +95,21 @@ function BookingSummaryPage() {
       <div className="page-shell">
         <PublicSiteHeader />
 
-        <section className="simple-panel">
-          <p className="section-tag">Booking summary</p>
-          <h1>Check your booking details.</h1>
-          <p>Review the event, selected seats, and total amount before you continue to payment.</p>
-
-          <div className="auth-link-list">
-            <Link className="ghost-link" to={`/booking/${eventId}`}>
-              Back to seat selection
-            </Link>
-            <Link className="ghost-link" to="/booking">
-              My bookings
-            </Link>
-          </div>
-        </section>
+        <PageIntro
+          eyebrow="Booking summary"
+          title="Check your booking details."
+          description="Review the event, selected seats, and total amount before you continue to payment."
+          actions={(
+            <>
+              <Link className="ghost-link" to={`/booking/${eventId}`}>
+                Back to seat selection
+              </Link>
+              <Link className="ghost-link" to="/booking">
+                My bookings
+              </Link>
+            </>
+          )}
+        />
 
         {isLoading ? (
           <section className="simple-panel">
@@ -135,7 +137,7 @@ function BookingSummaryPage() {
 
             <article className="simple-panel">
               <p className="section-tag">Your seats</p>
-              <h2 className="panel-title">Ready to pay</h2>
+              <h2 className="panel-title">Payment</h2>
 
               <div className="seat-selection-box">
                 <p className="seat-selection-label">Seat numbers</p>

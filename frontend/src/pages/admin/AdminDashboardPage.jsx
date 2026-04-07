@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import PageIntro from "../../components/PageIntro";
 import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
 import { getAuth, isAdmin } from "../../lib/auth";
@@ -47,19 +48,21 @@ function AdminDashboardPage() {
         <div className="page-shell">
           <PublicSiteHeader />
 
-          <section className="simple-panel">
-            <p className="section-tag">Admin</p>
-            <h1>Admin dashboard only.</h1>
-            <p>You need an admin account to open this page.</p>
-            <div className="auth-link-list">
-              <Link className="ghost-link" to="/auth/login">
-                Go to login
-              </Link>
-              <Link className="ghost-link" to="/">
-                Back to home
-              </Link>
-            </div>
-          </section>
+          <PageIntro
+            eyebrow="Admin"
+            title="Admin only."
+            description="You need an admin account to open this page."
+            actions={(
+              <>
+                <Link className="ghost-link" to="/auth/login">
+                  Go to login
+                </Link>
+                <Link className="ghost-link" to="/">
+                  Back to home
+                </Link>
+              </>
+            )}
+          />
         </div>
       </main>
     );
@@ -70,26 +73,27 @@ function AdminDashboardPage() {
       <div className="page-shell">
         <PublicSiteHeader />
 
-        <section className="simple-panel">
-          <p className="section-tag">Admin dashboard</p>
-          <h1>Manage events and bookings.</h1>
-          <p>Add events, update venue details in the forms, and check recent bookings from one place.</p>
-
-          <div className="auth-link-list">
-            <Link className="ghost-link" to="/events/create">
-              Add event
-            </Link>
-            <Link className="ghost-link" to="/events">
-              Manage events
-            </Link>
-            <Link className="ghost-link" to="/venues">
-              View venues
-            </Link>
-            <Link className="ghost-link" to="/admin/reports">
-              Booking report
-            </Link>
-          </div>
-        </section>
+        <PageIntro
+          eyebrow="Admin dashboard"
+          title="Admin page."
+          description="Add events, update event details, and check bookings."
+          actions={(
+            <>
+              <Link className="ghost-link" to="/events/create">
+                Add event
+              </Link>
+              <Link className="ghost-link" to="/events">
+                Manage events
+              </Link>
+              <Link className="ghost-link" to="/venues">
+                View venues
+              </Link>
+              <Link className="ghost-link" to="/admin/reports">
+                Booking report
+              </Link>
+            </>
+          )}
+        />
 
         {isLoading ? (
           <section className="simple-panel">

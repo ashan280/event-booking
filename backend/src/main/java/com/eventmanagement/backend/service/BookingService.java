@@ -34,18 +34,18 @@ public class BookingService {
         List<String> selectedSeats = cleanSeatLabels(bookingRequest.getSeatLabels());
 
         if (event.getAvailableSeats() < bookingRequest.getSeatCount()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough seats available");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough seats");
         }
 
         if (selectedSeats.size() != bookingRequest.getSeatCount()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Select the same number of seats as the seat count");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Select the same number of seats");
         }
 
         Set<String> bookedSeats = getBookedSeatSet(event.getId());
 
         for (String seatLabel : selectedSeats) {
             if (bookedSeats.contains(seatLabel)) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "One or more seats are already booked");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Some seats are already booked");
             }
         }
 
@@ -100,7 +100,7 @@ public class BookingService {
         boolean isAdmin = "ADMIN".equalsIgnoreCase(user.getRole());
 
         if (!isOwner && !isAdmin) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot open this booking");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot view this booking");
         }
 
         return toResponse(booking);
@@ -119,7 +119,7 @@ public class BookingService {
         }
 
         if ("CANCELLED".equalsIgnoreCase(booking.getBookingStatus())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Booking is already cancelled");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Booking already cancelled");
         }
 
         Event event = booking.getEvent();

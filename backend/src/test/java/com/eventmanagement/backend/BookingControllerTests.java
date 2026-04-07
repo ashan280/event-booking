@@ -127,7 +127,7 @@ class BookingControllerTests {
                     }
                     """))
             .andExpect(status().isUnauthorized())
-            .andExpect(jsonPath("$.message").value("Please login first"));
+            .andExpect(jsonPath("$.message").value("Please log in first"));
     }
 
     @Test

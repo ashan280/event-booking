@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import PageIntro from "../../components/PageIntro";
 import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
 
@@ -74,20 +75,21 @@ function BookingHistoryPage() {
       <div className="page-shell">
         <PublicSiteHeader />
 
-        <section className="simple-panel">
-          <p className="section-tag">My bookings</p>
-          <h1>Your bookings.</h1>
-          <p>Check the events you booked, the number of seats, and the booking date.</p>
-
-          <div className="auth-link-list">
-            <Link className="ghost-link" to="/events">
-              Browse events
-            </Link>
-            <Link className="ghost-link" to="/auth/profile">
-              Open profile
-            </Link>
-          </div>
-        </section>
+        <PageIntro
+          eyebrow="My bookings"
+          title="Your bookings."
+          description="Check the events you booked, the number of seats, and the booking date."
+          actions={(
+            <>
+              <Link className="ghost-link" to="/events">
+                Browse events
+              </Link>
+              <Link className="ghost-link" to="/auth/profile">
+                Profile
+              </Link>
+            </>
+          )}
+        />
 
         {isLoading ? (
           <section className="simple-panel">
