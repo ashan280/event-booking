@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom";
+import AdminRoute from "./components/AdminRoute";
 import GuestRoute from "./components/GuestRoute";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminBookingReportPage from "./pages/admin/AdminBookingReportPage";
@@ -87,17 +88,17 @@ function App() {
       <Route
         path="/events/create"
         element={
-          <ProtectedRoute>
+          <AdminRoute>
             <CreateEventPage />
-          </ProtectedRoute>
+          </AdminRoute>
         }
       />
       <Route
         path="/events/:eventId/edit"
         element={
-          <ProtectedRoute>
+          <AdminRoute>
             <EditEventPage />
-          </ProtectedRoute>
+          </AdminRoute>
         }
       />
       <Route
@@ -155,17 +156,17 @@ function App() {
       <Route
         path="/admin"
         element={
-          <ProtectedRoute>
+          <AdminRoute>
             <AdminDashboardPage />
-          </ProtectedRoute>
+          </AdminRoute>
         }
       />
       <Route
         path="/admin/reports"
         element={
-          <ProtectedRoute>
+          <AdminRoute>
             <AdminBookingReportPage />
-          </ProtectedRoute>
+          </AdminRoute>
         }
       />
       <Route

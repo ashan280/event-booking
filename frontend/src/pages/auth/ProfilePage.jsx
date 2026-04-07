@@ -60,101 +60,75 @@ function ProfilePage() {
   return (
     <AuthPageShell
       eyebrow="Your Account"
-      title="Your profile details."
-      description="Check your personal details and account status."
-      sideTitle="Profile"
-      sideText="Your account details after sign in."
+      title="Your profile."
+      description="Check your details and account status."
+      sideTitle="Account"
+      sideText="Important account details."
       sideItems={[
-        "Open this page after sign in.",
-        "See profile data from the backend.",
-        "Go back or sign out when needed."
+        "Check your name, email, and account role.",
+        "Open booking history to see your tickets and past bookings.",
+        "Use this page before booking or admin work."
       ]}
+      sideNote="This page helps you check your account before booking events, viewing tickets, or opening admin pages."
     >
       {isLoading ? (
-        <p className="rounded-2xl bg-slate-100 px-4 py-3 text-sm font-medium text-slate-600">
-          Loading your profile...
-        </p>
+        <p className="helper-text">Loading your profile...</p>
       ) : null}
 
-      {error ? (
-        <p className="rounded-2xl bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700">
-          {error}
-        </p>
-      ) : null}
+      {error ? <p className="error-text">{error}</p> : null}
 
       {profile ? (
         <>
-          <div className="grid gap-4 sm:grid-cols-3">
-            <article className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                Name
-              </p>
-              <strong className="mt-2 block text-xl font-bold text-slate-950">
-                {profile.fullName}
-              </strong>
+          <div className="detail-grid">
+            <article className="detail-card">
+              <p>Name</p>
+              <strong>{profile.fullName}</strong>
             </article>
-            <article className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                Role
-              </p>
-              <strong className="mt-2 block text-xl font-bold text-slate-950">
-                {profile.role}
-              </strong>
+            <article className="detail-card">
+              <p>Role</p>
+              <strong>{profile.role}</strong>
             </article>
-            <article className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                Account ID
-              </p>
-              <strong className="mt-2 block text-xl font-bold text-slate-950">
-                #{profile.id}
-              </strong>
+            <article className="detail-card">
+              <p>Account ID</p>
+              <strong>#{profile.id}</strong>
             </article>
           </div>
 
-          <div className="mt-5 grid gap-4 rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm md:grid-cols-2">
-            <div className="space-y-3">
-              <h2 className="text-lg font-bold text-slate-950">Account details</h2>
-              <p className="text-sm text-slate-600"><strong className="text-slate-900">Full name:</strong> {profile.fullName}</p>
-              <p className="text-sm text-slate-600"><strong className="text-slate-900">Email:</strong> {profile.email}</p>
-              <p className="text-sm text-slate-600"><strong className="text-slate-900">Role:</strong> {profile.role}</p>
+          <div className="detail-split-grid">
+            <div className="detail-panel">
+              <h2 className="panel-title">Account details</h2>
+              <div className="booking-info-grid">
+                <p><strong>Full name:</strong> {profile.fullName}</p>
+                <p><strong>Email:</strong> {profile.email}</p>
+                <p><strong>Role:</strong> {profile.role}</p>
+              </div>
             </div>
 
-            <div className="space-y-3">
-              <h2 className="text-lg font-bold text-slate-950">Status</h2>
-              <p className="text-sm text-slate-600"><strong className="text-slate-900">Joined:</strong> {formatDate(profile.createdAt)}</p>
-              <p className="text-sm text-slate-600"><strong className="text-slate-900">Access:</strong> Protected account</p>
-              <p className="text-sm text-slate-600"><strong className="text-slate-900">State:</strong> Active user</p>
+            <div className="detail-panel">
+              <h2 className="panel-title">Status</h2>
+              <div className="booking-info-grid">
+                <p><strong>Joined:</strong> {formatDate(profile.createdAt)}</p>
+                <p><strong>Access:</strong> Signed in</p>
+                <p><strong>Status:</strong> Active</p>
+              </div>
             </div>
           </div>
         </>
       ) : null}
 
-      <div className="mt-6 flex flex-wrap gap-3">
-        <Link
-          className="inline-flex items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
-          to="/auth"
-        >
+      <div className="auth-link-list">
+        <Link className="primary-link" to="/auth">
           Back to account home
         </Link>
-        <Link
-          className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50"
-          to="/booking"
-        >
+        <Link className="ghost-link" to="/booking">
           My bookings
         </Link>
         {isAdmin(auth) ? (
-          <Link
-            className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50"
-            to="/admin"
-          >
+          <Link className="ghost-link" to="/admin">
             Admin dashboard
           </Link>
         ) : null}
-        <button
-          className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50"
-          onClick={handleLogout}
-          type="button"
-        >
+        <button className="ghost-link" onClick={handleLogout} type="button">
           Sign out
         </button>
       </div>

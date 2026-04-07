@@ -20,7 +20,7 @@ public final class AuthDto {
     public static class LoginRequest {
 
         @NotBlank(message = "Email is required")
-        @Email(message = "Email is not valid")
+        @Email(message = "Enter a valid email")
         private String email;
 
         @NotBlank(message = "Password is required")
@@ -36,11 +36,11 @@ public final class AuthDto {
         private String fullName;
 
         @NotBlank(message = "Email is required")
-        @Email(message = "Email is not valid")
+        @Email(message = "Enter a valid email")
         private String email;
 
         @NotBlank(message = "Password is required")
-        @Size(min = 6, message = "Password must have at least 6 characters")
+        @Size(min = 6, message = "Password must be at least 6 characters")
         private String password;
     }
 
@@ -50,7 +50,7 @@ public final class AuthDto {
     public static class ForgotPasswordRequest {
 
         @NotBlank(message = "Email is required")
-        @Email(message = "Email is not valid")
+        @Email(message = "Enter a valid email")
         private String email;
     }
 
@@ -63,7 +63,7 @@ public final class AuthDto {
         private String token;
 
         @NotBlank(message = "Password is required")
-        @Size(min = 6, message = "Password must have at least 6 characters")
+        @Size(min = 6, message = "Password must be at least 6 characters")
         private String password;
     }
 

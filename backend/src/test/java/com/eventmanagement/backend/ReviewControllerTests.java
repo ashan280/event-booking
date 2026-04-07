@@ -72,7 +72,7 @@ class ReviewControllerTests {
                     }
                     """))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.message").value("Review added"))
+            .andExpect(jsonPath("$.message").value("Review saved"))
             .andExpect(jsonPath("$.fullName").value("Ashan Maduwantha"))
             .andExpect(jsonPath("$.rating").value(5));
 
@@ -94,6 +94,6 @@ class ReviewControllerTests {
                     }
                     """))
             .andExpect(status().isUnauthorized())
-            .andExpect(jsonPath("$.message").value("Please login first"));
+            .andExpect(jsonPath("$.message").value("Please log in first"));
     }
 }

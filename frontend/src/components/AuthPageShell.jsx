@@ -8,6 +8,7 @@ function AuthPageShell({
   sideTitle,
   sideText,
   sideItems = [],
+  sideNote,
   children
 }) {
   const location = useLocation();
@@ -16,63 +17,53 @@ function AuthPageShell({
     : { to: "/auth", label: "Back to account" };
 
   return (
-    <main className="min-h-screen bg-slate-100 px-4 py-6 md:px-8 md:py-8">
-      <div className="mx-auto max-w-[1300px] space-y-6">
+    <main className="home-page">
+      <div className="page-shell">
         <PublicSiteHeader />
 
-        <div className="grid min-h-[calc(100vh-4.5rem)] gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-          <section className="flex flex-col justify-between rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-            <div className="space-y-5">
-              <div className="flex flex-wrap items-center gap-3">
-                <Link
-                  className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-                  to={backLink.to}
-                >
-                  <span aria-hidden="true">{"<"}</span>
-                  <span>{backLink.label}</span>
-                </Link>
-              </div>
+        <div className="account-layout">
+          <section className="account-main">
+            <div className="page-actions">
+              <Link className="ghost-link" to={backLink.to}>
+                {backLink.label}
+              </Link>
+            </div>
 
-              <div className="inline-flex items-center rounded-full bg-orange-100 px-4 py-1 text-xs font-semibold text-orange-700">
-                {eyebrow}
-              </div>
+            <div className="account-badge">
+              {eyebrow}
+            </div>
 
-              <div className="space-y-3">
-                <h1 className="max-w-2xl text-3xl font-bold text-slate-950 md:text-4xl">
-                  {title}
-                </h1>
-                <p className="max-w-2xl text-base leading-7 text-slate-600">
-                  {description}
-                </p>
-              </div>
+            <div className="account-heading">
+              <h1>{title}</h1>
+              <p>{description}</p>
+            </div>
 
-              <div className="rounded-3xl border border-slate-200 bg-slate-50 p-4 md:p-6">
-                {children}
-              </div>
+            <div className="account-content">
+              {children}
             </div>
           </section>
 
-          <aside className="rounded-3xl border border-orange-100 bg-[#fff5ef] p-6 text-slate-900 shadow-sm md:p-8">
-            <div className="space-y-5">
-              <p className="text-xs font-semibold text-orange-700">
-                {sideTitle}
+          <aside className="account-side">
+            <div className="account-side-head">
+              <p className="section-tag">{sideTitle}</p>
+              <h2>{sideText}</h2>
+            </div>
+
+            <div className="account-side-list">
+              {sideItems.map((item, index) => (
+                <div className="account-side-item" key={item}>
+                  <span className="account-side-number">
+                    {index + 1}
+                  </span>
+                  <p>{item}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="account-side-note">
+              <p>
+                {sideNote || "Use these pages to sign in, reset your password, and check your details."}
               </p>
-              <h2 className="text-2xl font-bold md:text-3xl">
-                {sideText}
-              </h2>
-              <div className="space-y-3">
-                {sideItems.map((item, index) => (
-                  <div
-                    className="flex items-start gap-3 rounded-2xl border border-orange-100 bg-white px-4 py-3"
-                    key={item}
-                  >
-                    <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-orange-500 text-xs font-bold text-white">
-                      {index + 1}
-                    </span>
-                    <p className="text-sm leading-6 text-slate-600">{item}</p>
-                  </div>
-                ))}
-              </div>
             </div>
           </aside>
         </div>

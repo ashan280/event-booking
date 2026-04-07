@@ -78,21 +78,19 @@ function ResetPasswordPage() {
       title="Set a new password."
       description="Enter your token, add a new password, and save it."
       sideTitle="Reset"
-      sideText="Add your token and save a new password."
+      sideText="Add your token and new password."
       sideItems={[
-        "Use the token from the reset step.",
+        "Use the token from the last step.",
         "Enter a password with at least 6 characters.",
         "Confirm it before saving.",
-        "Use the new password the next time you sign in."
+        "Use the new password when you sign in again."
       ]}
     >
-      <form className="space-y-5" onSubmit={handleSubmit}>
-        <div className="space-y-2">
-          <label className="text-sm font-semibold text-slate-800" htmlFor="reset-token">
+      <form className="auth-form" onSubmit={handleSubmit}>
+        <label htmlFor="reset-token">
             Reset token
-          </label>
+          
           <input
-            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
             id="reset-token"
             name="token"
             type="text"
@@ -100,14 +98,12 @@ function ResetPasswordPage() {
             value={formData.token}
             onChange={handleChange}
           />
-        </div>
+        </label>
 
-        <div className="space-y-2">
-          <label className="text-sm font-semibold text-slate-800" htmlFor="reset-password">
+        <label htmlFor="reset-password">
             New password
-          </label>
+          
           <input
-            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
             id="reset-password"
             name="password"
             type="password"
@@ -115,14 +111,12 @@ function ResetPasswordPage() {
             value={formData.password}
             onChange={handleChange}
           />
-        </div>
+        </label>
 
-        <div className="space-y-2">
-          <label className="text-sm font-semibold text-slate-800" htmlFor="reset-confirm-password">
+        <label htmlFor="reset-confirm-password">
             Confirm password
-          </label>
+          
           <input
-            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
             id="reset-confirm-password"
             name="confirmPassword"
             type="password"
@@ -130,10 +124,10 @@ function ResetPasswordPage() {
             value={formData.confirmPassword}
             onChange={handleChange}
           />
-        </div>
+        </label>
 
         <button
-          className="inline-flex w-full items-center justify-center rounded-full bg-orange-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:bg-orange-300"
+          className="primary-link auth-submit"
           type="submit"
           disabled={isLoading}
         >
@@ -141,21 +135,13 @@ function ResetPasswordPage() {
         </button>
       </form>
 
-      {message ? (
-        <p className="mt-4 rounded-2xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
-          {message}
-        </p>
-      ) : null}
+      {message ? <p className="success-text">{message}</p> : null}
 
-      {error ? (
-        <p className="mt-4 rounded-2xl bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700">
-          {error}
-        </p>
-      ) : null}
+      {error ? <p className="error-text">{error}</p> : null}
 
-      <div className="mt-6 flex flex-wrap gap-3 text-sm text-slate-600">
+      <div className="inline-link-list">
         <span>Need the recovery step first?</span>
-        <Link className="font-semibold text-orange-700 hover:text-orange-800" to="/auth/forgot-password">
+        <Link to="/auth/forgot-password">
           Go back
         </Link>
       </div>

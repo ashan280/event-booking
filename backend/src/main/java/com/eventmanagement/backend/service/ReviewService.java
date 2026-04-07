@@ -32,7 +32,7 @@ public class ReviewService {
 
         Review savedReview = reviewRepository.save(review);
         return new ReviewDto.ReviewResponse(
-            "Review added",
+            "Review saved",
             savedReview.getId(),
             savedReview.getUser().getFullName(),
             savedReview.getRating(),

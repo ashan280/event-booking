@@ -34,6 +34,6 @@ public class ApiExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<CommonDto.ErrorResponse> handleOther() {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(new CommonDto.ErrorResponse("Something went wrong"));
+            .body(new CommonDto.ErrorResponse("Server error"));
     }
 }

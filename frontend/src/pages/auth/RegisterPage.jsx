@@ -45,23 +45,21 @@ function RegisterPage() {
   return (
     <AuthPageShell
       eyebrow="Register"
-      title="Create your account."
-      description="Create an account to sign in and use protected pages."
-      sideTitle="Register steps"
-      sideText="Add your details and create your account."
+      title="Create account."
+      description="Create an account and sign in."
+      sideTitle="Register"
+      sideText="Add your details and save the account."
       sideItems={[
         "Add your full name, email, and password.",
-        "Create the account.",
+        "Save the account.",
         "Open your profile after registration."
       ]}
     >
-      <form className="space-y-5" onSubmit={handleSubmit}>
-        <div className="space-y-2">
-          <label className="text-sm font-semibold text-slate-800" htmlFor="register-name">
+      <form className="auth-form" onSubmit={handleSubmit}>
+        <label htmlFor="register-name">
             Full name
-          </label>
+          
           <input
-            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
             id="register-name"
             name="fullName"
             type="text"
@@ -69,14 +67,12 @@ function RegisterPage() {
             value={formData.fullName}
             onChange={handleChange}
           />
-        </div>
+        </label>
 
-        <div className="space-y-2">
-          <label className="text-sm font-semibold text-slate-800" htmlFor="register-email">
+        <label htmlFor="register-email">
             Email
-          </label>
+          
           <input
-            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
             id="register-email"
             name="email"
             type="email"
@@ -84,14 +80,12 @@ function RegisterPage() {
             value={formData.email}
             onChange={handleChange}
           />
-        </div>
+        </label>
 
-        <div className="space-y-2">
-          <label className="text-sm font-semibold text-slate-800" htmlFor="register-password">
+        <label htmlFor="register-password">
             Password
-          </label>
+          
           <input
-            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
             id="register-password"
             name="password"
             type="password"
@@ -99,10 +93,10 @@ function RegisterPage() {
             value={formData.password}
             onChange={handleChange}
           />
-        </div>
+        </label>
 
         <button
-          className="inline-flex w-full items-center justify-center rounded-full bg-orange-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:bg-orange-300"
+          className="primary-link auth-submit"
           type="submit"
           disabled={isLoading}
         >
@@ -110,15 +104,11 @@ function RegisterPage() {
         </button>
       </form>
 
-      {error ? (
-        <p className="mt-4 rounded-2xl bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700">
-          {error}
-        </p>
-      ) : null}
+      {error ? <p className="error-text">{error}</p> : null}
 
-      <div className="mt-6 flex flex-wrap gap-3 text-sm text-slate-600">
+      <div className="inline-link-list">
         <span>Already registered?</span>
-        <Link className="font-semibold text-orange-700 hover:text-orange-800" to="/auth/login">
+        <Link to="/auth/login">
           Sign in here
         </Link>
       </div>
