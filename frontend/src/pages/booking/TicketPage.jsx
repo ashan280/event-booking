@@ -29,7 +29,7 @@ function TicketPage() {
   const [booking, setBooking] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
-  const showSuccess = searchParams.get("payment") === "success";
+  const paymentState = searchParams.get("payment");
 
   useEffect(() => {
     async function loadTicket() {
@@ -51,6 +51,50 @@ function TicketPage() {
 
   function handlePrint() {
     window.print();
+  }
+
+  function renderTicketBanner() {
+    if (!booking) {
+      return null;
+    }
+
+    if (paymentState === "success" || booking.paymentStatus === "PAID") {
+      return (
+        <div className="ticket-status-banner ticket-status-success">
+          <span className="ticket-status-pill">Paid</span>
+          <div>
+            <strong>Payment successful</strong>
+            <p>Your booking is confirmed and the ticket is ready.</p>
+          </div>
+        </div>
+      );
+    }
+
+    if (paymentState === "free" || booking.paymentStatus === "FREE") {
+      return (
+        <div className="ticket-status-banner ticket-status-info">
+          <span className="ticket-status-pill">Free</span>
+          <div>
+            <strong>Free booking confirmed</strong>
+            <p>No payment was needed for this event. Your ticket is ready.</p>
+          </div>
+        </div>
+      );
+    }
+
+    if (booking.paymentStatus === "PENDING") {
+      return (
+        <div className="ticket-status-banner ticket-status-warning">
+          <span className="ticket-status-pill">Pending</span>
+          <div>
+            <strong>Booking saved</strong>
+            <p>Your seats are confirmed. Complete the payment with the selected method.</p>
+          </div>
+        </div>
+      );
+    }
+
+    return null;
   }
 
   return (
@@ -93,12 +137,7 @@ function TicketPage() {
           <section className="ticket-screen-layout">
             <div className="ticket-page-wrap">
               <article className="simple-panel ticket-card">
-                {showSuccess ? (
-                  <div className="booking-success-banner">
-                    <strong>Payment successful</strong>
-                    <p>Your booking is confirmed and your ticket is ready.</p>
-                  </div>
-                ) : null}
+                {renderTicketBanner()}
 
                 <div className="ticket-top">
                   <div className="ticket-brand">
@@ -137,7 +176,7 @@ function TicketPage() {
                         <span>Method</span>
                         <strong>{booking.paymentMethod}</strong>
                       </article>
-                      <article className="ticket-detail-card">
+                      <article className="ticket-detail-card print-hide">
                         <span>Booked at</span>
                         <strong>{formatDateTime(booking.createdAt)}</strong>
                       </article>
@@ -166,6 +205,17 @@ function TicketPage() {
                       <article className="ticket-footer-item ticket-footer-total">
                         <span>Total paid</span>
                         <strong>{formatAmount(booking.totalAmount)}</strong>
+                      </article>
+                    </div>
+
+                    <div className="ticket-print-meta print-only">
+                      <article className="ticket-print-item">
+                        <span>Issued at</span>
+                        <strong>{formatDateTime(booking.createdAt)}</strong>
+                      </article>
+                      <article className="ticket-print-item">
+                        <span>Entry note</span>
+                        <strong>Show this ticket code at the venue entrance.</strong>
                       </article>
                     </div>
                   </div>

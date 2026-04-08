@@ -56,13 +56,16 @@ public class AdminService {
 
             confirmedBookings += 1;
             totalSeatsBooked += booking.getSeatCount();
-            totalRevenue = totalRevenue.add(booking.getTotalAmount());
 
             String city = booking.getEvent().getCity();
             CityReportData cityData = cityDataMap.computeIfAbsent(city, ignored -> new CityReportData());
             cityData.bookingCount += 1;
             cityData.seatsBooked += booking.getSeatCount();
-            cityData.revenue = cityData.revenue.add(booking.getTotalAmount());
+
+            if ("PAID".equalsIgnoreCase(booking.getPaymentStatus())) {
+                totalRevenue = totalRevenue.add(booking.getTotalAmount());
+                cityData.revenue = cityData.revenue.add(booking.getTotalAmount());
+            }
         }
 
         List<AdminDto.CitySummary> citySummaries = cityDataMap.entrySet().stream()

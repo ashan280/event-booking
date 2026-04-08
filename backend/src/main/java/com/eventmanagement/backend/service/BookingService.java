@@ -17,6 +17,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -27,6 +28,7 @@ public class BookingService {
     private final EventRepository eventRepository;
     private final AuthService authService;
 
+    @Transactional
     public BookingDto.BookingResponse createBooking(HttpServletRequest request, BookingDto.BookingRequest bookingRequest) {
         User user = authService.getCurrentUser(request);
         Event event = eventRepository.findById(bookingRequest.getEventId())
@@ -60,7 +62,7 @@ public class BookingService {
         booking.setTotalAmount(parsePrice(event.getPrice()).multiply(BigDecimal.valueOf(bookingRequest.getSeatCount())));
         booking.setBookingStatus("CONFIRMED");
         booking.setPaymentMethod(getPaymentMethod(bookingRequest.getPaymentMethod(), event.getPrice()));
-        booking.setPaymentStatus(isFreeEvent(event.getPrice()) ? "FREE" : "PAID");
+        booking.setPaymentStatus(getPaymentStatus(booking.getPaymentMethod(), event.getPrice()));
         booking.setTicketCode(buildTicketCode());
 
         return toResponse(bookingRepository.save(booking));
@@ -106,6 +108,7 @@ public class BookingService {
         return toResponse(booking);
     }
 
+    @Transactional
     public BookingDto.BookingResponse cancelBooking(HttpServletRequest request, Long bookingId) {
         User user = authService.getCurrentUser(request);
         Booking booking = bookingRepository.findById(bookingId)
@@ -127,7 +130,7 @@ public class BookingService {
         eventRepository.save(event);
 
         booking.setBookingStatus("CANCELLED");
-        booking.setPaymentStatus(booking.getTotalAmount().compareTo(BigDecimal.ZERO) > 0 ? "REFUNDED" : "FREE");
+        booking.setPaymentStatus(getCancelledPaymentStatus(booking));
 
         return toResponse(bookingRepository.save(booking));
     }
@@ -207,6 +210,30 @@ public class BookingService {
         }
 
         return paymentMethod.trim();
+    }
+
+    private String getPaymentStatus(String paymentMethod, String price) {
+        if (isFreeEvent(price)) {
+            return "FREE";
+        }
+
+        if ("Card".equalsIgnoreCase(paymentMethod)) {
+            return "PAID";
+        }
+
+        return "PENDING";
+    }
+
+    private String getCancelledPaymentStatus(Booking booking) {
+        if (booking.getTotalAmount().compareTo(BigDecimal.ZERO) == 0) {
+            return "FREE";
+        }
+
+        if ("PAID".equalsIgnoreCase(booking.getPaymentStatus())) {
+            return "REFUNDED";
+        }
+
+        return "CANCELLED";
     }
 
     private String buildTicketCode() {

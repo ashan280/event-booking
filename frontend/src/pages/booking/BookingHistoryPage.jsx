@@ -22,6 +22,40 @@ function formatAmount(value) {
   }).format(value || 0);
 }
 
+function formatCardAmount(value) {
+  return new Intl.NumberFormat("en-LK", {
+    style: "currency",
+    currency: "LKR",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(value || 0);
+}
+
+function formatShortDateTime(value) {
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return date.toLocaleString("en-LK", {
+    dateStyle: "short",
+    timeStyle: "short"
+  });
+}
+
+function getSeatPreview(seatLabels) {
+  if (!seatLabels?.length) {
+    return "-";
+  }
+
+  if (seatLabels.length <= 4) {
+    return seatLabels.join(", ");
+  }
+
+  return `${seatLabels.slice(0, 4).join(", ")} +${seatLabels.length - 4} more`;
+}
+
 function BookingHistoryPage() {
   const [bookings, setBookings] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -84,8 +118,8 @@ function BookingHistoryPage() {
               <Link className="ghost-link" to="/events">
                 Browse events
               </Link>
-              <Link className="ghost-link" to="/auth/profile">
-                Profile
+              <Link className="ghost-link" to="/auth">
+                My account
               </Link>
             </>
           )}
@@ -145,7 +179,7 @@ function BookingHistoryPage() {
                     </article>
                     <article className="booking-history-detail-card">
                       <span>Total</span>
-                      <strong>{formatAmount(booking.totalAmount)}</strong>
+                      <strong>{formatCardAmount(booking.totalAmount)}</strong>
                     </article>
                     <article className="booking-history-detail-card">
                       <span>Payment</span>
@@ -158,9 +192,9 @@ function BookingHistoryPage() {
                   </div>
 
                   <div className="booking-history-note-box">
-                    <p><strong>Seat numbers:</strong> {booking.seatLabels.join(", ")}</p>
+                    <p><strong>Seats:</strong> {getSeatPreview(booking.seatLabels)}</p>
                     <p><strong>Method:</strong> {booking.paymentMethod}</p>
-                    <p><strong>Booked at:</strong> {formatDateTime(booking.createdAt)}</p>
+                    <p><strong>Booked:</strong> {formatShortDateTime(booking.createdAt)}</p>
                   </div>
                 </div>
 

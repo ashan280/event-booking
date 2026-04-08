@@ -167,6 +167,36 @@ class BookingControllerTests {
             .andExpect(jsonPath("$.citySummaries[0].bookingCount").exists());
     }
 
+    @Test
+    void cashBookingStartsAsPendingAndCancelsCleanly() throws Exception {
+        String token = registerUserAndGetToken();
+
+        MvcResult bookingResult = mockMvc.perform(post("/api/bookings")
+                .header("Authorization", "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {
+                      "eventId": 1,
+                      "seatCount": 1,
+                      "paymentMethod": "Cash",
+                      "seatLabels": ["B1"]
+                    }
+                    """))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.paymentMethod").value("Cash"))
+            .andExpect(jsonPath("$.paymentStatus").value("PENDING"))
+            .andReturn();
+
+        JsonNode bookingResponse = objectMapper.readTree(bookingResult.getResponse().getContentAsString());
+        long bookingId = bookingResponse.get("id").asLong();
+
+        mockMvc.perform(post("/api/bookings/" + bookingId + "/cancel")
+                .header("Authorization", "Bearer " + token))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.bookingStatus").value("CANCELLED"))
+            .andExpect(jsonPath("$.paymentStatus").value("CANCELLED"));
+    }
+
     private String registerUserAndGetToken() throws Exception {
         MvcResult result = mockMvc.perform(post("/api/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)

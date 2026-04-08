@@ -123,7 +123,15 @@ function PaymentPage() {
         })
       });
 
-      navigate(`/booking/tickets/${data.id}?payment=success`);
+      let paymentState = "pending";
+
+      if (data.paymentStatus === "PAID") {
+        paymentState = "success";
+      } else if (data.paymentStatus === "FREE") {
+        paymentState = "free";
+      }
+
+      navigate(`/booking/tickets/${data.id}?payment=${paymentState}`);
     } catch (requestError) {
       setError(requestError.message);
       setIsSaving(false);
