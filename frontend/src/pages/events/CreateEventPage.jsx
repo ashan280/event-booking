@@ -6,6 +6,8 @@ import { apiRequest } from "../../lib/api";
 import { getAuth, isAdmin } from "../../lib/auth";
 
 const categoryOptions = ["Music", "Business", "Food & Drink", "Workshops", "Sports"];
+const defaultEventImage = "/images/concert.png";
+const maxImageSize = 2 * 1024 * 1024;
 
 function CreateEventPage() {
   const navigate = useNavigate();
@@ -21,10 +23,11 @@ function CreateEventPage() {
     shortDescription: "",
     description: "",
     availableSeats: "50",
-    imageUrl: "/images/concert.png"
+    imageUrl: defaultEventImage
   });
   const [error, setError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [selectedImageName, setSelectedImageName] = useState("");
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -32,6 +35,45 @@ function CreateEventPage() {
       ...current,
       [name]: value
     }));
+  }
+
+  function handleImageChange(event) {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      setError("Choose an image file");
+      event.target.value = "";
+      return;
+    }
+
+    if (file.size > maxImageSize) {
+      setError("Image must be under 2 MB");
+      event.target.value = "";
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        setFormData((current) => ({
+          ...current,
+          imageUrl: reader.result
+        }));
+        setSelectedImageName(file.name);
+        setError("");
+      }
+    };
+
+    reader.onerror = () => {
+      setError("Could not read the image");
+    };
+
+    reader.readAsDataURL(file);
   }
 
   function validateForm() {
@@ -212,14 +254,16 @@ function CreateEventPage() {
               />
             </label>
             <label className="event-form-full">
-              Image URL
+              Event image
               <input
-                name="imageUrl"
-                placeholder="Ex: /images/music.png"
-                value={formData.imageUrl}
-                onChange={handleChange}
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
               />
-              <span className="field-note">Use paths like /images/music.png, /images/business.png, etc.</span>
+              <span className="field-note">Choose an image from your computer. Use a file under 2 MB.</span>
+              {selectedImageName ? (
+                <span className="field-note">Selected: {selectedImageName}</span>
+              ) : null}
             </label>
             <label className="event-form-full">
               Short description

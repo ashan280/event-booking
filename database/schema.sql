@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS events (
     short_description VARCHAR(120) NOT NULL,
     description VARCHAR(500) NOT NULL,
     available_seats INT NOT NULL,
-    image_url VARCHAR(255) DEFAULT '/images/concert.png'
+    image_url LONGTEXT
 );
 
 CREATE TABLE IF NOT EXISTS bookings (
@@ -46,8 +46,10 @@ CREATE TABLE IF NOT EXISTS bookings (
 CREATE TABLE IF NOT EXISTS reviews (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     user_id BIGINT NOT NULL,
+    event_id BIGINT NOT NULL,
     rating INT NOT NULL,
     comment VARCHAR(500) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (event_id) REFERENCES events(id)
 );

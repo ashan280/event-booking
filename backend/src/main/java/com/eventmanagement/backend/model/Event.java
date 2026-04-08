@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -49,6 +50,7 @@ public class Event {
     @Column(name = "available_seats", nullable = false)
     private Integer availableSeats;
 
-    @Column(name = "image_url", length = 255)
+    @Lob
+    @Column(name = "image_url")
     private String imageUrl;
 }
