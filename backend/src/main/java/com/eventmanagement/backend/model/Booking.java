@@ -36,11 +36,23 @@ public class Booking {
     @Column(name = "seat_count", nullable = false)
     private Integer seatCount;
 
+    @Column(name = "seat_labels", nullable = false, length = 300)
+    private String seatLabels;
+
     @Column(name = "total_amount", nullable = false, precision = 10, scale = 2)
     private BigDecimal totalAmount;
 
     @Column(name = "booking_status", nullable = false)
     private String bookingStatus;
+
+    @Column(name = "payment_method", nullable = false)
+    private String paymentMethod;
+
+    @Column(name = "payment_status", nullable = false)
+    private String paymentStatus;
+
+    @Column(name = "ticket_code", nullable = false, unique = true)
+    private String ticketCode;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

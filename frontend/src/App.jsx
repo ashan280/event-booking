@@ -1,9 +1,13 @@
 import { Route, Routes } from "react-router-dom";
 import GuestRoute from "./components/GuestRoute";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminBookingReportPage from "./pages/admin/AdminBookingReportPage";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
 import BookingHistoryPage from "./pages/booking/BookingHistoryPage";
 import BookingPage from "./pages/booking/BookingPage";
+import BookingSummaryPage from "./pages/booking/BookingSummaryPage";
+import PaymentPage from "./pages/booking/PaymentPage";
+import TicketPage from "./pages/booking/TicketPage";
 import HomePage from "./pages/HomePage";
 import AuthHomePage from "./pages/auth/AuthHomePage";
 import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
@@ -125,10 +129,42 @@ function App() {
         }
       />
       <Route
+        path="/booking/:eventId/summary"
+        element={
+          <ProtectedRoute>
+            <BookingSummaryPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/booking/:eventId/payment"
+        element={
+          <ProtectedRoute>
+            <PaymentPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/booking/tickets/:bookingId"
+        element={
+          <ProtectedRoute>
+            <TicketPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/admin"
         element={
           <ProtectedRoute>
             <AdminDashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/reports"
+        element={
+          <ProtectedRoute>
+            <AdminBookingReportPage />
           </ProtectedRoute>
         }
       />
