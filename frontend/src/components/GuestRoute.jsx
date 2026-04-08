@@ -5,7 +5,7 @@ function GuestRoute({ children }) {
   const auth = getAuth();
 
   if (auth?.token) {
-    return <Navigate to="/auth/profile" replace />;
+    return <Navigate to="/auth" replace />;
   }
 
   return children;

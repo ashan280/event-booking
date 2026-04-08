@@ -33,7 +33,7 @@ function LoginPage() {
       });
 
       saveAuth(data);
-      navigate("/auth/profile");
+      navigate("/auth");
     } catch (requestError) {
       setError(requestError.message);
     } finally {

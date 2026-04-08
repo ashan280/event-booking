@@ -1,86 +1,92 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PublicSiteHeader from "../../components/PublicSiteHeader";
 import PageIntro from "../../components/PageIntro";
-import { getAuth, isAdmin } from "../../lib/auth";
+import { clearAuth, getAuth, isAdmin } from "../../lib/auth";
 
-const authActions = [
+const guestActions = [
   {
     title: "Login",
-    description: "Sign in with email and password.",
+    description: "Sign in with your email and password.",
     path: "/auth/login"
   },
   {
     title: "Register",
-    description: "Create a new account.",
+    description: "Create a new account for bookings and tickets.",
     path: "/auth/register"
   },
   {
     title: "Forgot Password",
-    description: "Recover access to your account.",
+    description: "Recover access if you forgot your password.",
     path: "/auth/forgot-password"
   },
   {
-    title: "Reset Password",
-    description: "Set a new password.",
-    path: "/auth/reset-password"
+    title: "Events",
+    description: "Browse events, venues, and booking options.",
+    path: "/events"
+  }
+];
+
+const signedInActions = [
+  {
+    title: "My Bookings",
+    description: "Open your booking history, tickets, and payment details.",
+    path: "/booking"
   },
   {
-    title: "Profile",
-    description: "View your account details.",
-    path: "/auth/profile"
+    title: "Events",
+    description: "Browse events, event details, and reviews.",
+    path: "/events"
   },
   {
-    title: "Reviews",
-    description: "Add and read reviews.",
-    path: "/auth/reviews"
+    title: "Venues",
+    description: "Check venues before you book your next event.",
+    path: "/venues"
   }
 ];
 
 function AuthHomePage() {
+  const navigate = useNavigate();
   const auth = getAuth();
-  const actions = [...authActions];
+  const signedIn = Boolean(auth?.token);
+  const adminUser = isAdmin(auth);
+  const actions = signedIn ? [...signedInActions] : [...guestActions];
   const sideCards = [
     {
       tag: "Latest",
       title: "Latest events",
-      text: "Open the event list and check new dates, venues, and prices.",
+      text: "See new events, dates, venues, and prices.",
       path: "/events",
       label: "View events"
     },
     {
-      tag: auth?.token ? "Bookings" : "Account",
-      title: auth?.token ? "My bookings" : "Create account",
-      text: auth?.token
-        ? "Open your bookings to check tickets and old event details."
-        : "Create an account if you want to save bookings and tickets.",
-      path: auth?.token ? "/booking" : "/auth/register",
-      label: auth?.token ? "Open bookings" : "Register"
+      tag: adminUser ? "Admin" : "Venues",
+      title: adminUser ? "Admin dashboard" : "Venue pages",
+      text: adminUser
+        ? "Manage events and check booking reports here."
+        : "Open venue pages before you choose your next event.",
+      path: adminUser ? "/admin" : "/venues",
+      label: adminUser ? "Open admin" : "View venues"
     },
     {
-      tag: isAdmin(auth) ? "Admin" : "Venues",
-      title: isAdmin(auth) ? "Admin dashboard" : "Venue pages",
-      text: isAdmin(auth)
-        ? "Admins can manage events and check booking reports here."
-        : "Check venue pages before you choose the next event.",
-      path: isAdmin(auth) ? "/admin" : "/venues",
-      label: isAdmin(auth) ? "Open admin" : "View venues"
+      tag: "Reviews",
+      title: "Event reviews",
+      text: "Read event feedback or post your own review from an event page.",
+      path: "/events",
+      label: "Open events"
     }
   ];
 
-  if (auth?.token) {
+  if (adminUser) {
     actions.push({
-      title: "My Bookings",
-      description: "Check the events you booked.",
-      path: "/booking"
+      title: "Admin Dashboard",
+      description: "Manage events and open booking reports.",
+      path: "/admin"
     });
   }
 
-  if (isAdmin(auth)) {
-    actions.push({
-      title: "Admin Dashboard",
-      description: "Check admin pages.",
-      path: "/admin"
-    });
+  function handleLogout() {
+    clearAuth();
+    navigate("/auth/login");
   }
 
   return (
@@ -90,8 +96,8 @@ function AuthHomePage() {
 
         <PageIntro
           eyebrow="Account"
-          title="Your account page."
-          description="Sign in, check your profile, open your bookings, and go to admin pages if you are an admin."
+          title="Account and access"
+          description="Use this page to sign in, check your account details, open bookings, and reach admin tools when available."
           actions={(
             <>
               <Link className="ghost-link" to="/">
@@ -113,24 +119,24 @@ function AuthHomePage() {
           <div className="account-stat-grid">
             <article className="account-stat-card">
               <p>Access</p>
-              <strong>Login and register</strong>
+              <strong>{signedIn ? "Account ready" : "Login and register"}</strong>
             </article>
             <article className="account-stat-card">
-              <p>Pages</p>
-              <strong>{actions.length} screens</strong>
+              <p>Shortcuts</p>
+              <strong>{actions.length} pages</strong>
             </article>
             <article className="account-stat-card">
               <p>Status</p>
-              <strong>{auth?.token ? "Signed in" : "Open"}</strong>
+              <strong>{signedIn ? "Signed in" : "Guest"}</strong>
             </article>
           </div>
         </PageIntro>
 
         <section className="account-home-grid">
-          <section className="simple-panel">
+          <section className="simple-panel account-pages-panel">
             <div className="section-head">
               <p className="section-tag">Pages</p>
-              <h2>Account pages</h2>
+              <h2>{signedIn ? "Quick links" : "Account pages"}</h2>
             </div>
 
             <div className="account-action-grid">
@@ -148,16 +154,30 @@ function AuthHomePage() {
           </section>
 
           <div className="account-home-side">
-            <section className="simple-panel">
+            <section className="simple-panel account-user-panel">
               <div className="section-head">
                 <p className="section-tag">User</p>
-                <h2>{auth?.fullName ? auth.fullName : "Welcome"}</h2>
+              <h2>{signedIn ? "Account overview" : "Guest access"}</h2>
               </div>
 
               {auth?.fullName ? (
                 <div className="account-note-stack">
-                  <p className="account-note-text">{auth.email}</p>
+                  <div className="account-user-hero">
+                    <div>
+                      <h3>{auth.fullName}</h3>
+                      <p className="account-note-text">{auth.email}</p>
+                    </div>
+                    <span className="account-badge">{auth.role}</span>
+                  </div>
                   <div className="detail-grid">
+                    <article className="detail-card">
+                      <span className="profile-summary-label">Name</span>
+                      <strong>{auth.fullName}</strong>
+                    </article>
+                    <article className="detail-card detail-card-wide">
+                      <span className="profile-summary-label">Email</span>
+                      <strong>{auth.email}</strong>
+                    </article>
                     <article className="detail-card">
                       <span className="profile-summary-label">Role</span>
                       <strong>{auth.role}</strong>
@@ -166,24 +186,32 @@ function AuthHomePage() {
                       <span className="profile-summary-label">Status</span>
                       <strong>Signed in</strong>
                     </article>
-                    <article className="detail-card">
+                    <article className="detail-card detail-card-wide">
                       <span className="profile-summary-label">Bookings</span>
-                      <strong>{auth?.token ? "Open now" : "Sign in first"}</strong>
+                      <strong>{signedIn ? "Booking pages ready" : "Sign in first"}</strong>
                     </article>
                   </div>
                   <div className="auth-link-list">
-                    <Link className="primary-link" to="/auth/profile">
-                      Profile
-                    </Link>
-                    <Link className="ghost-link" to="/booking">
+                    <Link className="primary-link" to="/booking">
                       My bookings
                     </Link>
+                    {isAdmin(auth) ? (
+                      <Link className="ghost-link" to="/admin">
+                        Admin dashboard
+                      </Link>
+                    ) : null}
+                    <Link className="ghost-link" to="/events">
+                      Events
+                    </Link>
+                    <button className="ghost-link" onClick={handleLogout} type="button">
+                      Sign out
+                    </button>
                   </div>
                 </div>
               ) : (
                 <div className="account-note-stack">
                   <p className="account-note-text">
-                    No user is signed in right now. Login and register are open. Profile and reviews need sign in.
+                    No user is signed in right now. Login and register are open. Bookings and event reviews need sign in.
                   </p>
                   <div className="auth-link-list">
                     <Link className="ghost-link" to="/auth/login">
@@ -197,30 +225,7 @@ function AuthHomePage() {
               )}
             </section>
 
-            <section className="simple-panel">
-              <div className="section-head">
-                <p className="section-tag">Useful</p>
-                <h2>Events and bookings</h2>
-              </div>
-
-              <div className="auth-side-card-grid">
-                {sideCards.map((item) => (
-                  <article className="auth-side-card" key={item.title}>
-                    <p className="section-tag">{item.tag}</p>
-                    <h3>{item.title}</h3>
-                    <p>{item.text}</p>
-                    <Link className="ghost-link" to={item.path}>
-                      {item.label}
-                    </Link>
-                  </article>
-                ))}
-              </div>
-
-              <div className="booking-note-box">
-                <strong>Quick tip</strong>
-                <p>After login, open your profile or bookings page first before you continue with event booking.</p>
-              </div>
-            </section>
+            
           </div>
         </section>
       </div>

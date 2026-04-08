@@ -61,19 +61,6 @@ User:
 
 - create a new account from the register page
 
-## Environment Variables
-
-Frontend:
-
-- `VITE_API_URL`
-
-Backend:
-
-- `FRONTEND_URL`
-- `APP_JWT_SECRET`
-- `DB_URL`
-- `DB_USERNAME`
-- `DB_PASSWORD`
 
 ## Security
 
@@ -82,10 +69,3 @@ Backend:
 - booking pages need login
 - admin pages need admin role
 
-## Branches
-
-- `main`
-- `dev`
-- `feature/ashan-auth-user`
-- `feature/vinuri-event-venue`
-- `feature/nimesha-booking-payment`

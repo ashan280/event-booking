@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import AdminRoute from "./components/AdminRoute";
 import GuestRoute from "./components/GuestRoute";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -15,8 +15,6 @@ import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
-import ProfilePage from "./pages/auth/ProfilePage";
-import ReviewPage from "./pages/auth/ReviewPage";
 import CreateEventPage from "./pages/events/CreateEventPage";
 import EditEventPage from "./pages/events/EditEventPage";
 import EventDetailsPage from "./pages/events/EventDetailsPage";
@@ -69,7 +67,7 @@ function App() {
         path="/auth/profile"
         element={
           <ProtectedRoute>
-            <ProfilePage />
+            <Navigate to="/auth" replace />
           </ProtectedRoute>
         }
       />
@@ -77,7 +75,7 @@ function App() {
         path="/auth/reviews"
         element={
           <ProtectedRoute>
-            <ReviewPage />
+            <Navigate to="/events" replace />
           </ProtectedRoute>
         }
       />

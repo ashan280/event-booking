@@ -23,7 +23,7 @@ function PublicSiteHeader() {
         {isAdmin(auth) ? (
           <Link to="/admin">Admin</Link>
         ) : null}
-        <Link className="nav-cta" to={isLoggedIn(auth) ? "/auth/profile" : "/auth/login"}>
+        <Link className="nav-cta" to={isLoggedIn(auth) ? "/auth" : "/auth/login"}>
           {isLoggedIn(auth) ? "My account" : "Sign in"}
         </Link>
       </nav>
