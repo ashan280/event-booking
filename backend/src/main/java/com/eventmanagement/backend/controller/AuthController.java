@@ -1,9 +1,9 @@
 package com.eventmanagement.backend.controller;
 
-import com.eventmanagement.backend.dto.LoginRequest;
-import com.eventmanagement.backend.dto.RegisterRequest;
+import com.eventmanagement.backend.dto.AuthDto;
 import com.eventmanagement.backend.service.AuthService;
-import java.util.Map;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,17 +19,27 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public Map<String, String> login(@RequestBody LoginRequest request) {
+    public AuthDto.AuthResponse login(@Valid @RequestBody AuthDto.LoginRequest request) {
         return authService.login(request);
     }
 
     @PostMapping("/register")
-    public Map<String, String> register(@RequestBody RegisterRequest request) {
+    public AuthDto.AuthResponse register(@Valid @RequestBody AuthDto.RegisterRequest request) {
         return authService.register(request);
     }
 
+    @PostMapping("/forgot-password")
+    public AuthDto.ForgotPasswordResponse forgotPassword(@Valid @RequestBody AuthDto.ForgotPasswordRequest request) {
+        return authService.forgotPassword(request);
+    }
+
+    @PostMapping("/reset-password")
+    public AuthDto.MessageResponse resetPassword(@Valid @RequestBody AuthDto.ResetPasswordRequest request) {
+        return authService.resetPassword(request);
+    }
+
     @GetMapping("/profile")
-    public Map<String, String> profile() {
-        return authService.profile();
+    public AuthDto.AuthResponse profile(HttpServletRequest request) {
+        return authService.profile(request);
     }
 }

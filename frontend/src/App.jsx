@@ -1,65 +1,170 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
+import AdminRoute from "./components/AdminRoute";
+import GuestRoute from "./components/GuestRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
+import AdminBookingReportPage from "./pages/admin/AdminBookingReportPage";
+import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
+import BookingHistoryPage from "./pages/booking/BookingHistoryPage";
+import BookingPage from "./pages/booking/BookingPage";
+import BookingSummaryPage from "./pages/booking/BookingSummaryPage";
+import PaymentPage from "./pages/booking/PaymentPage";
+import TicketPage from "./pages/booking/TicketPage";
 import HomePage from "./pages/HomePage";
 import AuthHomePage from "./pages/auth/AuthHomePage";
+import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
-import ProfilePage from "./pages/auth/ProfilePage";
+import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
+import CreateEventPage from "./pages/events/CreateEventPage";
+import EditEventPage from "./pages/events/EditEventPage";
+import EventDetailsPage from "./pages/events/EventDetailsPage";
+import EventsPage from "./pages/events/EventsPage";
+import VenueDetailsPage from "./pages/events/VenueDetailsPage";
+import VenuesPage from "./pages/events/VenuesPage";
 import PlaceholderPage from "./pages/PlaceholderPage";
-
-const modules = [
-  {
-    title: "Member 1",
-    path: "/auth",
-    description: "Authentication, user management, reviews"
-  },
-  {
-    title: "Member 2",
-    path: "/events",
-    description: "Events, categories, venues, search"
-  },
-  {
-    title: "Member 3",
-    path: "/booking",
-    description: "Booking, seats, payments, tickets, reports"
-  }
-];
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<HomePage modules={modules} />} />
+      <Route path="/" element={<HomePage />} />
       <Route
         path="/auth"
         element={<AuthHomePage />}
       />
       <Route
         path="/auth/login"
-        element={<LoginPage />}
+        element={
+          <GuestRoute>
+            <LoginPage />
+          </GuestRoute>
+        }
+      />
+      <Route
+        path="/auth/forgot-password"
+        element={
+          <GuestRoute>
+            <ForgotPasswordPage />
+          </GuestRoute>
+        }
+      />
+      <Route
+        path="/auth/reset-password"
+        element={
+          <GuestRoute>
+            <ResetPasswordPage />
+          </GuestRoute>
+        }
       />
       <Route
         path="/auth/register"
-        element={<RegisterPage />}
+        element={
+          <GuestRoute>
+            <RegisterPage />
+          </GuestRoute>
+        }
       />
       <Route
         path="/auth/profile"
-        element={<ProfilePage />}
+        element={
+          <ProtectedRoute>
+            <Navigate to="/auth" replace />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/auth/reviews"
+        element={
+          <ProtectedRoute>
+            <Navigate to="/events" replace />
+          </ProtectedRoute>
+        }
       />
       <Route
         path="/events"
+        element={<EventsPage />}
+      />
+      <Route
+        path="/events/create"
         element={
-          <PlaceholderPage
-            title="Events Module"
-            description="Base route reserved for Member 2."
-          />
+          <AdminRoute>
+            <CreateEventPage />
+          </AdminRoute>
         }
+      />
+      <Route
+        path="/events/:eventId/edit"
+        element={
+          <AdminRoute>
+            <EditEventPage />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/events/:eventId"
+        element={<EventDetailsPage />}
+      />
+      <Route
+        path="/venues"
+        element={<VenuesPage />}
+      />
+      <Route
+        path="/venues/:city/:venueName"
+        element={<VenueDetailsPage />}
       />
       <Route
         path="/booking"
         element={
-          <PlaceholderPage
-            title="Booking Module"
-            description="Base route reserved for Member 3."
-          />
+          <ProtectedRoute>
+            <BookingHistoryPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/booking/:eventId"
+        element={
+          <ProtectedRoute>
+            <BookingPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/booking/:eventId/summary"
+        element={
+          <ProtectedRoute>
+            <BookingSummaryPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/booking/:eventId/payment"
+        element={
+          <ProtectedRoute>
+            <PaymentPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/booking/tickets/:bookingId"
+        element={
+          <ProtectedRoute>
+            <TicketPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin"
+        element={
+          <AdminRoute>
+            <AdminDashboardPage />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/admin/reports"
+        element={
+          <AdminRoute>
+            <AdminBookingReportPage />
+          </AdminRoute>
         }
       />
       <Route
