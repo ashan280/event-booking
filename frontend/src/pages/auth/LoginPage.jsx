@@ -46,13 +46,25 @@ function LoginPage() {
       eyebrow="Login"
       title="Sign in."
       description="Use your email and password to open your account."
-      sideTitle="Login"
-      sideText="Use your email and password."
+      sideTitle="Events"
+      sideText="Sign in and start using the event pages."
       sideItems={[
-        "Enter your email and password.",
-        "Open your profile after login.",
-        "Open other account pages after sign in."
+        {
+          tag: "Latest",
+          title: "Latest events",
+          text: "Open the event list and check new events, dates, and venues.",
+          link: "/events",
+          label: "View events"
+        },
+        {
+          tag: "Venues",
+          title: "Event places",
+          text: "Check venue pages before you book your seats.",
+          link: "/venues",
+          label: "View venues"
+        }
       ]}
+      sideNote="Sign in first if you want to book events, open tickets, and check booking history later."
     >
       <form className="auth-form" onSubmit={handleSubmit}>
         <label htmlFor="login-email">

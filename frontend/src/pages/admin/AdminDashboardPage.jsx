@@ -106,19 +106,19 @@ function AdminDashboardPage() {
         {dashboard ? (
           <>
             <section className="admin-summary-grid">
-              <article className="simple-panel compact-panel">
+              <article className="simple-panel compact-panel admin-stat-card">
                 <p className="section-tag">Users</p>
                 <h2 className="panel-title">{dashboard.totalUsers}</h2>
               </article>
-              <article className="simple-panel compact-panel">
+              <article className="simple-panel compact-panel admin-stat-card">
                 <p className="section-tag">Events</p>
                 <h2 className="panel-title">{dashboard.totalEvents}</h2>
               </article>
-              <article className="simple-panel compact-panel">
+              <article className="simple-panel compact-panel admin-stat-card">
                 <p className="section-tag">Bookings</p>
                 <h2 className="panel-title">{dashboard.totalBookings}</h2>
               </article>
-              <article className="simple-panel compact-panel">
+              <article className="simple-panel compact-panel admin-stat-card">
                 <p className="section-tag">Venues</p>
                 <h2 className="panel-title">{dashboard.totalVenues}</h2>
               </article>
@@ -134,10 +134,36 @@ function AdminDashboardPage() {
                 <div className="booking-history-grid">
                   {dashboard.recentBookings.map((booking) => (
                     <article className="booking-history-card admin-booking-card" key={booking.id}>
-                      <h3>{booking.eventTitle}</h3>
-                      <p>{booking.city} | {booking.venue}</p>
-                      <p>Seats: {booking.seatCount}</p>
-                      <p>Total: {formatAmount(booking.totalAmount)}</p>
+                      <div className="booking-history-hero">
+                        <img
+                          className="booking-history-photo"
+                          src={booking.eventImageUrl || "/images/concert.png"}
+                          alt={booking.eventTitle}
+                        />
+                        <div className="booking-history-copy">
+                          <p className="section-tag">{booking.bookingStatus}</p>
+                          <h3>{booking.eventTitle}</h3>
+                          <p>{booking.city} | {booking.venue}</p>
+                        </div>
+                      </div>
+                      <div className="booking-detail-grid admin-booking-detail-grid">
+                        <article className="booking-detail-card">
+                          <span className="booking-detail-label">Seats</span>
+                          <strong className="booking-detail-value">{booking.seatCount}</strong>
+                        </article>
+                        <article className="booking-detail-card">
+                          <span className="booking-detail-label">Payment</span>
+                          <strong className="booking-detail-value">{booking.paymentStatus}</strong>
+                        </article>
+                        <article className="booking-detail-card">
+                          <span className="booking-detail-label">Total</span>
+                          <strong className="booking-detail-value">{formatAmount(booking.totalAmount)}</strong>
+                        </article>
+                        <article className="booking-detail-card">
+                          <span className="booking-detail-label">Ticket</span>
+                          <strong className="booking-detail-value">{booking.ticketCode}</strong>
+                        </article>
+                      </div>
                       <Link className="ghost-link" to={`/events/${booking.eventId}`}>
                         Open event
                       </Link>

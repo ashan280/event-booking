@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
+import BookingFlowSteps from "../../components/BookingFlowSteps";
 import PageIntro from "../../components/PageIntro";
 import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
@@ -12,11 +13,23 @@ function formatAmount(value) {
   }).format(value || 0);
 }
 
+function formatDateTime(value) {
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return date.toLocaleString();
+}
+
 function TicketPage() {
   const { bookingId } = useParams();
+  const [searchParams] = useSearchParams();
   const [booking, setBooking] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const showSuccess = searchParams.get("payment") === "success";
 
   useEffect(() => {
     async function loadTicket() {
@@ -64,7 +77,9 @@ function TicketPage() {
               </button>
             </>
           )}
-        />
+        >
+          <BookingFlowSteps current="Ticket" />
+        </PageIntro>
 
         {isLoading ? (
           <section className="simple-panel">
@@ -77,31 +92,84 @@ function TicketPage() {
         {booking ? (
           <section className="ticket-layout">
             <article className="simple-panel">
-              <p className="section-tag">Ticket code</p>
-              <h2 className="panel-title">{booking.ticketCode}</h2>
-              <div className="booking-info-grid">
-                <p><strong>Event:</strong> {booking.eventTitle}</p>
-                <p><strong>Date:</strong> {booking.eventDate}</p>
-                <p><strong>Time:</strong> {booking.eventTime}</p>
-                <p><strong>Venue:</strong> {booking.venue}</p>
-                <p><strong>City:</strong> {booking.city}</p>
-                <p><strong>Seats:</strong> {booking.seatCount}</p>
-                <p><strong>Seat numbers:</strong> {booking.seatLabels.join(", ")}</p>
+              {showSuccess ? (
+                <div className="booking-success-banner">
+                  <strong>Payment successful</strong>
+                  <p>Your booking is confirmed and your ticket is ready.</p>
+                </div>
+              ) : null}
+
+              <div className="booking-event-hero booking-event-hero-compact">
+                <img
+                  className="booking-event-photo"
+                  src={booking.eventImageUrl || "/images/concert.png"}
+                  alt={booking.eventTitle}
+                />
+                <div className="booking-event-copy">
+                  <p className="section-tag">Ticket code</p>
+                  <h2 className="panel-title">{booking.ticketCode}</h2>
+                  <p className="booking-event-text">{booking.eventTitle}</p>
+                </div>
+              </div>
+
+              <div className="booking-detail-grid">
+                <article className="booking-detail-card">
+                  <span className="booking-detail-label">Date</span>
+                  <strong className="booking-detail-value">{booking.eventDate}</strong>
+                </article>
+                <article className="booking-detail-card">
+                  <span className="booking-detail-label">Time</span>
+                  <strong className="booking-detail-value">{booking.eventTime}</strong>
+                </article>
+                <article className="booking-detail-card">
+                  <span className="booking-detail-label">Venue</span>
+                  <strong className="booking-detail-value">{booking.venue}</strong>
+                </article>
+                <article className="booking-detail-card">
+                  <span className="booking-detail-label">City</span>
+                  <strong className="booking-detail-value">{booking.city}</strong>
+                </article>
+                <article className="booking-detail-card">
+                  <span className="booking-detail-label">Seats</span>
+                  <strong className="booking-detail-value">{booking.seatCount}</strong>
+                </article>
+                <article className="booking-detail-card booking-detail-card-wide">
+                  <span className="booking-detail-label">Seat numbers</span>
+                  <strong className="booking-detail-value">{booking.seatLabels.join(", ")}</strong>
+                </article>
               </div>
             </article>
 
             <article className="simple-panel">
               <p className="section-tag">Payment</p>
               <h2 className="panel-title">Booking summary</h2>
-              <div className="booking-info-grid">
-                <p><strong>Status:</strong> {booking.bookingStatus}</p>
-                <p><strong>Payment:</strong> {booking.paymentStatus}</p>
-                <p><strong>Method:</strong> {booking.paymentMethod}</p>
+              <div className="booking-detail-grid">
+                <article className="booking-detail-card">
+                  <span className="booking-detail-label">Status</span>
+                  <strong className="booking-detail-value">{booking.bookingStatus}</strong>
+                </article>
+                <article className="booking-detail-card">
+                  <span className="booking-detail-label">Payment</span>
+                  <strong className="booking-detail-value">{booking.paymentStatus}</strong>
+                </article>
+                <article className="booking-detail-card">
+                  <span className="booking-detail-label">Method</span>
+                  <strong className="booking-detail-value">{booking.paymentMethod}</strong>
+                </article>
+                <article className="booking-detail-card">
+                  <span className="booking-detail-label">Booked at</span>
+                  <strong className="booking-detail-value">{formatDateTime(booking.createdAt)}</strong>
+                </article>
               </div>
 
               <div className="booking-total-box">
                 <p>Total paid</p>
                 <strong>{formatAmount(booking.totalAmount)}</strong>
+              </div>
+
+              <div className="booking-note-box">
+                <strong>Keep this ticket</strong>
+                <p>You can reopen it later from the booking history page.</p>
               </div>
             </article>
           </section>

@@ -100,8 +100,15 @@ function BookingHistoryPage() {
         {error ? <p className="error-text">{error}</p> : null}
 
         {!isLoading && !bookings.length ? (
-          <section className="simple-panel">
+          <section className="simple-panel empty-state-panel">
+            <p className="section-tag">No bookings</p>
+            <h2>Start with your first event.</h2>
             <p>You have no bookings yet. Open the event list and book your first event.</p>
+            <div className="auth-link-list">
+              <Link className="primary-link" to="/events">
+                Browse events
+              </Link>
+            </div>
           </section>
         ) : null}
 
@@ -109,8 +116,17 @@ function BookingHistoryPage() {
           <section className="booking-history-grid">
             {bookings.map((booking) => (
               <article className="simple-panel booking-history-card" key={booking.id}>
-                <p className="section-tag">{booking.bookingStatus}</p>
-                <h2 className="panel-title">{booking.eventTitle}</h2>
+                <div className="booking-history-hero">
+                  <img
+                    className="booking-history-photo"
+                    src={booking.eventImageUrl || "/images/concert.png"}
+                    alt={booking.eventTitle}
+                  />
+                  <div className="booking-history-copy">
+                    <p className="section-tag">{booking.bookingStatus}</p>
+                    <h2 className="panel-title">{booking.eventTitle}</h2>
+                  </div>
+                </div>
                 <div className="booking-info-grid">
                   <p><strong>Date:</strong> {booking.eventDate}</p>
                   <p><strong>Time:</strong> {booking.eventTime}</p>

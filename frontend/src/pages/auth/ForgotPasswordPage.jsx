@@ -43,13 +43,25 @@ function ForgotPasswordPage() {
       eyebrow="Forgot password"
       title="Reset your password."
       description="Enter your email and go to the next step."
-      sideTitle="Reset"
-      sideText="Start the password reset."
+      sideTitle="Account help"
+      sideText="Recover your account and return to event booking."
       sideItems={[
-        "Enter the email linked to your account.",
-        "Use the reset token.",
-        "Set a new password on the next page."
+        {
+          tag: "Account",
+          title: "Keep bookings safe",
+          text: "Recover your account if you need to open old bookings and tickets.",
+          link: "/auth/login",
+          label: "Back to sign in"
+        },
+        {
+          tag: "Events",
+          title: "Return to events",
+          text: "After reset, you can go back to the events page and continue booking.",
+          link: "/events",
+          label: "View events"
+        }
       ]}
+      sideNote="This step helps you get back into your account so you can continue booking events and opening your tickets."
     >
       <form className="auth-form" onSubmit={handleSubmit}>
         <label htmlFor="forgot-email">

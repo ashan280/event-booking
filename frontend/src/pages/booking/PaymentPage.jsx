@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import BookingFlowSteps from "../../components/BookingFlowSteps";
 import PageIntro from "../../components/PageIntro";
 import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
@@ -51,6 +52,10 @@ function PaymentPage() {
   const [searchParams] = useSearchParams();
   const [event, setEvent] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("Card");
+  const [cardName, setCardName] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
+  const [expiryDate, setExpiryDate] = useState("");
+  const [cvv, setCvv] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
@@ -98,6 +103,14 @@ function PaymentPage() {
       return;
     }
 
+    if (paymentMethod === "Card") {
+      if (!cardName.trim() || !cardNumber.trim() || !expiryDate.trim() || !cvv.trim()) {
+        setError("Fill in the card details.");
+        setIsSaving(false);
+        return;
+      }
+    }
+
     try {
       const data = await apiRequest("/api/bookings", {
         method: "POST",
@@ -110,7 +123,7 @@ function PaymentPage() {
         })
       });
 
-      navigate(`/booking/tickets/${data.id}`);
+      navigate(`/booking/tickets/${data.id}?payment=success`);
     } catch (requestError) {
       setError(requestError.message);
       setIsSaving(false);
@@ -136,7 +149,9 @@ function PaymentPage() {
               </Link>
             </>
           )}
-        />
+        >
+          <BookingFlowSteps current="Payment" />
+        </PageIntro>
 
         {isLoading ? (
           <section className="simple-panel">
@@ -149,16 +164,47 @@ function PaymentPage() {
         {event ? (
           <section className="ticket-layout">
             <article className="simple-panel">
-              <p className="section-tag">Summary</p>
-              <h2 className="panel-title">{event.title}</h2>
-              <div className="booking-info-grid">
-                <p><strong>Date:</strong> {event.date}</p>
-                <p><strong>Time:</strong> {event.time}</p>
-                <p><strong>Venue:</strong> {event.venue}</p>
-                <p><strong>City:</strong> {event.city}</p>
-                <p><strong>Seats:</strong> {seatCount}</p>
-                <p><strong>Seat numbers:</strong> {seatLabels.join(", ")}</p>
-                <p><strong>Price:</strong> {event.price}</p>
+              <div className="booking-event-hero booking-event-hero-compact">
+                <img
+                  className="booking-event-photo"
+                  src={event.imageUrl || "/images/concert.png"}
+                  alt={event.title}
+                />
+                <div className="booking-event-copy">
+                  <p className="section-tag">Summary</p>
+                  <h2 className="panel-title">{event.title}</h2>
+                  <p className="booking-event-text">{event.shortDescription}</p>
+                </div>
+              </div>
+              <div className="booking-detail-grid">
+                <article className="booking-detail-card">
+                  <span className="booking-detail-label">Date</span>
+                  <strong className="booking-detail-value">{event.date}</strong>
+                </article>
+                <article className="booking-detail-card">
+                  <span className="booking-detail-label">Time</span>
+                  <strong className="booking-detail-value">{event.time}</strong>
+                </article>
+                <article className="booking-detail-card">
+                  <span className="booking-detail-label">Venue</span>
+                  <strong className="booking-detail-value">{event.venue}</strong>
+                </article>
+                <article className="booking-detail-card">
+                  <span className="booking-detail-label">City</span>
+                  <strong className="booking-detail-value">{event.city}</strong>
+                </article>
+                <article className="booking-detail-card">
+                  <span className="booking-detail-label">Seats</span>
+                  <strong className="booking-detail-value">{seatCount}</strong>
+                </article>
+                <article className="booking-detail-card">
+                  <span className="booking-detail-label">Price</span>
+                  <strong className="booking-detail-value">{event.price}</strong>
+                </article>
+                <article className="booking-detail-card booking-detail-card-wide">
+                  <span className="booking-detail-label">Seat numbers</span>
+                  <strong className="booking-detail-value">{seatLabels.join(", ")}</strong>
+                </article>
               </div>
 
               <div className="booking-total-box">
@@ -170,17 +216,18 @@ function PaymentPage() {
             <article className="simple-panel">
               <p className="section-tag">Payment method</p>
               <h2 className="panel-title">Choose how you want to pay</h2>
+              <p className="booking-side-note">Choose a payment method and confirm your booking details here.</p>
 
               <form className="booking-form" onSubmit={handleSubmit}>
                 <div className="payment-method-list">
                   {event.price?.trim().toLowerCase() === "free" ? (
-                    <label className="payment-method-card">
-                      <input checked readOnly type="radio" />
+                    <div className="payment-free-card">
+                      <div className="payment-free-icon">OK</div>
                       <div>
                         <strong>Free event</strong>
-                        <p>No payment is needed for this booking.</p>
+                        <p>No payment is needed for this booking. You can confirm and get your ticket now.</p>
                       </div>
-                    </label>
+                    </div>
                   ) : (
                     paymentOptions.map((option) => (
                       <label className="payment-method-card" key={option}>
@@ -191,7 +238,7 @@ function PaymentPage() {
                           value={option}
                           onChange={(inputEvent) => setPaymentMethod(inputEvent.target.value)}
                         />
-                        <div>
+                        <div className="payment-method-copy">
                           <strong>{option}</strong>
                           <p>Use {option.toLowerCase()} for this booking.</p>
                         </div>
@@ -199,6 +246,61 @@ function PaymentPage() {
                     ))
                   )}
                 </div>
+
+                {paymentMethod === "Card" ? (
+                  <div className="payment-form-grid">
+                    <label>
+                      Card holder name
+                      <input
+                        type="text"
+                        placeholder="Name on card"
+                        value={cardName}
+                        onChange={(eventObject) => setCardName(eventObject.target.value)}
+                      />
+                    </label>
+                    <label className="payment-form-wide">
+                      Card number
+                      <input
+                        type="text"
+                        placeholder="1111 2222 3333 4444"
+                        value={cardNumber}
+                        onChange={(eventObject) => setCardNumber(eventObject.target.value)}
+                      />
+                    </label>
+                    <label>
+                      Expiry date
+                      <input
+                        type="text"
+                        placeholder="MM/YY"
+                        value={expiryDate}
+                        onChange={(eventObject) => setExpiryDate(eventObject.target.value)}
+                      />
+                    </label>
+                    <label>
+                      CVV
+                      <input
+                        type="text"
+                        placeholder="123"
+                        value={cvv}
+                        onChange={(eventObject) => setCvv(eventObject.target.value)}
+                      />
+                    </label>
+                  </div>
+                ) : null}
+
+                {paymentMethod === "Bank transfer" ? (
+                  <div className="booking-note-box">
+                    <strong>Bank transfer</strong>
+                    <p>Use your booking number as the payment reference after confirmation.</p>
+                  </div>
+                ) : null}
+
+                {paymentMethod === "Cash" ? (
+                  <div className="booking-note-box">
+                    <strong>Cash payment</strong>
+                    <p>Complete the booking now and pay at the venue counter before the event starts.</p>
+                  </div>
+                ) : null}
 
                 <button className="primary-link" disabled={isSaving} type="submit">
                   {isSaving ? "Saving payment..." : "Confirm payment"}

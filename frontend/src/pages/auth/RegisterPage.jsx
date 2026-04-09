@@ -47,13 +47,25 @@ function RegisterPage() {
       eyebrow="Register"
       title="Create account."
       description="Create an account and sign in."
-      sideTitle="Register"
-      sideText="Add your details and save the account."
+      sideTitle="Events"
+      sideText="Create an account and start booking events."
       sideItems={[
-        "Add your full name, email, and password.",
-        "Save the account.",
-        "Open your profile after registration."
+        {
+          tag: "Latest",
+          title: "New events",
+          text: "Check the latest events and pick what you want to book.",
+          link: "/events",
+          label: "View events"
+        },
+        {
+          tag: "Account",
+          title: "Save your tickets",
+          text: "Your account keeps your profile, bookings, and tickets together.",
+          link: "/auth/login",
+          label: "Already have an account?"
+        }
       ]}
+      sideNote="Create an account so you can book seats, open ticket pages, and return to your bookings later."
     >
       <form className="auth-form" onSubmit={handleSubmit}>
         <label htmlFor="register-name">

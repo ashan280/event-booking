@@ -222,6 +222,7 @@ public class BookingService {
             booking.getEvent().getTime(),
             booking.getEvent().getVenue(),
             booking.getEvent().getCity(),
+            booking.getEvent().getImageUrl() != null ? booking.getEvent().getImageUrl() : "/images/concert.png",
             booking.getSeatCount(),
             splitSeatLabels(booking.getSeatLabels()),
             booking.getTotalAmount(),

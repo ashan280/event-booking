@@ -39,17 +39,33 @@ const authActions = [
 function AuthHomePage() {
   const auth = getAuth();
   const actions = [...authActions];
-  const highlights = [
-    "Sign in to book events and save your booking details.",
-    "Open your profile to check your account details.",
-    "Use booking history to see your tickets and past bookings.",
-    "Use password reset if you cannot sign in.",
-    "Check events and venues before booking."
+  const sideCards = [
+    {
+      tag: "Latest",
+      title: "Latest events",
+      text: "Open the event list and check new dates, venues, and prices.",
+      path: "/events",
+      label: "View events"
+    },
+    {
+      tag: auth?.token ? "Bookings" : "Account",
+      title: auth?.token ? "My bookings" : "Create account",
+      text: auth?.token
+        ? "Open your bookings to check tickets and old event details."
+        : "Create an account if you want to save bookings and tickets.",
+      path: auth?.token ? "/booking" : "/auth/register",
+      label: auth?.token ? "Open bookings" : "Register"
+    },
+    {
+      tag: isAdmin(auth) ? "Admin" : "Venues",
+      title: isAdmin(auth) ? "Admin dashboard" : "Venue pages",
+      text: isAdmin(auth)
+        ? "Admins can manage events and check booking reports here."
+        : "Check venue pages before you choose the next event.",
+      path: isAdmin(auth) ? "/admin" : "/venues",
+      label: isAdmin(auth) ? "Open admin" : "View venues"
+    }
   ];
-
-  if (isAdmin(auth)) {
-    highlights.push("Admins can manage events and check booking reports.");
-  }
 
   if (auth?.token) {
     actions.push({
@@ -141,13 +157,28 @@ function AuthHomePage() {
               {auth?.fullName ? (
                 <div className="account-note-stack">
                   <p className="account-note-text">{auth.email}</p>
-                  <div className="detail-box">
-                    <p><strong>Role:</strong> {auth.role}</p>
-                    <p><strong>Account:</strong> Logged in</p>
+                  <div className="detail-grid">
+                    <article className="detail-card">
+                      <span className="profile-summary-label">Role</span>
+                      <strong>{auth.role}</strong>
+                    </article>
+                    <article className="detail-card">
+                      <span className="profile-summary-label">Status</span>
+                      <strong>Signed in</strong>
+                    </article>
+                    <article className="detail-card">
+                      <span className="profile-summary-label">Bookings</span>
+                      <strong>{auth?.token ? "Open now" : "Sign in first"}</strong>
+                    </article>
                   </div>
-                  <Link className="primary-link" to="/auth/profile">
-                    Profile
-                  </Link>
+                  <div className="auth-link-list">
+                    <Link className="primary-link" to="/auth/profile">
+                      Profile
+                    </Link>
+                    <Link className="ghost-link" to="/booking">
+                      My bookings
+                    </Link>
+                  </div>
                 </div>
               ) : (
                 <div className="account-note-stack">
@@ -169,16 +200,25 @@ function AuthHomePage() {
             <section className="simple-panel">
               <div className="section-head">
                 <p className="section-tag">Useful</p>
-                <h2>Account info</h2>
+                <h2>Events and bookings</h2>
               </div>
 
-              <div className="account-step-list">
-                {highlights.map((item, index) => (
-                  <div className="account-step-item" key={item}>
-                    <span>{index + 1}</span>
-                    <p>{item}</p>
-                  </div>
+              <div className="auth-side-card-grid">
+                {sideCards.map((item) => (
+                  <article className="auth-side-card" key={item.title}>
+                    <p className="section-tag">{item.tag}</p>
+                    <h3>{item.title}</h3>
+                    <p>{item.text}</p>
+                    <Link className="ghost-link" to={item.path}>
+                      {item.label}
+                    </Link>
+                  </article>
                 ))}
+              </div>
+
+              <div className="booking-note-box">
+                <strong>Quick tip</strong>
+                <p>After login, open your profile or bookings page first before you continue with event booking.</p>
               </div>
             </section>
           </div>

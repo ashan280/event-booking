@@ -49,20 +49,30 @@ function AuthPageShell({
               <h2>{sideText}</h2>
             </div>
 
-            <div className="account-side-list">
-              {sideItems.map((item, index) => (
-                <div className="account-side-item" key={item}>
-                  <span className="account-side-number">
-                    {index + 1}
-                  </span>
-                  <p>{item}</p>
-                </div>
-              ))}
+            <div className="auth-side-card-grid">
+              {sideItems.map((item, index) => {
+                const card = typeof item === "string"
+                  ? { title: `Info ${index + 1}`, text: item }
+                  : item;
+
+                return (
+                  <article className="auth-side-card" key={`${card.title}-${index}`}>
+                    {card.tag ? <p className="section-tag">{card.tag}</p> : null}
+                    <h3>{card.title}</h3>
+                    <p>{card.text}</p>
+                    {card.link && card.label ? (
+                      <Link className="ghost-link" to={card.link}>
+                        {card.label}
+                      </Link>
+                    ) : null}
+                  </article>
+                );
+              })}
             </div>
 
             <div className="account-side-note">
               <p>
-                {sideNote || "Use these pages to sign in, reset your password, and check your details."}
+                {sideNote || "Use your account to book events, save tickets, and check your booking history later."}
               </p>
             </div>
           </aside>

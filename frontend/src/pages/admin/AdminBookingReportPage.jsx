@@ -100,23 +100,23 @@ function AdminBookingReportPage() {
         {report ? (
           <>
             <section className="admin-summary-grid">
-              <article className="simple-panel compact-panel">
+              <article className="simple-panel compact-panel admin-stat-card">
                 <p className="section-tag">Total bookings</p>
                 <h2 className="panel-title">{report.totalBookings}</h2>
               </article>
-              <article className="simple-panel compact-panel">
+              <article className="simple-panel compact-panel admin-stat-card">
                 <p className="section-tag">Confirmed</p>
                 <h2 className="panel-title">{report.confirmedBookings}</h2>
               </article>
-              <article className="simple-panel compact-panel">
+              <article className="simple-panel compact-panel admin-stat-card">
                 <p className="section-tag">Cancelled</p>
                 <h2 className="panel-title">{report.cancelledBookings}</h2>
               </article>
-              <article className="simple-panel compact-panel">
+              <article className="simple-panel compact-panel admin-stat-card">
                 <p className="section-tag">Seats booked</p>
                 <h2 className="panel-title">{report.totalSeatsBooked}</h2>
               </article>
-              <article className="simple-panel compact-panel">
+              <article className="simple-panel compact-panel admin-stat-card">
                 <p className="section-tag">Revenue</p>
                 <h2 className="panel-title">{formatAmount(report.totalRevenue)}</h2>
               </article>
@@ -132,10 +132,22 @@ function AdminBookingReportPage() {
                 <div className="admin-city-grid">
                   {report.citySummaries.map((item) => (
                     <article className="admin-city-card" key={item.city}>
+                      <p className="section-tag">City</p>
                       <h3>{item.city}</h3>
-                      <p>Bookings: {item.bookingCount}</p>
-                      <p>Seats: {item.seatsBooked}</p>
-                      <p>Revenue: {formatAmount(item.revenue)}</p>
+                      <div className="booking-detail-grid admin-city-detail-grid">
+                        <article className="booking-detail-card">
+                          <span className="booking-detail-label">Bookings</span>
+                          <strong className="booking-detail-value">{item.bookingCount}</strong>
+                        </article>
+                        <article className="booking-detail-card">
+                          <span className="booking-detail-label">Seats</span>
+                          <strong className="booking-detail-value">{item.seatsBooked}</strong>
+                        </article>
+                        <article className="booking-detail-card booking-detail-card-wide">
+                          <span className="booking-detail-label">Revenue</span>
+                          <strong className="booking-detail-value">{formatAmount(item.revenue)}</strong>
+                        </article>
+                      </div>
                     </article>
                   ))}
                 </div>
@@ -152,12 +164,32 @@ function AdminBookingReportPage() {
                 <div className="booking-history-grid">
                   {report.recentBookings.map((booking) => (
                     <article className="booking-history-card admin-booking-card" key={booking.id}>
-                      <p className="section-tag">{booking.bookingStatus}</p>
-                      <h3>{booking.eventTitle}</h3>
-                      <p>{booking.city} | {booking.venue}</p>
-                      <p>Seats: {booking.seatLabels.join(", ")}</p>
-                      <p>Payment: {booking.paymentStatus}</p>
-                      <p>Total: {formatAmount(booking.totalAmount)}</p>
+                      <div className="booking-history-hero">
+                        <img
+                          className="booking-history-photo"
+                          src={booking.eventImageUrl || "/images/concert.png"}
+                          alt={booking.eventTitle}
+                        />
+                        <div className="booking-history-copy">
+                          <p className="section-tag">{booking.bookingStatus}</p>
+                          <h3>{booking.eventTitle}</h3>
+                          <p>{booking.city} | {booking.venue}</p>
+                        </div>
+                      </div>
+                      <div className="booking-detail-grid admin-booking-detail-grid">
+                        <article className="booking-detail-card booking-detail-card-wide">
+                          <span className="booking-detail-label">Seats</span>
+                          <strong className="booking-detail-value">{booking.seatLabels.join(", ")}</strong>
+                        </article>
+                        <article className="booking-detail-card">
+                          <span className="booking-detail-label">Payment</span>
+                          <strong className="booking-detail-value">{booking.paymentStatus}</strong>
+                        </article>
+                        <article className="booking-detail-card">
+                          <span className="booking-detail-label">Total</span>
+                          <strong className="booking-detail-value">{formatAmount(booking.totalAmount)}</strong>
+                        </article>
+                      </div>
                       <div className="auth-link-list">
                         <Link className="ghost-link" to={`/events/${booking.eventId}`}>
                           Open event

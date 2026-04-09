@@ -62,12 +62,23 @@ function ProfilePage() {
       eyebrow="Your Account"
       title="Your profile."
       description="Check your details and account status."
-      sideTitle="Account"
-      sideText="Important account details."
+      sideTitle="Account use"
+      sideText="Use this page before booking and ticket pages."
       sideItems={[
-        "Check your name, email, and account role.",
-        "Open booking history to see your tickets and past bookings.",
-        "Use this page before booking or admin work."
+        {
+          tag: "Bookings",
+          title: "My bookings",
+          text: "Open booking history to see your tickets and old bookings.",
+          link: "/booking",
+          label: "Open bookings"
+        },
+        {
+          tag: "Events",
+          title: "Browse events",
+          text: "Go back to the events page and choose what you want to book next.",
+          link: "/events",
+          label: "View events"
+        }
       ]}
       sideNote="This page helps you check your account before booking events, viewing tickets, or opening admin pages."
     >

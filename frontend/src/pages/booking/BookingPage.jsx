@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import BookingFlowSteps from "../../components/BookingFlowSteps";
 import PageIntro from "../../components/PageIntro";
 import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
@@ -172,7 +173,9 @@ function BookingPage() {
               </Link>
             </>
           )}
-        />
+        >
+          <BookingFlowSteps current="Seats" />
+        </PageIntro>
 
         {isLoading ? (
           <section className="simple-panel">
@@ -185,16 +188,48 @@ function BookingPage() {
         {event && seatInfo ? (
           <section className="booking-layout">
             <article className="simple-panel">
-              <p className="section-tag">{event.category}</p>
-              <h2 className="panel-title">{event.title}</h2>
+              <div className="booking-event-hero">
+                <img
+                  className="booking-event-photo"
+                  src={event.imageUrl || "/images/concert.png"}
+                  alt={event.title}
+                />
+                <div className="booking-event-copy">
+                  <p className="section-tag">{event.category}</p>
+                  <h2 className="panel-title">{event.title}</h2>
+                  <p className="booking-event-text">{event.shortDescription}</p>
+                </div>
+              </div>
 
-              <div className="booking-info-grid">
-                <p><strong>Date:</strong> {event.date}</p>
-                <p><strong>Time:</strong> {event.time}</p>
-                <p><strong>Venue:</strong> {event.venue}</p>
-                <p><strong>City:</strong> {event.city}</p>
-                <p><strong>Price:</strong> {event.price}</p>
-                <p><strong>Seats left:</strong> {seatInfo.availableSeats}</p>
+              <div className="booking-detail-grid">
+                <article className="booking-detail-card">
+                  <span className="booking-detail-label">Date</span>
+                  <strong className="booking-detail-value">{event.date}</strong>
+                </article>
+                <article className="booking-detail-card">
+                  <span className="booking-detail-label">Time</span>
+                  <strong className="booking-detail-value">{event.time}</strong>
+                </article>
+                <article className="booking-detail-card">
+                  <span className="booking-detail-label">Venue</span>
+                  <strong className="booking-detail-value">{event.venue}</strong>
+                </article>
+                <article className="booking-detail-card">
+                  <span className="booking-detail-label">City</span>
+                  <strong className="booking-detail-value">{event.city}</strong>
+                </article>
+                <article className="booking-detail-card">
+                  <span className="booking-detail-label">Price</span>
+                  <strong className="booking-detail-value">{event.price}</strong>
+                </article>
+                <article className="booking-detail-card">
+                  <span className="booking-detail-label">Seats left</span>
+                  <strong className="booking-detail-value">{seatInfo.availableSeats}</strong>
+                </article>
+              </div>
+
+              <div className="booking-screen-bar">
+                <span>Stage view</span>
               </div>
 
               <div className="seat-legend">
@@ -232,13 +267,21 @@ function BookingPage() {
 
             <article className="simple-panel">
               <h2 className="panel-title">Booking summary</h2>
+              <p className="booking-side-note">Your seats will be checked again before payment.</p>
 
-              <div className="booking-summary-stack">
+              <div className="booking-quick-grid">
                 <div className="booking-total-box">
                   <p>Selected seats</p>
                   <strong>{selectedSeats.length}</strong>
                 </div>
 
+                <div className="booking-total-box">
+                  <p>Total amount</p>
+                  <strong>{formatAmount(totalAmount)}</strong>
+                </div>
+              </div>
+
+              <div className="booking-summary-stack">
                 <div className="seat-selection-box">
                   <p className="seat-selection-label">Seat numbers</p>
                   {selectedSeats.length ? (
@@ -255,8 +298,8 @@ function BookingPage() {
                 </div>
 
                 <div className="booking-total-box">
-                  <p>Total amount</p>
-                  <strong>{formatAmount(totalAmount)}</strong>
+                  <p>Price per seat</p>
+                  <strong>{event.price}</strong>
                 </div>
               </div>
 

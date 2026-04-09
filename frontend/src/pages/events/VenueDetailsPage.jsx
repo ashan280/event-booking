@@ -70,14 +70,25 @@ function VenueDetailsPage() {
         {venue ? (
           <section className="venue-event-grid">
             {venue.events.map((event) => (
-              <article className="venue-card simple-list-card" key={event.id}>
-                <p className="section-tag">{event.category}</p>
-                <div className="venue-card-body">
+              <article className="event-list-card venue-event-card" key={event.id}>
+                <div className="event-list-image">
+                  <img
+                    className="event-list-card-image"
+                    src={event.imageUrl || "/images/concert.png"}
+                    alt={event.title}
+                  />
+                  <span className="event-image-badge">{event.category}</span>
+                </div>
+                <div className="event-list-body">
                   <h2>{event.title}</h2>
-                  <p className="venue-card-title">{event.shortDescription}</p>
-                  <p className="venue-card-meta">{event.date} | {event.time}</p>
-                  <p className="venue-card-meta">{event.price}</p>
-                  <p className="venue-card-meta">{event.availableSeats} seats left</p>
+                  <p className="event-summary-text">{event.shortDescription}</p>
+                  <div className="event-meta-grid">
+                    <span>{event.date}</span>
+                    <span>{event.time}</span>
+                    <span>{event.price}</span>
+                    <span>{event.availableSeats} seats left</span>
+                  </div>
+                  <p className="event-venue-text">{event.city} | {event.venue}</p>
                   <Link className="primary-link" to={`/events/${event.id}`}>
                     View event
                   </Link>

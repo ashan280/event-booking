@@ -85,13 +85,25 @@ function ReviewPage() {
       eyebrow="Reviews"
       title="Reviews."
       description="Post a review and read recent reviews."
-      sideTitle="Reviews"
-      sideText="Post a review and read other reviews."
+      sideTitle="Events"
+      sideText="Use reviews together with your event and booking pages."
       sideItems={[
-        "Only signed-in users can submit a review.",
-        "Recent reviews show on this page.",
-        "The list updates after posting."
+        {
+          tag: "Events",
+          title: "Back to events",
+          text: "Open the event list again after you finish reading reviews.",
+          link: "/events",
+          label: "View events"
+        },
+        {
+          tag: "Bookings",
+          title: "Open tickets",
+          text: "Use your booking page if you want to reopen tickets and old bookings.",
+          link: "/booking",
+          label: "My bookings"
+        }
       ]}
+      sideNote="Signed-in users can post reviews here, then go back to events, venues, or booking pages."
     >
       <div className="review-layout">
         <section className="detail-panel">

@@ -52,6 +52,7 @@ public final class BookingDto {
         private final String eventTime;
         private final String venue;
         private final String city;
+        private final String eventImageUrl;
         private final Integer seatCount;
         private final List<String> seatLabels;
         private final BigDecimal totalAmount;

@@ -77,14 +77,25 @@ function ResetPasswordPage() {
       eyebrow="Reset Password"
       title="Set a new password."
       description="Enter your token, add a new password, and save it."
-      sideTitle="Reset"
-      sideText="Add your token and new password."
+      sideTitle="Account help"
+      sideText="Set a new password and return to your account."
       sideItems={[
-        "Use the token from the last step.",
-        "Enter a password with at least 6 characters.",
-        "Confirm it before saving.",
-        "Use the new password when you sign in again."
+        {
+          tag: "Reset",
+          title: "Use your token",
+          text: "Add the reset token from the last step and save the new password.",
+          link: "/auth/forgot-password",
+          label: "Need a token?"
+        },
+        {
+          tag: "Sign in",
+          title: "Return to login",
+          text: "After saving the new password, sign in and continue with your account.",
+          link: "/auth/login",
+          label: "Go to login"
+        }
       ]}
+      sideNote="After you save the new password, use it to sign in and open your bookings, tickets, and event pages."
     >
       <form className="auth-form" onSubmit={handleSubmit}>
         <label htmlFor="reset-token">
