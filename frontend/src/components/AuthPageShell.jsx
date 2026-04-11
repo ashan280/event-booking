@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import PublicSiteHeader from "./PublicSiteHeader";
 
 function AuthPageShell({
   eyebrow,
@@ -7,6 +8,7 @@ function AuthPageShell({
   sideTitle,
   sideText,
   sideItems = [],
+  sideNote,
   children
 }) {
   const location = useLocation();
@@ -15,62 +17,66 @@ function AuthPageShell({
     : { to: "/auth", label: "Back to account" };
 
   return (
-    <main className="min-h-screen bg-slate-100 px-4 py-6 md:px-8 md:py-8">
-      <div className="mx-auto grid min-h-[calc(100vh-3rem)] max-w-6xl gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-        <section className="flex flex-col justify-between rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-          <div className="space-y-5">
-            <div className="flex flex-wrap items-center gap-3">
-              <Link
-                className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-                to={backLink.to}
-              >
-                <span aria-hidden="true">{"<"}</span>
-                <span>{backLink.label}</span>
+    <main className="home-page">
+      <div className="page-shell">
+        <PublicSiteHeader />
+
+        <div className="account-layout">
+          <section className="account-main">
+            <div className="page-actions">
+              <Link className="ghost-link" to={backLink.to}>
+                {backLink.label}
               </Link>
             </div>
 
-            <div className="inline-flex items-center rounded-full bg-orange-100 px-4 py-1 text-xs font-semibold text-orange-700">
+            <div className="account-badge">
               {eyebrow}
             </div>
 
-            <div className="space-y-3">
-              <h1 className="max-w-2xl text-3xl font-bold text-slate-950 md:text-4xl">
-                {title}
-              </h1>
-              <p className="max-w-2xl text-base leading-7 text-slate-600">
-                {description}
-              </p>
+            <div className="account-heading">
+              <h1>{title}</h1>
+              <p>{description}</p>
             </div>
 
-            <div className="rounded-3xl border border-slate-200 bg-slate-50 p-4 md:p-6">
+            <div className="account-content">
               {children}
             </div>
-          </div>
-        </section>
+          </section>
 
-        <aside className="rounded-3xl bg-slate-900 p-6 text-white shadow-sm md:p-8">
-          <div className="space-y-5">
-            <p className="text-xs font-semibold text-orange-300">
-              {sideTitle}
-            </p>
-            <h2 className="text-2xl font-bold md:text-3xl">
-              {sideText}
-            </h2>
-            <div className="space-y-3">
-              {sideItems.map((item, index) => (
-                <div
-                  className="flex items-start gap-3 rounded-2xl border border-slate-700 bg-slate-800 px-4 py-3"
-                  key={item}
-                >
-                  <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-700 text-xs font-bold text-white">
-                    {index + 1}
-                  </span>
-                  <p className="text-sm leading-6 text-slate-200">{item}</p>
-                </div>
-              ))}
+          <aside className="account-side">
+            <div className="account-side-head">
+              <p className="section-tag">{sideTitle}</p>
+              <h2>{sideText}</h2>
             </div>
-          </div>
-        </aside>
+
+            <div className="auth-side-card-grid">
+              {sideItems.map((item, index) => {
+                const card = typeof item === "string"
+                  ? { title: `Info ${index + 1}`, text: item }
+                  : item;
+
+                return (
+                  <article className="auth-side-card" key={`${card.title}-${index}`}>
+                    {card.tag ? <p className="section-tag">{card.tag}</p> : null}
+                    <h3>{card.title}</h3>
+                    <p>{card.text}</p>
+                    {card.link && card.label ? (
+                      <Link className="ghost-link" to={card.link}>
+                        {card.label}
+                      </Link>
+                    ) : null}
+                  </article>
+                );
+              })}
+            </div>
+
+            <div className="account-side-note">
+              <p>
+                {sideNote || "Use your account to book events, save tickets, and check your booking history later."}
+              </p>
+            </div>
+          </aside>
+        </div>
       </div>
     </main>
   );

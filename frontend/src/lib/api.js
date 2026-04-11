@@ -1,9 +1,13 @@
-const API_BASE_URL = "http://localhost:8080";
+import { getAuth } from "./auth";
+
+const API_BASE_URL = (import.meta.env.VITE_API_URL || "http://localhost:8080").replace(/\/$/, "");
 
 export async function apiRequest(path, options = {}) {
+  const auth = getAuth();
   const response = await fetch(`${API_BASE_URL}${path}`, {
     headers: {
       "Content-Type": "application/json",
+      ...(options.auth ? { Authorization: `Bearer ${auth?.token || ""}` } : {}),
       ...(options.headers || {})
     },
     ...options

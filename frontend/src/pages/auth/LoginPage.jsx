@@ -33,7 +33,7 @@ function LoginPage() {
       });
 
       saveAuth(data);
-      navigate("/auth/profile");
+      navigate("/auth");
     } catch (requestError) {
       setError(requestError.message);
     } finally {
@@ -44,23 +44,33 @@ function LoginPage() {
   return (
     <AuthPageShell
       eyebrow="Login"
-      title="Sign in to your account."
+      title="Sign in."
       description="Use your email and password to open your account."
-      sideTitle="Login steps"
-      sideText="Sign in and open your account pages."
+      sideTitle="Events"
+      sideText="Sign in and start using the event pages."
       sideItems={[
-        "Enter your email and password.",
-        "Open your profile after login.",
-        "Use reviews after you sign in."
+        {
+          tag: "Latest",
+          title: "Latest events",
+          text: "Open the event list and check new events, dates, and venues.",
+          link: "/events",
+          label: "View events"
+        },
+        {
+          tag: "Venues",
+          title: "Event places",
+          text: "Check venue pages before you book your seats.",
+          link: "/venues",
+          label: "View venues"
+        }
       ]}
+      sideNote="Sign in first if you want to book events, open tickets, and check booking history later."
     >
-      <form className="space-y-5" onSubmit={handleSubmit}>
-        <div className="space-y-2">
-          <label className="text-sm font-semibold text-slate-800" htmlFor="login-email">
+      <form className="auth-form" onSubmit={handleSubmit}>
+        <label htmlFor="login-email">
             Email
-          </label>
+          
           <input
-            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
             id="login-email"
             name="email"
             type="email"
@@ -68,14 +78,12 @@ function LoginPage() {
             value={formData.email}
             onChange={handleChange}
           />
-        </div>
+        </label>
 
-        <div className="space-y-2">
-          <label className="text-sm font-semibold text-slate-800" htmlFor="login-password">
+        <label htmlFor="login-password">
             Password
-          </label>
+          
           <input
-            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
             id="login-password"
             name="password"
             type="password"
@@ -83,10 +91,10 @@ function LoginPage() {
             value={formData.password}
             onChange={handleChange}
           />
-        </div>
+        </label>
 
         <button
-          className="inline-flex w-full items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-400"
+          className="primary-link auth-submit"
           type="submit"
           disabled={isLoading}
         >
@@ -94,22 +102,18 @@ function LoginPage() {
         </button>
       </form>
 
-      {error ? (
-        <p className="mt-4 rounded-2xl bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700">
-          {error}
-        </p>
-      ) : null}
+      {error ? <p className="error-text">{error}</p> : null}
 
-      <div className="mt-6 flex flex-wrap gap-3 text-sm text-slate-600">
+      <div className="inline-link-list">
         <span>New here?</span>
-        <Link className="font-semibold text-blue-700 hover:text-blue-800" to="/auth/register">
+        <Link to="/auth/register">
           Create an account
         </Link>
       </div>
 
-      <div className="mt-3 flex flex-wrap gap-3 text-sm text-slate-600">
+      <div className="inline-link-list">
         <span>Forgot your password?</span>
-        <Link className="font-semibold text-blue-700 hover:text-blue-800" to="/auth/forgot-password">
+        <Link to="/auth/forgot-password">
           Start recovery
         </Link>
       </div>

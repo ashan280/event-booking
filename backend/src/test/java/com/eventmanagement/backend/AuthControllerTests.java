@@ -1,5 +1,6 @@
 package com.eventmanagement.backend;
 
+import com.eventmanagement.backend.repository.BookingRepository;
 import com.eventmanagement.backend.repository.ReviewRepository;
 import com.eventmanagement.backend.repository.UserRepository;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -34,8 +35,12 @@ class AuthControllerTests {
     @Autowired
     private ReviewRepository reviewRepository;
 
+    @Autowired
+    private BookingRepository bookingRepository;
+
     @BeforeEach
     void clearData() {
+        bookingRepository.deleteAll();
         reviewRepository.deleteAll();
         userRepository.deleteAll();
     }
@@ -52,7 +57,7 @@ class AuthControllerTests {
                     }
                     """))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.message").value("Register successful"))
+            .andExpect(jsonPath("$.message").value("Account created"))
             .andExpect(jsonPath("$.fullName").value("Ashan Maduwantha"))
             .andExpect(jsonPath("$.email").value("ashan@example.com"))
             .andExpect(jsonPath("$.token").exists());
@@ -75,7 +80,7 @@ class AuthControllerTests {
         mockMvc.perform(get("/api/auth/profile")
                 .header("Authorization", "Bearer " + token))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.message").value("Profile loaded"))
+            .andExpect(jsonPath("$.message").value("Profile details"))
             .andExpect(jsonPath("$.fullName").value("Ashan Maduwantha"))
             .andExpect(jsonPath("$.email").value("ashan@example.com"))
             .andExpect(jsonPath("$.role").value("USER"));
@@ -103,7 +108,7 @@ class AuthControllerTests {
                     }
                     """))
             .andExpect(status().isUnauthorized())
-            .andExpect(jsonPath("$.message").value("Email or password is wrong"));
+            .andExpect(jsonPath("$.message").value("Wrong email or password"));
     }
 
     @Test
@@ -127,7 +132,7 @@ class AuthControllerTests {
                     }
                     """))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.message").value("Password reset link created"))
+            .andExpect(jsonPath("$.message").value("Reset link created"))
             .andExpect(jsonPath("$.resetToken").exists())
             .andReturn();
 
@@ -143,7 +148,7 @@ class AuthControllerTests {
                     }
                     """.formatted(resetToken)))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.message").value("Password updated successfully"));
+            .andExpect(jsonPath("$.message").value("Password updated"));
 
         mockMvc.perform(post("/api/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -168,6 +173,6 @@ class AuthControllerTests {
                     }
                     """))
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.message").value("Reset token is not valid"));
+            .andExpect(jsonPath("$.message").value("Invalid reset token"));
     }
 }

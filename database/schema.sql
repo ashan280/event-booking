@@ -12,38 +12,32 @@ CREATE TABLE IF NOT EXISTS users (
     reset_token_expires_at TIMESTAMP NULL
 );
 
-CREATE TABLE IF NOT EXISTS categories (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(100) NOT NULL UNIQUE,
-    description VARCHAR(255)
-);
-
-CREATE TABLE IF NOT EXISTS venues (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(150) NOT NULL,
-    location VARCHAR(255) NOT NULL,
-    capacity INT NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS events (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    category_id BIGINT NOT NULL,
-    venue_id BIGINT NOT NULL,
     title VARCHAR(150) NOT NULL,
-    description TEXT,
-    event_date DATETIME NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    status VARCHAR(50) NOT NULL DEFAULT 'DRAFT',
-    FOREIGN KEY (category_id) REFERENCES categories(id),
-    FOREIGN KEY (venue_id) REFERENCES venues(id)
+    category VARCHAR(80) NOT NULL,
+    venue VARCHAR(150) NOT NULL,
+    city VARCHAR(120) NOT NULL,
+    date VARCHAR(20) NOT NULL,
+    time VARCHAR(40) NOT NULL,
+    price VARCHAR(40) NOT NULL,
+    short_description VARCHAR(120) NOT NULL,
+    description VARCHAR(500) NOT NULL,
+    available_seats INT NOT NULL,
+    image_url LONGTEXT
 );
 
 CREATE TABLE IF NOT EXISTS bookings (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     user_id BIGINT NOT NULL,
     event_id BIGINT NOT NULL,
+    seat_count INT NOT NULL,
+    seat_labels VARCHAR(300) NOT NULL,
     total_amount DECIMAL(10, 2) NOT NULL,
     booking_status VARCHAR(50) NOT NULL DEFAULT 'PENDING',
+    payment_method VARCHAR(50) NOT NULL,
+    payment_status VARCHAR(50) NOT NULL,
+    ticket_code VARCHAR(100) NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (event_id) REFERENCES events(id)
@@ -52,8 +46,10 @@ CREATE TABLE IF NOT EXISTS bookings (
 CREATE TABLE IF NOT EXISTS reviews (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     user_id BIGINT NOT NULL,
+    event_id BIGINT NOT NULL,
     rating INT NOT NULL,
     comment VARCHAR(500) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (event_id) REFERENCES events(id)
 );
