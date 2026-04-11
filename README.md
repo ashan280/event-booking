@@ -67,4 +67,3 @@ User:
 - passwords are hashed with BCrypt
 - JWT is used after login
 - booking pages need login
-
