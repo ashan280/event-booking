@@ -1,51 +1,39 @@
-# Event Booking and Seat Reservation System
+# Event Booking System
 
-A web application for browsing events, reserving seats, and managing bookings.
+This is a university group project for browsing events, booking seats, making payments, and viewing tickets online.
 
-## Tech
+## Main Features
 
-- React
+- user register and login
+- JWT authentication
+- profile and reviews
+- event and venue pages
+- seat selection and booking summary
+- payment and ticket page
+- booking history
+- admin dashboard and booking report
+
+## Tech Stack
+
+- React + Vite
 - Spring Boot
-- MySQL
+- Spring Security
+- JPA
+- MySQL or H2
 
-## Folders
+## Team Work
 
-- `frontend/` for React
-- `backend/` for Spring Boot
-- `database/` for SQL
-- `docs/` for local notes only
+- Ashan: auth, profile, reviews
+- Vinuri: events, venues
+- Nimesha: booking, payment, tickets, reports
 
-## Team
+## Project Structure
 
-- `Ashan` for auth, user, review
-- `vinuri` for event, venue, category, search
-- `nimesha` for booking, seat, payment, ticket, report
+- `frontend/` for the React app
+- `backend/` for the Spring Boot app
+- `database/` for the SQL script
 
-## Branches
-
-- `main` is final
-- `develop` is team branch
-- `feature/ashan-auth-user`
-- `feature/vinuri-event-venue`
-- `feature/nimesha-booking-payment`
-
-## Workflow
-
-1. Do one small task.
-2. Make one simple commit.
-3. Push only to your feature branch.
-4. Merge feature branch to `develop`.
-5. Test in `develop`.
-6. Merge `develop` to `main` at the end.
-
-## Simple Commit Names
-
-- `add login page`
-- `fix register form`
-- `add event list`
-- `add booking page`
-
-## Run Project
+## Run The Project
 
 Frontend:
 
@@ -61,3 +49,23 @@ Backend:
 cd backend
 mvn spring-boot:run
 ```
+
+## Demo Login
+
+Admin:
+
+- email: `admin@eventhub.com`
+- password: `admin123`
+
+User:
+
+- create a new account from the register page
+
+
+## Security
+
+- passwords are hashed with BCrypt
+- JWT is used after login
+- booking pages need login
+
+
