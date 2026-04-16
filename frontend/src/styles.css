@@ -2105,6 +2105,47 @@ label {
   flex-shrink: 0;
 }
 
+.paypal-box {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+  border-radius: var(--radius);
+  border: 1px solid #bfdbfe;
+  background: #eff6ff;
+}
+
+.paypal-box strong,
+.paypal-box p {
+  margin: 0;
+}
+
+.paypal-box p {
+  color: #1d4ed8;
+}
+
+.paypal-summary-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--ink);
+}
+
+.paypal-helper-text {
+  font-size: 0.9rem;
+}
+
+.paypal-button-wrap {
+  min-height: 48px;
+}
+
+.paypal-button-wrap-ready {
+  min-height: auto;
+}
+
 .payment-form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

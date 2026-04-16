@@ -6,9 +6,9 @@ import { apiRequest } from "../../lib/api";
 import { getAuth, isAdmin } from "../../lib/auth";
 
 function formatAmount(value) {
-  return new Intl.NumberFormat("en-LK", {
+  return new Intl.NumberFormat("en-IE", {
     style: "currency",
-    currency: "LKR",
+    currency: "EUR",
     minimumFractionDigits: 2
   }).format(value || 0);
 }

@@ -30,18 +30,30 @@ public class EventDataInitializer implements CommandLineRunner {
         }
 
         eventRepository.saveAll(List.of(
-            event("Colombo Music Night", "Music", "Lotus Hall", "Colombo", "2026-04-08", "7:00 PM", "LKR 2,500",
-                "Live music, local artists, and a full evening show.",
-                "Enjoy a full evening with live bands, food stalls, and an easy seat booking flow in Colombo.", 120, "/images/concert.png"),
-            event("Startup Meetup 2026", "Business", "City Innovation Hub", "Kandy", "2026-04-20", "10:00 AM", "Free",
-                "A meetup for students, founders, and small teams.",
-                "Join talks, networking sessions, and simple startup discussions with local speakers and student founders.", 80, "/images/conference.png"),
-            event("Food Festival Weekend", "Food & Drink", "Ocean View Grounds", "Galle", "2026-04-28", "4:00 PM", "LKR 1,200",
-                "Street food, music, and family fun by the coast.",
-                "Taste local food, watch live cooking, and enjoy a relaxed weekend event with family and friends.", 200, "/images/food.png"),
-            event("Creative Design Workshop", "Workshops", "Studio 8", "Colombo", "2026-05-03", "1:00 PM", "LKR 3,000",
-                "A hands-on design session for beginners.",
-                "Learn design basics, layout ideas, and team project tips in a guided workshop for beginners.", 35, "/images/workshop.png")
+            event("Intro to Web Development Workshop", "Technology", "The Digital Hub", "Dublin", "2026-05-10", "11:00 AM - 3:00 PM", "Free",
+                "Organizer: Student Tech Community",
+                "Beginner-friendly workshop covering HTML, CSS, and React basics.", 70, "/images/workshop.png"),
+            event("Young Professionals Meetup", "Networking", "The Convention Centre Dublin", "Dublin", "2026-05-14", "6:00 PM - 9:00 PM", "EUR 8",
+                "Organizer: Career Connect",
+                "Connect with graduates, startups, and recruiters in Dublin.", 120, "/images/conference.png"),
+            event("Outdoor Acoustic Night", "Music", "St Stephen's Green", "Dublin", "2026-06-02", "5:00 PM - 9:00 PM", "EUR 5",
+                "Organizer: Dublin Music Circle",
+                "Live acoustic performances by local student artists.", 250, "/images/concert.png"),
+            event("Student Fitness Bootcamp", "Sports", "Phoenix Park", "Dublin", "2026-05-18", "8:00 AM - 10:00 AM", "Free",
+                "Organizer: Fit Students Ireland",
+                "Group workout session including cardio and strength training.", 60, "/images/sports.png"),
+            event("Cultural Food Festival", "Cultural", "Temple Bar Square", "Dublin", "2026-05-25", "12:00 PM - 7:00 PM", "EUR 10",
+                "Organizer: Global Student Network",
+                "Experience international cuisines and cultural performances.", 300, "/images/food.png"),
+            event("UI/UX Design Crash Course", "Workshop", "Dogpatch Labs", "Dublin", "2026-05-20", "2:00 PM - 6:00 PM", "EUR 12",
+                "Organizer: Design Hub Dublin",
+                "Learn wireframing, prototyping, and Figma basics.", 50, "/images/workshop.png"),
+            event("Summer Rooftop Party", "Social", "The Marker Hotel Rooftop", "Dublin", "2026-06-05", "7:00 PM - 11:30 PM", "EUR 20",
+                "Organizer: Student Union Events",
+                "Social event with DJ music and networking opportunities.", 180, "/images/concert.png"),
+            event("Career Skills Seminar", "Education", "Dublin City Library & Archive", "Dublin", "2026-05-12", "3:00 PM - 5:00 PM", "Free",
+                "Organizer: Dublin Youth Services",
+                "Learn CV writing, interview tips, and job search strategies.", 90, "/images/conference.png")
         ));
     }
 

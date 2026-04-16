@@ -12,15 +12,15 @@ function parsePrice(price) {
     return 0;
   }
 
-  const cleaned = price.replace("LKR", "").replaceAll(",", "").trim();
+  const cleaned = price.replace(/[^\d.,]/g, "").replaceAll(",", "").trim();
   const amount = Number(cleaned);
   return Number.isNaN(amount) ? 0 : amount;
 }
 
 function formatAmount(amount) {
-  return new Intl.NumberFormat("en-LK", {
+  return new Intl.NumberFormat("en-IE", {
     style: "currency",
-    currency: "LKR",
+    currency: "EUR",
     minimumFractionDigits: 2
   }).format(amount);
 }

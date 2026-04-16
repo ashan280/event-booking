@@ -179,13 +179,13 @@ function CreateEventPage() {
         <section className="simple-panel">
           <form className="event-form-grid" onSubmit={handleSubmit}>
             <label>
-              Title
-              <input
-                name="title"
-                placeholder="Ex: Colombo Music Night"
-                value={formData.title}
-                onChange={handleChange}
-              />
+                Title
+                <input
+                  name="title"
+                placeholder="Ex: Young Professionals Meetup"
+                  value={formData.title}
+                  onChange={handleChange}
+                />
             </label>
             <label>
               Category
@@ -199,22 +199,22 @@ function CreateEventPage() {
               </select>
             </label>
             <label>
-              Venue
-              <input
-                name="venue"
-                placeholder="Ex: Lotus Hall"
-                value={formData.venue}
-                onChange={handleChange}
-              />
+                Venue
+                <input
+                  name="venue"
+                placeholder="Ex: The Convention Centre Dublin"
+                  value={formData.venue}
+                  onChange={handleChange}
+                />
             </label>
             <label>
-              City
-              <input
-                name="city"
-                placeholder="Ex: Colombo"
-                value={formData.city}
-                onChange={handleChange}
-              />
+                City
+                <input
+                  name="city"
+                placeholder="Ex: Dublin"
+                  value={formData.city}
+                  onChange={handleChange}
+                />
             </label>
             <label>
               Date
@@ -235,13 +235,13 @@ function CreateEventPage() {
               />
             </label>
             <label>
-              Price
-              <input
-                name="price"
-                placeholder="Ex: LKR 1,500 or Free"
-                value={formData.price}
-                onChange={handleChange}
-              />
+                Price
+                <input
+                  name="price"
+                placeholder="Ex: EUR 25 or Free"
+                  value={formData.price}
+                  onChange={handleChange}
+                />
             </label>
             <label>
               Seats

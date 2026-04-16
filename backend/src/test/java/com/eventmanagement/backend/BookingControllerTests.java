@@ -2,7 +2,6 @@ package com.eventmanagement.backend;
 
 import com.eventmanagement.backend.model.User;
 import com.eventmanagement.backend.repository.BookingRepository;
-import com.eventmanagement.backend.repository.ReviewRepository;
 import com.eventmanagement.backend.repository.UserRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,9 +34,6 @@ class BookingControllerTests {
     private BookingRepository bookingRepository;
 
     @Autowired
-    private ReviewRepository reviewRepository;
-
-    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -46,7 +42,6 @@ class BookingControllerTests {
     @BeforeEach
     void clearData() {
         bookingRepository.deleteAll();
-        reviewRepository.deleteAll();
         userRepository.deleteAll();
         createAdminUser();
     }
@@ -55,7 +50,7 @@ class BookingControllerTests {
     void loggedInUserCanBookAndSeeHistory() throws Exception {
         String token = registerUserAndGetToken();
 
-        mockMvc.perform(get("/api/bookings/events/1/seats"))
+        mockMvc.perform(get("/api/bookings/events/2/seats"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.bookedSeats").isArray());
 
@@ -64,14 +59,14 @@ class BookingControllerTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                     {
-                      "eventId": 1,
+                      "eventId": 2,
                       "seatCount": 2,
                       "paymentMethod": "Card",
                       "seatLabels": ["A1", "A2"]
                     }
                     """))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.eventTitle").value("Colombo Music Night"))
+            .andExpect(jsonPath("$.eventTitle").value("Young Professionals Meetup"))
             .andExpect(jsonPath("$.seatCount").value(2))
             .andExpect(jsonPath("$.bookingStatus").value("CONFIRMED"))
             .andExpect(jsonPath("$.paymentMethod").value("Card"))
@@ -87,7 +82,7 @@ class BookingControllerTests {
         mockMvc.perform(get("/api/bookings")
                 .header("Authorization", "Bearer " + token))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$[0].eventTitle").value("Colombo Music Night"))
+            .andExpect(jsonPath("$[0].eventTitle").value("Young Professionals Meetup"))
             .andExpect(jsonPath("$[0].seatCount").value(2))
             .andExpect(jsonPath("$[0].seatLabels[0]").value("A1"))
             .andExpect(jsonPath("$[0].ticketCode").value(ticketCode));
@@ -98,7 +93,7 @@ class BookingControllerTests {
             .andExpect(jsonPath("$.id").value(bookingId))
             .andExpect(jsonPath("$.ticketCode").value(ticketCode));
 
-        mockMvc.perform(get("/api/bookings/events/1/seats"))
+        mockMvc.perform(get("/api/bookings/events/2/seats"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.bookedSeats[0]").value("A1"))
             .andExpect(jsonPath("$.bookedSeats[1]").value("A2"));
@@ -109,7 +104,7 @@ class BookingControllerTests {
             .andExpect(jsonPath("$.bookingStatus").value("CANCELLED"))
             .andExpect(jsonPath("$.paymentStatus").value("REFUNDED"));
 
-        mockMvc.perform(get("/api/bookings/events/1/seats"))
+        mockMvc.perform(get("/api/bookings/events/2/seats"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.bookedSeats").isEmpty());
     }
@@ -120,7 +115,7 @@ class BookingControllerTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                     {
-                      "eventId": 1,
+                      "eventId": 2,
                       "seatCount": 1,
                       "paymentMethod": "Card",
                       "seatLabels": ["A1"]
@@ -139,7 +134,7 @@ class BookingControllerTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                     {
-                      "eventId": 1,
+                      "eventId": 2,
                       "seatCount": 1,
                       "paymentMethod": "Card",
                       "seatLabels": ["A1"]
@@ -154,7 +149,7 @@ class BookingControllerTests {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.totalUsers").exists())
             .andExpect(jsonPath("$.totalEvents").exists())
-            .andExpect(jsonPath("$.recentBookings[0].eventTitle").value("Colombo Music Night"));
+            .andExpect(jsonPath("$.recentBookings[0].eventTitle").value("Young Professionals Meetup"));
 
         mockMvc.perform(get("/api/admin/bookings/report")
                 .header("Authorization", "Bearer " + adminToken))
@@ -163,7 +158,7 @@ class BookingControllerTests {
             .andExpect(jsonPath("$.confirmedBookings").exists())
             .andExpect(jsonPath("$.totalSeatsBooked").exists())
             .andExpect(jsonPath("$.totalRevenue").exists())
-            .andExpect(jsonPath("$.citySummaries[0].city").value("Colombo"))
+            .andExpect(jsonPath("$.citySummaries[0].city").value("Dublin"))
             .andExpect(jsonPath("$.citySummaries[0].bookingCount").exists());
     }
 
@@ -176,7 +171,7 @@ class BookingControllerTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                     {
-                      "eventId": 1,
+                      "eventId": 2,
                       "seatCount": 1,
                       "paymentMethod": "Cash",
                       "seatLabels": ["B1"]
@@ -195,6 +190,26 @@ class BookingControllerTests {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.bookingStatus").value("CANCELLED"))
             .andExpect(jsonPath("$.paymentStatus").value("CANCELLED"));
+    }
+
+    @Test
+    void paypalBookingIsMarkedAsPaid() throws Exception {
+        String token = registerUserAndGetToken();
+
+        mockMvc.perform(post("/api/bookings")
+                .header("Authorization", "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {
+                      "eventId": 2,
+                      "seatCount": 1,
+                      "paymentMethod": "PayPal",
+                      "seatLabels": ["C1"]
+                    }
+                    """))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.paymentMethod").value("PayPal"))
+            .andExpect(jsonPath("$.paymentStatus").value("PAID"));
     }
 
     private String registerUserAndGetToken() throws Exception {

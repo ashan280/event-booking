@@ -15,17 +15,17 @@ function formatDateTime(value) {
 }
 
 function formatAmount(value) {
-  return new Intl.NumberFormat("en-LK", {
+  return new Intl.NumberFormat("en-IE", {
     style: "currency",
-    currency: "LKR",
+    currency: "EUR",
     minimumFractionDigits: 2
   }).format(value || 0);
 }
 
 function formatCardAmount(value) {
-  return new Intl.NumberFormat("en-LK", {
+  return new Intl.NumberFormat("en-IE", {
     style: "currency",
-    currency: "LKR",
+    currency: "EUR",
     minimumFractionDigits: 0,
     maximumFractionDigits: 0
   }).format(value || 0);
@@ -38,7 +38,7 @@ function formatShortDateTime(value) {
     return value;
   }
 
-  return date.toLocaleString("en-LK", {
+  return date.toLocaleString("en-IE", {
     dateStyle: "short",
     timeStyle: "short"
   });

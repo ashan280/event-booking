@@ -222,7 +222,7 @@ function EditEventPage() {
                 Title
                 <input
                   name="title"
-                  placeholder="Ex: Colombo Music Night"
+                  placeholder="Ex: Young Professionals Meetup"
                   value={formData.title}
                   onChange={handleChange}
                 />
@@ -242,7 +242,7 @@ function EditEventPage() {
                 Venue
                 <input
                   name="venue"
-                  placeholder="Ex: Lotus Hall"
+                  placeholder="Ex: The Convention Centre Dublin"
                   value={formData.venue}
                   onChange={handleChange}
                 />
@@ -251,7 +251,7 @@ function EditEventPage() {
                 City
                 <input
                   name="city"
-                  placeholder="Ex: Colombo"
+                  placeholder="Ex: Dublin"
                   value={formData.city}
                   onChange={handleChange}
                 />
@@ -278,7 +278,7 @@ function EditEventPage() {
                 Price
                 <input
                   name="price"
-                  placeholder="Ex: LKR 1,500 or Free"
+                  placeholder="Ex: EUR 25 or Free"
                   value={formData.price}
                   onChange={handleChange}
                 />

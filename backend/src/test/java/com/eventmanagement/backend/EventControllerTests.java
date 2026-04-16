@@ -11,9 +11,9 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,39 +33,39 @@ class EventControllerTests {
     void eventListWorks() throws Exception {
         mockMvc.perform(get("/api/events"))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$[0].title").value("Colombo Music Night"))
-            .andExpect(jsonPath("$[0].category").value("Music"));
+            .andExpect(jsonPath("$[0].title").value("Intro to Web Development Workshop"))
+            .andExpect(jsonPath("$[0].category").value("Technology"));
     }
 
     @Test
     void eventSearchWorks() throws Exception {
-        mockMvc.perform(get("/api/events").param("category", "Business"))
+        mockMvc.perform(get("/api/events").param("category", "Networking"))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$[0].title").value("Startup Meetup 2026"));
+            .andExpect(jsonPath("$[0].title").value("Young Professionals Meetup"));
     }
 
     @Test
     void cityFilterWorks() throws Exception {
-        mockMvc.perform(get("/api/events").param("city", "Colombo"))
+        mockMvc.perform(get("/api/events").param("city", "Dublin"))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$[0].city").value("Colombo"));
+            .andExpect(jsonPath("$[0].city").value("Dublin"));
     }
 
     @Test
     void searchAndCityFilterWork() throws Exception {
         mockMvc.perform(get("/api/events")
-                .param("search", "Startup")
-                .param("city", "Kandy"))
+                .param("search", "Young")
+                .param("city", "Dublin"))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$[0].title").value("Startup Meetup 2026"));
+            .andExpect(jsonPath("$[0].title").value("Young Professionals Meetup"));
     }
 
     @Test
     void eventDetailsWork() throws Exception {
         mockMvc.perform(get("/api/events/1"))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.title").value("Colombo Music Night"))
-            .andExpect(jsonPath("$.venue").value("Lotus Hall"));
+            .andExpect(jsonPath("$.title").value("Intro to Web Development Workshop"))
+            .andExpect(jsonPath("$.venue").value("The Digital Hub"));
     }
 
     @Test
@@ -94,11 +94,11 @@ class EventControllerTests {
 
     @Test
     void venueDetailsWork() throws Exception {
-        mockMvc.perform(get("/api/events/venues/{city}/{name}", "Colombo", "Lotus Hall"))
+        mockMvc.perform(get("/api/events/venues/{city}/{name}", "Dublin", "The Digital Hub"))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.name").value("Lotus Hall"))
-            .andExpect(jsonPath("$.city").value("Colombo"))
-            .andExpect(jsonPath("$.events[0].title").value("Colombo Music Night"));
+            .andExpect(jsonPath("$.name").value("The Digital Hub"))
+            .andExpect(jsonPath("$.city").value("Dublin"))
+            .andExpect(jsonPath("$.events[0].title").value("Intro to Web Development Workshop"));
     }
 
     @Test
@@ -113,10 +113,10 @@ class EventControllerTests {
                       "title": "Student Coding Workshop",
                       "category": "Workshops",
                       "venue": "Tech Lab",
-                      "city": "Colombo",
+                      "city": "Dublin",
                       "date": "2026-05-15",
                       "time": "2:00 PM",
-                      "price": "LKR 1,500",
+                      "price": "EUR 25",
                       "shortDescription": "A simple workshop for coding basics.",
                       "description": "Students can join and learn coding basics with practice sessions and group work.",
                       "availableSeats": 40
@@ -137,21 +137,21 @@ class EventControllerTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                     {
-                      "title": "Colombo Music Night Updated",
-                      "category": "Music",
-                      "venue": "Lotus Hall",
-                      "city": "Colombo",
-                      "date": "2026-04-14",
-                      "time": "8:00 PM",
-                      "price": "LKR 2,800",
-                      "shortDescription": "Updated music event details.",
-                      "description": "Updated event details for the music night with a new time and date.",
+                      "title": "Intro to Web Development Workshop Updated",
+                      "category": "Technology",
+                      "venue": "The Digital Hub",
+                      "city": "Dublin",
+                      "date": "2026-05-11",
+                      "time": "1:00 PM - 4:00 PM",
+                      "price": "Free",
+                      "shortDescription": "Updated workshop details.",
+                      "description": "Updated workshop details with a new schedule for students.",
                       "availableSeats": 100
                     }
                     """))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.title").value("Colombo Music Night Updated"))
-            .andExpect(jsonPath("$.time").value("8:00 PM"))
+            .andExpect(jsonPath("$.title").value("Intro to Web Development Workshop Updated"))
+            .andExpect(jsonPath("$.time").value("1:00 PM - 4:00 PM"))
             .andExpect(jsonPath("$.availableSeats").value(100));
     }
 
@@ -179,7 +179,7 @@ class EventControllerTests {
                       "title": "User Event",
                       "category": "Music",
                       "venue": "Hall A",
-                      "city": "Colombo",
+                      "city": "Dublin",
                       "date": "2026-06-01",
                       "time": "6:00 PM",
                       "price": "Free",

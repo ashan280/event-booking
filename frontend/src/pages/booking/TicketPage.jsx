@@ -6,9 +6,9 @@ import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
 
 function formatAmount(value) {
-  return new Intl.NumberFormat("en-LK", {
+  return new Intl.NumberFormat("en-IE", {
     style: "currency",
-    currency: "LKR",
+    currency: "EUR",
     minimumFractionDigits: 2
   }).format(value || 0);
 }
