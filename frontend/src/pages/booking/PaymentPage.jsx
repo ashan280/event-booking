@@ -1,26 +1,24 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import BookingFlowSteps from "../../components/BookingFlowSteps";
 import PageIntro from "../../components/PageIntro";
 import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
 
-const paymentOptions = ["Card", "Bank transfer", "Cash"];
-
 function parsePrice(price) {
   if (!price || price.trim().toLowerCase() === "free") {
     return 0;
   }
 
-  const cleaned = price.replace("LKR", "").replaceAll(",", "").trim();
+  const cleaned = price.replace(/[^\d.,]/g, "").replaceAll(",", "").trim();
   const amount = Number(cleaned);
   return Number.isNaN(amount) ? 0 : amount;
 }
 
-function formatAmount(amount) {
-  return new Intl.NumberFormat("en-LK", {
+function formatAmount(amount, currency = "EUR") {
+  return new Intl.NumberFormat("en-IE", {
     style: "currency",
-    currency: "LKR",
+    currency,
     minimumFractionDigits: 2
   }).format(amount);
 }
@@ -46,12 +44,51 @@ function getSeatLabels(value) {
     .filter((item) => item);
 }
 
+function isFreeEvent(price) {
+  return !price || price.trim().toLowerCase() === "free";
+}
+
+function loadPayPalScript(clientId, currency) {
+  const existingScript = document.querySelector("script[data-paypal-sdk='true']");
+
+  if (
+    window.paypal?.Buttons &&
+    existingScript?.dataset.clientId === clientId &&
+    existingScript?.dataset.currency === currency
+  ) {
+    return Promise.resolve(window.paypal);
+  }
+
+  if (existingScript) {
+    existingScript.remove();
+    delete window.paypal;
+  }
+
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(clientId)}&currency=${encodeURIComponent(currency)}&intent=capture&disable-funding=credit,card,venmo,paylater&components=buttons&commit=true`;
+    script.async = true;
+    script.dataset.paypalSdk = "true";
+    script.dataset.clientId = clientId;
+    script.dataset.currency = currency;
+    script.addEventListener("load", () => resolve(window.paypal), { once: true });
+    script.addEventListener("error", () => reject(new Error("PayPal script could not be loaded")), { once: true });
+    document.body.appendChild(script);
+  });
+}
+
 function PaymentPage() {
   const navigate = useNavigate();
   const { eventId } = useParams();
   const [searchParams] = useSearchParams();
   const [event, setEvent] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("Card");
+  const [paypalConfig, setPayPalConfig] = useState({
+    enabled: false,
+    clientId: "",
+    currency: "EUR",
+    note: ""
+  });
   const [cardName, setCardName] = useState("");
   const [cardNumber, setCardNumber] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
@@ -59,20 +96,37 @@ function PaymentPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
+  const [paypalMessage, setPayPalMessage] = useState("");
+  const [isPayPalReady, setIsPayPalReady] = useState(false);
+  const paypalButtonsRef = useRef(null);
   const seatCount = getSeatValue(searchParams.get("seats"));
-  const seatLabels = getSeatLabels(searchParams.get("labels"));
+  const seatLabelsText = searchParams.get("labels") || "";
+  const seatLabels = useMemo(() => getSeatLabels(seatLabelsText), [seatLabelsText]);
+
+  function clearPayPalButtons() {
+    if (paypalButtonsRef.current) {
+      paypalButtonsRef.current.innerHTML = "";
+    }
+  }
 
   useEffect(() => {
-    async function loadEvent() {
+    async function loadData() {
       setIsLoading(true);
       setError("");
 
       try {
-        const data = await apiRequest(`/api/events/${eventId}`);
-        setEvent(data);
+        const [eventData, configData] = await Promise.all([
+          apiRequest(`/api/events/${eventId}`),
+          apiRequest("/api/payments/paypal/config")
+        ]);
 
-        if (data.price?.trim().toLowerCase() === "free") {
+        setEvent(eventData);
+        setPayPalConfig(configData);
+
+        if (isFreeEvent(eventData.price)) {
           setPaymentMethod("Free");
+        } else if (configData.enabled) {
+          setPaymentMethod("PayPal");
         }
       } catch (requestError) {
         setError(requestError.message);
@@ -81,7 +135,7 @@ function PaymentPage() {
       }
     }
 
-    loadEvent();
+    loadData();
   }, [eventId]);
 
   const totalAmount = useMemo(() => {
@@ -91,6 +145,125 @@ function PaymentPage() {
 
     return parsePrice(event.price) * seatCount;
   }, [event, seatCount]);
+
+  const availablePaymentOptions = useMemo(() => {
+    const options = ["Card", "Bank transfer", "Cash"];
+    return paypalConfig.enabled ? ["PayPal", ...options] : options;
+  }, [paypalConfig.enabled]);
+
+  useEffect(() => {
+    if (!event || paymentMethod !== "PayPal" || !paypalConfig.enabled || isFreeEvent(event.price)) {
+      setIsPayPalReady(false);
+      setPayPalMessage("");
+      clearPayPalButtons();
+      return;
+    }
+
+    if (!seatLabels.length || seatLabels.length !== seatCount) {
+      setIsPayPalReady(false);
+      setPayPalMessage("Go back and select your seats again before using PayPal.");
+      clearPayPalButtons();
+      return;
+    }
+
+    let cancelled = false;
+    const bookingPayload = {
+      eventId: Number(eventId),
+      seatCount,
+      seatLabels,
+      paymentMethod: "PayPal"
+    };
+
+    async function renderPayPalButtons() {
+      setIsPayPalReady(false);
+      setPayPalMessage("Loading PayPal...");
+
+      try {
+        const paypal = await loadPayPalScript(paypalConfig.clientId, paypalConfig.currency);
+
+        if (cancelled || !paypalButtonsRef.current) {
+          return;
+        }
+
+        clearPayPalButtons();
+
+        await paypal.Buttons({
+          style: {
+            layout: "vertical",
+            shape: "rect",
+            label: "paypal"
+          },
+          createOrder: async () => {
+            setError("");
+            setPayPalMessage("Creating PayPal order...");
+
+            try {
+              const order = await apiRequest("/api/payments/paypal/orders", {
+                method: "POST",
+                auth: true,
+                body: JSON.stringify(bookingPayload)
+              });
+
+              return order.orderId;
+            } catch (requestError) {
+              setError(requestError.message);
+              setPayPalMessage("");
+              throw requestError;
+            }
+          },
+          onApprove: async (approveData) => {
+            setIsSaving(true);
+            setError("");
+            setPayPalMessage("Processing payment...");
+
+            try {
+              const result = await apiRequest(
+                `/api/payments/paypal/orders/${approveData.orderID}/capture`,
+                {
+                  method: "POST",
+                  auth: true,
+                  body: JSON.stringify(bookingPayload)
+                }
+              );
+
+              navigate(`/booking/tickets/${result.booking.id}?payment=success`);
+            } catch (requestError) {
+              setError(requestError.message);
+              setPayPalMessage("PayPal payment could not be completed. Please try again.");
+              setIsSaving(false);
+            }
+          },
+          onCancel: () => {
+            setIsSaving(false);
+            setPayPalMessage("PayPal payment was cancelled.");
+          },
+          onError: (requestError) => {
+            console.error("PayPal error:", requestError);
+            setIsSaving(false);
+            setError("PayPal payment could not be completed. Please try again.");
+            setPayPalMessage("");
+          }
+        }).render(paypalButtonsRef.current);
+
+        if (!cancelled) {
+          setIsPayPalReady(true);
+          setPayPalMessage("Click the PayPal button below to pay.");
+        }
+      } catch (requestError) {
+        if (!cancelled) {
+          setError(requestError.message);
+          setPayPalMessage("");
+        }
+      }
+    }
+
+    renderPayPalButtons();
+
+    return () => {
+      cancelled = true;
+      clearPayPalButtons();
+    };
+  }, [event, eventId, navigate, paymentMethod, paypalConfig.clientId, paypalConfig.currency, paypalConfig.enabled, seatCount, seatLabels, seatLabelsText]);
 
   async function handleSubmit(eventObject) {
     eventObject.preventDefault();
@@ -217,7 +390,7 @@ function PaymentPage() {
 
               <div className="booking-total-box">
                 <p>Total amount</p>
-                <strong>{formatAmount(totalAmount)}</strong>
+                <strong>{formatAmount(totalAmount, paypalConfig.currency || "EUR")}</strong>
               </div>
             </article>
 
@@ -237,7 +410,7 @@ function PaymentPage() {
                       </div>
                     </div>
                   ) : (
-                    paymentOptions.map((option) => (
+                    availablePaymentOptions.map((option) => (
                       <label className="payment-method-card" key={option}>
                         <input
                           checked={paymentMethod === option}
@@ -254,6 +427,22 @@ function PaymentPage() {
                     ))
                   )}
                 </div>
+
+                {paymentMethod === "PayPal" ? (
+                  <div className="paypal-box">
+                    <strong>PayPal Sandbox</strong>
+                    <p>{paypalConfig.note}</p>
+                    <div className="paypal-summary-line">
+                      <span>Total</span>
+                      <strong>{formatAmount(totalAmount, paypalConfig.currency || "EUR")}</strong>
+                    </div>
+                    {paypalMessage ? <p className="paypal-helper-text">{paypalMessage}</p> : null}
+                    <div
+                      className={`paypal-button-wrap${isPayPalReady ? " paypal-button-wrap-ready" : ""}`}
+                      ref={paypalButtonsRef}
+                    />
+                  </div>
+                ) : null}
 
                 {paymentMethod === "Card" ? (
                   <div className="payment-form-grid">
@@ -310,9 +499,11 @@ function PaymentPage() {
                   </div>
                 ) : null}
 
-                <button className="primary-link" disabled={isSaving} type="submit">
-                  {isSaving ? "Saving payment..." : "Confirm payment"}
-                </button>
+                {paymentMethod !== "PayPal" ? (
+                  <button className="primary-link" disabled={isSaving} type="submit">
+                    {isSaving ? "Saving payment..." : "Confirm payment"}
+                  </button>
+                ) : null}
               </form>
             </article>
           </section>

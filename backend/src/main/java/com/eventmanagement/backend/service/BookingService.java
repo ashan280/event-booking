@@ -31,6 +31,15 @@ public class BookingService {
     @Transactional
     public BookingDto.BookingResponse createBooking(HttpServletRequest request, BookingDto.BookingRequest bookingRequest) {
         User user = authService.getCurrentUser(request);
+        return createBookingForUser(user, bookingRequest, null);
+    }
+
+    @Transactional
+    public BookingDto.BookingResponse createBookingForUser(
+        User user,
+        BookingDto.BookingRequest bookingRequest,
+        String paymentMethodOverride
+    ) {
         Event event = eventRepository.findById(bookingRequest.getEventId())
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
         List<String> selectedSeats = cleanSeatLabels(bookingRequest.getSeatLabels());
@@ -61,7 +70,10 @@ public class BookingService {
         booking.setSeatLabels(String.join(",", selectedSeats));
         booking.setTotalAmount(parsePrice(event.getPrice()).multiply(BigDecimal.valueOf(bookingRequest.getSeatCount())));
         booking.setBookingStatus("CONFIRMED");
-        booking.setPaymentMethod(getPaymentMethod(bookingRequest.getPaymentMethod(), event.getPrice()));
+        booking.setPaymentMethod(getPaymentMethod(
+            paymentMethodOverride != null ? paymentMethodOverride : bookingRequest.getPaymentMethod(),
+            event.getPrice()
+        ));
         booking.setPaymentStatus(getPaymentStatus(booking.getPaymentMethod(), event.getPrice()));
         booking.setTicketCode(buildTicketCode());
 
@@ -146,7 +158,7 @@ public class BookingService {
             return BigDecimal.ZERO;
         }
 
-        String cleanedPrice = price.replace("LKR", "").replace(",", "").trim();
+        String cleanedPrice = price.replaceAll("[^0-9.,]", "").replace(",", "").trim();
 
         try {
             return new BigDecimal(cleanedPrice);
@@ -217,7 +229,7 @@ public class BookingService {
             return "FREE";
         }
 
-        if ("Card".equalsIgnoreCase(paymentMethod)) {
+        if ("Card".equalsIgnoreCase(paymentMethod) || "PayPal".equalsIgnoreCase(paymentMethod)) {
             return "PAID";
         }
 
