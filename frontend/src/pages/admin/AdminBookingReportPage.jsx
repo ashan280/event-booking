@@ -67,8 +67,8 @@ function AdminBookingReportPage() {
 
           <PageIntro
             eyebrow="Admin"
-            title="Admin only."
-            description="You need an admin account to open this page."
+            title="Admin access only"
+            description="You need an admin account to open booking reports and print admin summaries."
             actions={(
               <>
                 <Link className="ghost-link" to="/auth/login">
@@ -92,8 +92,8 @@ function AdminBookingReportPage() {
 
         <PageIntro
           eyebrow="Booking report"
-          title="Booking report."
-          description="Check bookings, cancelled orders, seats booked, and ticket details."
+          title="Booking report"
+          description="Review totals, city performance, and recent bookings in one clear admin report."
           actions={(
             <>
               <button className="ghost-link" type="button" onClick={handlePrint}>
