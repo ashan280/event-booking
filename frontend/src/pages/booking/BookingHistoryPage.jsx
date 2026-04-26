@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import PageIntro from "../../components/PageIntro";
 import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
+import { DEFAULT_EVENT_IMAGE } from "../../lib/constants";
 
 function formatDateTime(value) {
   const date = new Date(value);
@@ -153,7 +154,7 @@ function BookingHistoryPage() {
                 <div className="booking-history-hero">
                   <img
                     className="booking-history-photo"
-                    src={booking.eventImageUrl || "/images/concert.png"}
+                    src={booking.eventImageUrl || DEFAULT_EVENT_IMAGE}
                     alt={booking.eventTitle}
                   />
                   <div className="booking-history-copy">

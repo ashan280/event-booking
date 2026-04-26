@@ -4,6 +4,7 @@ import PageIntro from "../../components/PageIntro";
 import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
 import { getAuth, isAdmin } from "../../lib/auth";
+import { DEFAULT_EVENT_IMAGE } from "../../lib/constants";
 
 function formatAmount(value) {
   return new Intl.NumberFormat("en-IE", {
@@ -267,7 +268,7 @@ function AdminDashboardPage() {
                   <div className="admin-spotlight-card">
                     <img
                       className="admin-spotlight-image"
-                      src={spotlightBooking.eventImageUrl || "/images/concert.png"}
+                      src={spotlightBooking.eventImageUrl || DEFAULT_EVENT_IMAGE}
                       alt={spotlightBooking.eventTitle}
                     />
                     <div className="admin-spotlight-copy">
@@ -308,7 +309,7 @@ function AdminDashboardPage() {
                       <div className="booking-history-hero">
                         <img
                           className="booking-history-photo"
-                          src={booking.eventImageUrl || "/images/concert.png"}
+                          src={booking.eventImageUrl || DEFAULT_EVENT_IMAGE}
                           alt={booking.eventTitle}
                         />
                         <div className="booking-history-copy">

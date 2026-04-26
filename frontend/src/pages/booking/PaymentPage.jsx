@@ -4,6 +4,7 @@ import BookingFlowSteps from "../../components/BookingFlowSteps";
 import PageIntro from "../../components/PageIntro";
 import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
+import { DEFAULT_EVENT_IMAGE } from "../../lib/constants";
 
 function parsePrice(price) {
   if (!price || price.trim().toLowerCase() === "free") {
@@ -348,7 +349,7 @@ function PaymentPage() {
               <div className="booking-event-hero booking-event-hero-compact">
                 <img
                   className="booking-event-photo"
-                  src={event.imageUrl || "/images/concert.png"}
+                  src={event.imageUrl || DEFAULT_EVENT_IMAGE}
                   alt={event.title}
                 />
                 <div className="booking-event-copy">

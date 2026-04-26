@@ -4,6 +4,7 @@ import PageIntro from "../../components/PageIntro";
 import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
 import { getAuth, isAdmin } from "../../lib/auth";
+import { DEFAULT_EVENT_IMAGE } from "../../lib/constants";
 
 function formatReviewDate(value) {
   const date = new Date(value);
@@ -206,7 +207,7 @@ function EventDetailsPage() {
               <div className="event-details-image simple-event-image">
                 <img
                   className="event-details-photo"
-                  src={event.imageUrl || "/images/concert.png"}
+                  src={event.imageUrl || DEFAULT_EVENT_IMAGE}
                   alt={event.title}
                 />
                 <span className="event-image-badge">{event.category}</span>

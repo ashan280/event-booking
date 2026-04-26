@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import PublicSiteHeader from "../components/PublicSiteHeader";
 import { apiRequest } from "../lib/api";
+import { DEFAULT_EVENT_IMAGE } from "../lib/constants";
 
 function getTodayValue() {
   const date = new Date();
@@ -26,7 +27,7 @@ function formatDateLabel(value) {
 }
 
 function getEventImage(event) {
-  return event.imageUrl || "/images/concert.png";
+  return event.imageUrl || DEFAULT_EVENT_IMAGE;
 }
 
 function getCategorySummary(events) {

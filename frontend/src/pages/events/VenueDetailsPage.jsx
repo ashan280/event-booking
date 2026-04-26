@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import PageIntro from "../../components/PageIntro";
 import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
+import { DEFAULT_EVENT_IMAGE } from "../../lib/constants";
 
 function VenueDetailsPage() {
   const { city, venueName } = useParams();
@@ -74,7 +75,7 @@ function VenueDetailsPage() {
                 <div className="event-list-image">
                   <img
                     className="event-list-card-image"
-                    src={event.imageUrl || "/images/concert.png"}
+                    src={event.imageUrl || DEFAULT_EVENT_IMAGE}
                     alt={event.title}
                   />
                   <span className="event-image-badge">{event.category}</span>

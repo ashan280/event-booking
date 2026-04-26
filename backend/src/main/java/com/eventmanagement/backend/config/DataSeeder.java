@@ -51,61 +51,61 @@ public class DataSeeder implements CommandLineRunner {
                 "2026-06-15", "18:00", "£45.00",
                 "The biggest outdoor music festival of the summer season.",
                 "Join us for an unforgettable evening of live music featuring top artists across multiple stages. Food stalls, art installations, and family-friendly activities make this a complete summer experience.",
-                200, null),
+                200, "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800&q=80"),
 
             event("Tech Innovation Summit", "Conference", "ExCeL London", "London",
                 "2026-07-10", "09:00", "£120.00",
                 "Europe's leading technology and innovation conference.",
                 "Three days of keynotes, workshops, and networking with industry leaders from AI, fintech, green tech, and more. Includes access to exhibition hall with 200+ exhibitors.",
-                500, null),
+                500, "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80"),
 
             event("Shakespeare in the Park", "Theatre", "Regent's Park Open Air Theatre", "London",
                 "2026-06-28", "19:30", "£25.00",
                 "A Midsummer Night's Dream performed under the stars.",
                 "Experience the magic of Shakespeare performed in the open air. Our acclaimed production of A Midsummer Night's Dream brings the Bard's beloved comedy to life with stunning costumes and live music.",
-                300, null),
+                300, "https://images.unsplash.com/photo-1503095396549-807759245b35?w=800&q=80"),
 
             event("Street Food & Culture Fair", "Food & Drink", "Southbank Centre", "London",
                 "2026-07-05", "11:00", "Free",
                 "Celebrating global cuisines and cultural diversity.",
                 "Explore over 80 street food vendors from around the world, live cooking demonstrations, music performances, and cultural exhibitions. Free entry, pay only for food.",
-                1000, null),
+                1000, "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80"),
 
             event("Contemporary Art Exhibition", "Arts", "Tate Modern", "London",
                 "2026-07-20", "10:00", "£18.00",
                 "New works from 30 emerging and established contemporary artists.",
                 "A curated exhibition exploring themes of identity, technology, and nature through painting, sculpture, digital media, and installation art. Guided tours available daily.",
-                150, null),
+                150, "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800&q=80"),
 
             event("Half Marathon City Run", "Sports", "Victoria Embankment", "London",
                 "2026-08-02", "07:30", "£35.00",
                 "Scenic 21km route through central London landmarks.",
                 "Run through the heart of London passing iconic landmarks including Tower Bridge, St Paul's Cathedral, and Buckingham Palace. Suitable for all abilities with 3-hour cut-off time.",
-                400, null),
+                400, "https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?w=800&q=80"),
 
             event("Jazz & Blues Night", "Music", "Ronnie Scott's Jazz Club", "London",
                 "2026-06-20", "20:00", "£30.00",
                 "An intimate evening of world-class jazz and blues.",
                 "Enjoy performances from internationally renowned jazz and blues musicians in London's most famous jazz club. Dinner packages available. Smart casual dress code.",
-                80, null),
+                80, "https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=800&q=80"),
 
             event("International Film Festival", "Film", "BFI Southbank", "London",
                 "2026-09-12", "10:00", "£15.00",
                 "Screenings of award-winning films from 40 countries.",
                 "Five days of premieres, retrospectives, and panel discussions celebrating world cinema. Q&A sessions with directors and actors after selected screenings.",
-                250, null),
+                250, "https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=800&q=80"),
 
             event("Startup Pitch Competition", "Business", "Here East, Queen Elizabeth Olympic Park", "London",
                 "2026-08-18", "10:00", "£20.00",
                 "Watch 20 startups compete for £100,000 in funding.",
                 "The most exciting startup competition in the UK. Watch the UK's hottest startups pitch to a panel of top investors. Networking drinks reception included after the final.",
-                350, null),
+                350, "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800&q=80"),
 
             event("Comedy Gala Night", "Comedy", "O2 Arena", "London",
                 "2026-07-25", "19:00", "£55.00",
                 "Five top comedians for one unmissable night of laughter.",
                 "An incredible line-up of the UK's best stand-up comedians performing their latest material. Bar and food available throughout the evening. Strictly 18+ event.",
-                600, null)
+                600, "https://images.unsplash.com/photo-1527224857830-43a7acc85260?w=800&q=80")
         );
 
         eventRepository.saveAll(events);

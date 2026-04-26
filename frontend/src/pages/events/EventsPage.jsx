@@ -191,7 +191,7 @@ function EventsPage() {
                 <div className="event-list-image">
                   <img
                     className="event-list-card-image"
-                    src={event.imageUrl || "/images/concert.png"}
+                    src={event.imageUrl || DEFAULT_EVENT_IMAGE}
                     alt={event.title}
                   />
                   <span className="event-image-badge">{event.category}</span>

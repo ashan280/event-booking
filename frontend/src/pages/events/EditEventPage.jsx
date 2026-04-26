@@ -4,9 +4,10 @@ import PageIntro from "../../components/PageIntro";
 import PublicSiteHeader from "../../components/PublicSiteHeader";
 import { apiRequest } from "../../lib/api";
 import { getAuth, isAdmin } from "../../lib/auth";
+import { DEFAULT_EVENT_IMAGE } from "../../lib/constants";
 
-const categoryOptions = ["Music", "Business", "Food & Drink", "Workshops", "Sports"];
-const defaultEventImage = "/images/concert.png";
+const categoryOptions = ["Music", "Business", "Food & Drink", "Workshops", "Sports", "Conference", "Theatre", "Arts", "Film", "Comedy"];
+const defaultEventImage = DEFAULT_EVENT_IMAGE;
 const maxImageSize = 2 * 1024 * 1024;
 
 function EditEventPage() {
