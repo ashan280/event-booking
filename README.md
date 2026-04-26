@@ -10,6 +10,7 @@ This is a university group project for browsing events, booking seats, making pa
 - event and venue pages
 - seat selection and booking summary
 - payment and ticket page
+- paypal payment
 - booking history
 - admin dashboard and booking report
 
