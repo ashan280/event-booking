@@ -35,10 +35,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: frontend
-        run: |
-          rm -rf node_modules
-          npm install --ignore-scripts
-          npm install
+        run: npm ci
 
       - name: Build project
         working-directory: frontend
