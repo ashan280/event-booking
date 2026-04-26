@@ -3158,6 +3158,208 @@ label {
   font-size: 0.82rem;
 }
 
+.top-bar,
+.page-intro-main,
+.hero-actions,
+.page-actions,
+.booking-history-actions,
+.auth-link-list,
+.inline-link-list,
+.footer-links-inline {
+  min-width: 0;
+}
+
+.hero-copy,
+.spotlight-panel,
+.simple-panel,
+.event-card,
+.collection-card,
+.event-list-card,
+.booking-history-card,
+.admin-booking-card,
+.admin-action-tile,
+.home-insight-card,
+.home-category-card,
+.home-feature-item,
+.account-main,
+.account-side {
+  min-width: 0;
+}
+
+.hero-copy h1,
+.page-intro-copy h1,
+.panel-title,
+.event-content h3,
+.collection-card h3,
+.home-feature-copy h3,
+.admin-booking-card h3,
+.booking-history-copy .panel-title {
+  overflow-wrap: anywhere;
+}
+
+.event-content p,
+.collection-card p,
+.home-feature-copy p,
+.booking-history-detail-card strong,
+.report-table td,
+.helper-text,
+.page-intro-text {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 1100px) {
+  .hero-section,
+  .home-split-section,
+  .admin-command-grid,
+  .admin-workbench-grid,
+  .account-layout,
+  .booking-layout,
+  .event-details-layout,
+  .review-layout,
+  .venue-hero,
+  .site-footer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-browse-strip,
+  .home-insight-grid,
+  .home-category-grid,
+  .admin-highlight-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .spotlight-image,
+  .hero-image-container img {
+    height: 280px;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-page {
+    padding: 14px;
+  }
+
+  .page-shell {
+    padding-bottom: 18px;
+  }
+
+  .top-bar {
+    padding: 14px;
+    margin-bottom: 20px;
+    border-radius: 18px;
+  }
+
+  .brand-subtitle {
+    font-size: 0.78rem;
+  }
+
+  .hero-section,
+  .simple-panel,
+  .account-main,
+  .account-side,
+  .admin-booking-card,
+  .search-panel,
+  .site-footer {
+    padding: 18px;
+  }
+
+  .hero-section,
+  .page-intro,
+  .home-insight-grid,
+  .home-split-section,
+  .featured-section,
+  .collection-section,
+  .category-section,
+  .module-section {
+    margin-bottom: 22px;
+  }
+
+  .page-intro-main,
+  .admin-section-head,
+  .hero-actions,
+  .page-actions {
+    gap: 12px;
+  }
+
+  .hero-browse-strip,
+  .hero-stats,
+  .home-insight-grid,
+  .home-category-grid,
+  .event-grid,
+  .collection-grid,
+  .venue-grid,
+  .venue-event-grid,
+  .event-list-grid,
+  .booking-history-grid,
+  .admin-summary-grid,
+  .admin-city-grid,
+  .insight-strip,
+  .admin-highlight-grid,
+  .admin-action-grid,
+  .booking-steps,
+  .payment-form-grid,
+  .booking-quick-grid,
+  .booking-detail-grid,
+  .booking-history-detail-grid,
+  .event-review-form-grid,
+  .ticket-detail-grid,
+  .ticket-footer-row,
+  .ticket-side-grid,
+  .ticket-print-meta,
+  .site-footer-grid,
+  .site-footer-bottom {
+    grid-template-columns: 1fr;
+  }
+
+  .home-feature-item,
+  .booking-history-hero,
+  .booking-event-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .home-feature-item img,
+  .booking-history-photo,
+  .booking-event-photo,
+  .event-card-image,
+  .collection-card-image,
+  .spotlight-image {
+    width: 100%;
+    height: 190px;
+  }
+
+  .hero-image-container img {
+    height: 220px;
+  }
+
+  .nav-cta,
+  .primary-link,
+  .ghost-link,
+  .delete-link,
+  .booking-history-actions .ghost-link,
+  .booking-history-actions button,
+  .page-actions .primary-link,
+  .page-actions .ghost-link,
+  .page-actions .delete-link,
+  .auth-link-list .primary-link,
+  .auth-link-list .ghost-link,
+  .auth-link-list .delete-link {
+    width: 100%;
+  }
+
+  .top-links {
+    width: 100%;
+  }
+
+  .top-links a {
+    justify-content: center;
+  }
+
+  .collection-meta-row,
+  .admin-spotlight-meta {
+    gap: 8px;
+  }
+}
+
 @media print {
   .top-bar, .auth-link-list, .nav-cta, button, .ghost-link, .site-footer, .page-intro, .print-hide {
     display: none !important;
