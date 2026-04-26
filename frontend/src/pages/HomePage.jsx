@@ -161,7 +161,7 @@ function HomePage() {
         <PublicSiteHeader />
 
         <div className="hero-image-container">
-          <img src="/images/hero.png" alt="People at an event" />
+          <img src={`${import.meta.env.BASE_URL}images/hero.png`} alt="People at an event" />
           <div className="hero-image-overlay">
             <h2>Find events near you</h2>
             <p>Browse events, check venues, and book seats online.</p>
