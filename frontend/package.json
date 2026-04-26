@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:github-pages": "node ./scripts/publish-github-pages.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
