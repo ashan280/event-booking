@@ -10,7 +10,7 @@ function PublicSiteHeader() {
         <Link className="brand-name" to="/">
           EventHub
         </Link>
-        <span className="brand-subtitle">Event booking site</span>
+        <span className="brand-subtitle">Find good events, book faster, and keep every ticket in one place</span>
       </div>
 
       <nav className="top-links">

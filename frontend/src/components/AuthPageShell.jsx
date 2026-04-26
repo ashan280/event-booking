@@ -13,7 +13,7 @@ function AuthPageShell({
 }) {
   const location = useLocation();
   const backLink = location.pathname === "/auth"
-    ? { to: "/", label: "Back to home" }
+    ? { to: "/", label: "Back home" }
     : { to: "/auth", label: "Back to account" };
 
   return (
@@ -72,7 +72,7 @@ function AuthPageShell({
 
             <div className="account-side-note">
               <p>
-                {sideNote || "Use your account to book events, save tickets, and check your booking history later."}
+                {sideNote || "Use your account to book events, keep your tickets ready, and come back to your bookings anytime."}
               </p>
             </div>
           </aside>
