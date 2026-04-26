@@ -45,32 +45,31 @@ function RegisterPage() {
   return (
     <AuthPageShell
       eyebrow="Register"
-      title="Create account."
-      description="Create an account and sign in."
+      title="Create your account"
+      description="Set up your account once and keep all your bookings, tickets, and event plans together."
       sideTitle="Events"
-      sideText="Create an account and start booking events."
+      sideText="A quick account setup makes every booking easier."
       sideItems={[
         {
           tag: "Latest",
           title: "New events",
-          text: "Check the latest events and pick what you want to book.",
+          text: "See what is coming up and save the events you want to book next.",
           link: "/events",
           label: "View events"
         },
         {
           tag: "Account",
-          title: "Save your tickets",
-          text: "Your account keeps your profile, bookings, and tickets together.",
+          title: "Keep everything together",
+          text: "Your profile, bookings, and tickets stay in one simple place.",
           link: "/auth/login",
-          label: "Already have an account?"
+          label: "Already registered?"
         }
       ]}
-      sideNote="Create an account so you can book seats, open ticket pages, and return to your bookings later."
+      sideNote="Create an account to book seats, pay faster, and come back to your tickets later without hassle."
     >
       <form className="auth-form" onSubmit={handleSubmit}>
         <label htmlFor="register-name">
-            Full name
-          
+          Full name
           <input
             id="register-name"
             name="fullName"
@@ -82,8 +81,7 @@ function RegisterPage() {
         </label>
 
         <label htmlFor="register-email">
-            Email
-          
+          Email
           <input
             id="register-email"
             name="email"
@@ -95,8 +93,7 @@ function RegisterPage() {
         </label>
 
         <label htmlFor="register-password">
-            Password
-          
+          Password
           <input
             id="register-password"
             name="password"

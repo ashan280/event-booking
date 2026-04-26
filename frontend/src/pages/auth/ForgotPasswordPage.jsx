@@ -41,32 +41,31 @@ function ForgotPasswordPage() {
   return (
     <AuthPageShell
       eyebrow="Forgot password"
-      title="Reset your password."
-      description="Enter your email and go to the next step."
+      title="Reset your password"
+      description="Enter your email and we’ll help you move to the password reset step."
       sideTitle="Account help"
-      sideText="Recover your account and return to event booking."
+      sideText="Get back into your account and keep your plans moving."
       sideItems={[
         {
           tag: "Account",
-          title: "Keep bookings safe",
-          text: "Recover your account if you need to open old bookings and tickets.",
+          title: "Keep your bookings safe",
+          text: "Recover your account if you need access to saved tickets or older bookings.",
           link: "/auth/login",
           label: "Back to sign in"
         },
         {
           tag: "Events",
-          title: "Return to events",
-          text: "After reset, you can go back to the events page and continue booking.",
+          title: "Back to events",
+          text: "Once your password is sorted, you can head straight back to the event list.",
           link: "/events",
           label: "View events"
         }
       ]}
-      sideNote="This step helps you get back into your account so you can continue booking events and opening your tickets."
+      sideNote="This step helps you get back into your account so your bookings and tickets are still easy to reach."
     >
       <form className="auth-form" onSubmit={handleSubmit}>
         <label htmlFor="forgot-email">
-            Email address
-          
+          Email address
           <input
             id="forgot-email"
             type="email"

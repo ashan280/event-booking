@@ -14,7 +14,7 @@ function PlaceholderPage({ title, description }) {
           description={description}
           actions={(
             <Link className="primary-link" to="/">
-              Back to home
+              Go home
             </Link>
           )}
         />

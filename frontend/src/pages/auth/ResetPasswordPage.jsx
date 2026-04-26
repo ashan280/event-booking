@@ -75,32 +75,31 @@ function ResetPasswordPage() {
   return (
     <AuthPageShell
       eyebrow="Reset Password"
-      title="Set a new password."
-      description="Enter your token, add a new password, and save it."
+      title="Set a new password"
+      description="Paste your reset token, choose a new password, and save it securely."
       sideTitle="Account help"
-      sideText="Set a new password and return to your account."
+      sideText="You’re one step away from getting back into your account."
       sideItems={[
         {
           tag: "Reset",
-          title: "Use your token",
-          text: "Add the reset token from the last step and save the new password.",
+          title: "Use your reset token",
+          text: "Paste the token from the previous step and save your new password here.",
           link: "/auth/forgot-password",
           label: "Need a token?"
         },
         {
           tag: "Sign in",
-          title: "Return to login",
-          text: "After saving the new password, sign in and continue with your account.",
+          title: "Return to sign in",
+          text: "Once the password is updated, sign in again and continue normally.",
           link: "/auth/login",
           label: "Go to login"
         }
       ]}
-      sideNote="After you save the new password, use it to sign in and open your bookings, tickets, and event pages."
+      sideNote="After saving your new password, sign in again to open your bookings, tickets, and event pages."
     >
       <form className="auth-form" onSubmit={handleSubmit}>
         <label htmlFor="reset-token">
-            Reset token
-          
+          Reset token
           <input
             id="reset-token"
             name="token"
@@ -112,8 +111,7 @@ function ResetPasswordPage() {
         </label>
 
         <label htmlFor="reset-password">
-            New password
-          
+          New password
           <input
             id="reset-password"
             name="password"
@@ -125,8 +123,7 @@ function ResetPasswordPage() {
         </label>
 
         <label htmlFor="reset-confirm-password">
-            Confirm password
-          
+          Confirm password
           <input
             id="reset-confirm-password"
             name="confirmPassword"

@@ -44,32 +44,31 @@ function LoginPage() {
   return (
     <AuthPageShell
       eyebrow="Login"
-      title="Sign in."
-      description="Use your email and password to open your account."
+      title="Welcome back"
+      description="Sign in to manage bookings, open tickets, and keep exploring upcoming events."
       sideTitle="Events"
-      sideText="Sign in and start using the event pages."
+      sideText="Jump back in and pick up where you left off."
       sideItems={[
         {
           tag: "Latest",
-          title: "Latest events",
-          text: "Open the event list and check new events, dates, and venues.",
+          title: "Fresh events",
+          text: "Browse new events, updated dates, and venues before you book.",
           link: "/events",
           label: "View events"
         },
         {
           tag: "Venues",
-          title: "Event places",
-          text: "Check venue pages before you book your seats.",
+          title: "Venue guides",
+          text: "Look through venues first if you want a better feel for the location.",
           link: "/venues",
           label: "View venues"
         }
       ]}
-      sideNote="Sign in first if you want to book events, open tickets, and check booking history later."
+      sideNote="Sign in to book seats, keep your ticket handy, and come back to your bookings whenever you need."
     >
       <form className="auth-form" onSubmit={handleSubmit}>
         <label htmlFor="login-email">
-            Email
-          
+          Email
           <input
             id="login-email"
             name="email"
@@ -81,8 +80,7 @@ function LoginPage() {
         </label>
 
         <label htmlFor="login-password">
-            Password
-          
+          Password
           <input
             id="login-password"
             name="password"
