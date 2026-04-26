@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - "frontend/**"
+      - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
 permissions:
@@ -23,9 +24,6 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: frontend
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -33,19 +31,23 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: Install dependencies
+        working-directory: frontend
         run: |
-          rm -rf node_modules package-lock.json
+          rm -rf node_modules
+          npm install --ignore-scripts
           npm install
 
       - name: Build project
+        working-directory: frontend
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
         run: npm run build
 
       - name: Add 404.html for React Router SPA
+        working-directory: frontend
         run: cp dist/index.html dist/404.html
 
       - name: Setup Pages
