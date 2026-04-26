@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  base: "/Event-Booking-Seat-Reservation/",
+  base: "/event-booking/",
   plugins: [tailwindcss(), react()],
   server: {
     port: 5173

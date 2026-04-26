@@ -1,0 +1,36 @@
+services:
+  backend:
+    image: maven:3.9.5-eclipse-temurin-17
+    working_dir: /app
+    volumes:
+      - ./backend:/app
+      # Cache Maven dependencies to make startup faster
+      - maven-repo:/root/.m2
+    ports:
+      - "8080:8080"
+    # Runs Spring Boot in development mode with hot-reloading
+    command: mvn spring-boot:run
+    environment:
+      - DB_URL=jdbc:h2:mem:eventdb;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+      - DB_USERNAME=sa
+      - FRONTEND_URL=http://localhost:5173
+      - APP_JWT_SECRET=event-booking-simple-jwt-secret-for-student-project-2026
+      # Add your PayPal secrets here for local testing if needed
+
+  frontend:
+    image: node:18
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+      # Keep node_modules isolated to avoid Windows/Linux conflicts
+      - node_modules:/app/node_modules
+    ports:
+      - "5173:5173"
+    # Installs packages and starts Vite, exposing it to the host
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    environment:
+      - VITE_API_URL=http://localhost:8080
+
+volumes:
+  maven-repo:
+  node_modules:
