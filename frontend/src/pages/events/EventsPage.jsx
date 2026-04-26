@@ -99,12 +99,12 @@ function EventsPage() {
 
         <PageIntro
           eyebrow="Events"
-          title="Browse events."
-          description="Use search, category, and city to find events."
+          title="Find your next event"
+          description="Search by title, filter by category, or narrow things down by city to find the right event faster."
           actions={(
             <>
               <Link className="ghost-link" to="/">
-                Back to home
+                Back home
               </Link>
               <Link className="ghost-link" to="/venues">
                 View venues
@@ -171,8 +171,8 @@ function EventsPage() {
         {!isLoading && !events.length ? (
           <section className="simple-panel empty-state-panel">
             <p className="section-tag">No events found</p>
-            <h2>Try another search.</h2>
-            <p>Nothing matched this search. Clear the filters or check a different city or category.</p>
+            <h2>Nothing matched that search</h2>
+            <p>Try clearing the filters or switching to a different city or category.</p>
             <div className="auth-link-list">
               <button className="ghost-link" type="button" onClick={clearFilters}>
                 Clear filters

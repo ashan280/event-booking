@@ -142,8 +142,8 @@ function CreateEventPage() {
 
           <PageIntro
             eyebrow="Admin"
-            title="Admin account needed."
-            description="Admins can add events here."
+            title="Admin account required"
+            description="Only admin accounts can create and publish events from this page."
             actions={(
               <>
                 <Link className="ghost-link" to="/admin">
@@ -167,8 +167,8 @@ function CreateEventPage() {
 
         <PageIntro
           eyebrow="Create event"
-          title="Add a new event."
-          description="Fill the form and save the event details."
+          title="Create a new event"
+          description="Add the event details, upload a strong image, and publish something people will want to book."
           actions={(
             <Link className="ghost-link" to="/events">
               Back to events

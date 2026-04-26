@@ -111,8 +111,8 @@ function BookingHistoryPage() {
 
         <PageIntro
           eyebrow="My bookings"
-          title="Your bookings."
-          description="Check the events you booked, the number of seats, and the booking date."
+          title="Your bookings"
+          description="Keep track of every booking, check ticket details, and revisit event information anytime."
           actions={(
             <>
               <Link className="ghost-link" to="/events">
@@ -136,7 +136,7 @@ function BookingHistoryPage() {
         {!isLoading && !bookings.length ? (
           <section className="simple-panel empty-state-panel">
             <p className="section-tag">No bookings</p>
-            <h2>Start with your first event.</h2>
+            <h2>Your first booking starts here</h2>
             <p>You have no bookings yet. Open the event list and book your first event.</p>
             <div className="auth-link-list">
               <Link className="primary-link" to="/events">

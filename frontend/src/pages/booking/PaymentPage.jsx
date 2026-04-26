@@ -318,8 +318,8 @@ function PaymentPage() {
 
         <PageIntro
           eyebrow="Payment"
-          title="Pay for your booking."
-          description="Check the booking summary, choose a payment method, and confirm the booking."
+          title="Complete your booking"
+          description="Review the summary, choose a payment method, and confirm everything in one place."
           actions={(
             <>
               <Link className="ghost-link" to={`/booking/${eventId}/summary?${searchParams.toString()}`}>
@@ -397,7 +397,7 @@ function PaymentPage() {
             <article className="simple-panel">
               <p className="section-tag">Payment method</p>
               <h2 className="panel-title">Choose how you want to pay</h2>
-              <p className="booking-side-note">Choose a payment method and confirm your booking details here.</p>
+              <p className="booking-side-note">Pick the option that suits you best and then finish the booking.</p>
 
               <form className="booking-form" onSubmit={handleSubmit}>
                 <div className="payment-method-list">

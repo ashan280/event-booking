@@ -156,8 +156,8 @@ function BookingPage() {
 
         <PageIntro
           eyebrow="Booking"
-          title="Select your seats."
-          description="Pick the seats you want, check the total, and then continue to payment."
+          title="Choose your seats"
+          description="Pick the seats you want, watch the total update, and continue when everything looks right."
           actions={(
             <>
               <Link className="ghost-link" to="/events">
@@ -267,7 +267,7 @@ function BookingPage() {
 
             <article className="simple-panel">
               <h2 className="panel-title">Booking summary</h2>
-              <p className="booking-side-note">Your seats will be checked again before payment.</p>
+              <p className="booking-side-note">Your seat choice will be checked one more time before payment is confirmed.</p>
 
               <div className="booking-quick-grid">
                 <div className="booking-total-box">
@@ -293,7 +293,7 @@ function BookingPage() {
                       ))}
                     </div>
                   ) : (
-                    <p className="seat-selection-empty">No seats selected yet.</p>
+                    <p className="seat-selection-empty">No seats selected yet. Choose any available seats from the map.</p>
                   )}
                 </div>
 

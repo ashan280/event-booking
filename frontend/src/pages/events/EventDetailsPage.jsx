@@ -254,7 +254,7 @@ function EventDetailsPage() {
                   <div>
                     <p className="section-tag">Reviews</p>
                     <h2 className="panel-title">Reviews for this event</h2>
-                    <p className="helper-text">Share a review or read visitor comments.</p>
+                    <p className="helper-text">Read what others thought or share your own experience after booking.</p>
                   </div>
                   <span className="account-badge review-count-badge">{reviewCountLabel}</span>
                 </div>
@@ -296,7 +296,7 @@ function EventDetailsPage() {
                 ) : (
                   <div className="booking-note-box">
                     <strong>Want to post a review?</strong>
-                    <p>Sign in first, then you can add a review for this event.</p>
+                    <p>Sign in first and you’ll be able to leave a review for this event.</p>
                     <Link className="ghost-link" to="/auth/login">
                       Sign in
                     </Link>
@@ -368,7 +368,7 @@ function EventDetailsPage() {
                 </div>
                 <div className="booking-note-box">
                   <strong>Before you continue</strong>
-                  <p>Sign in first if you want to book this event and save your ticket.</p>
+                  <p>Sign in first if you want to book this event and keep the ticket saved in your account.</p>
                 </div>
                 <Link className="primary-link" to={`/booking/${event.id}`}>
                   Book now

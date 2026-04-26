@@ -174,8 +174,8 @@ function EditEventPage() {
 
           <PageIntro
             eyebrow="Admin"
-            title="Admin account needed."
-            description="Admins can edit event details here."
+            title="Admin account required"
+            description="Only admin accounts can update event details from this page."
             actions={(
               <>
                 <Link className="ghost-link" to="/admin">
@@ -199,8 +199,8 @@ function EditEventPage() {
 
         <PageIntro
           eyebrow="Edit event"
-          title="Update event details."
-          description="Change the event information and save it again."
+          title="Update event details"
+          description="Refresh the event information, swap the image if needed, and save the latest version."
           actions={(
             <>
               <Link className="ghost-link" to="/events">

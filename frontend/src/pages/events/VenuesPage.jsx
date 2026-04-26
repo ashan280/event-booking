@@ -38,8 +38,8 @@ function VenuesPage() {
 
         <PageIntro
           eyebrow="Venues"
-          title="Venues."
-          description="Check each venue, the city, and how many events are linked to it."
+          title="Browse venues"
+          description="Explore where events are happening and see how active each venue is before you book."
           actions={(
             <Link className="ghost-link" to="/events">
               Back to events
