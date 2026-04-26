@@ -41,11 +41,14 @@ jobs:
         working-directory: frontend
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VITE_BASE_PATH: /${{ github.event.repository.name }}/
         run: npm run build
 
-      - name: Add 404.html for React Router SPA
+      - name: Add GitHub Pages SPA files
         working-directory: frontend
-        run: cp dist/index.html dist/404.html
+        run: |
+          cp dist/index.html dist/404.html
+          touch dist/.nojekyll
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
