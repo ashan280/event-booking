@@ -11,6 +11,7 @@ build/
 .next/
 .vite/
 coverage/
+.pages-dist/
 
 # Java / Spring Boot
 target/
@@ -36,3 +37,7 @@ pnpm-debug.log*
 
 # Project docs
 docs/
+
+# GitHub Pages
+# Root-level index.html, 404.html, assets/, images/, .nojekyll, and app-config.js
+# are intentionally tracked because this repo publishes from main/(root).
